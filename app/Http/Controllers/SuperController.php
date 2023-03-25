@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lab;
+use App\Models\Alat;
 use App\Models\User;
+use Inertia\Inertia;
+use App\Models\P_alat;
 use App\Models\Ruangan;
 use App\Models\P_ruangan;
 use App\Models\Temp_berkas;
@@ -23,7 +26,7 @@ class SuperController extends Controller
      */
     public function index()
     {
-        //
+        // //
         $j_dosen = DB::table('users')->where('level', '1')->count();
         $j_laboran = DB::table('users')->where('level', '2')->count();
 
@@ -33,8 +36,7 @@ class SuperController extends Controller
             "nomor" => 1,
             "lab" => Lab::all(),
             "user" => User::all(),
-            "jumlah_dosen" => $j_dosen,
-            "jumlah_laboran" => $j_laboran,
+            "jumlah_laboran" => User::where('level', '1')->count(),
             "jumlah_lab" => Lab::count(),
             "jumlah_ruangan" => Ruangan::count()
         ];
@@ -42,7 +44,9 @@ class SuperController extends Controller
         $ruangan = Ruangan::all();
         $p_ruangan = P_ruangan::all();
 
-        return view('/superadmin/index', ($data), compact('p_ruangan', 'ruangan'));
+        return Inertia::render('Super/DashboardSuper', $data);
+
+        // return view('/superadmin/index', ($data), compact('p_ruangan', 'ruangan'));
     }
 
     public function profil(User $user)
@@ -129,13 +133,15 @@ class SuperController extends Controller
 
     public function lab()
     {
-        return view('/superadmin/lab', [
+        $data = [
             "title" => "Halaman Laboratorium",
             "active" => "lab",
             "users" => User::all(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/LabSuper', $data);
     }
 
     public function show_lab(Lab $lab)
@@ -194,152 +200,58 @@ class SuperController extends Controller
 
         return redirect('/admin/laboratorium')->with('success', 'Update Success !!');
     }
-
-    // DOSEN
-    public function dosen()
-    {
-        return view('/superadmin/dosen', [
-            "title" => "Halaman Daftar Dosen",
-            "active" => "dosen",
-            "user" => User::latest()->get(),
-            "lab" => Lab::all(),
-            "nomor" => 1,
-        ]);
-    }
-
-    public function add_dosen()
-    {
-        return view('/superadmin/add_dosen', [
-            "title" => "Halaman Tambah Dosen",
-            "active" => "dosen",
-            "user" => User::all(),
-            "lab" => Lab::latest()->get(),
-            "nomor" => 1,
-        ]);
-    }
-
-    public function show_dosen(User $user)
-    {
-        return view('/superadmin/show_dosen', [
-            "title" => "Halaman Detail Dosen",
-            "active" => "dosen",
-            "user" => $user,
-            "lab" => Lab::all(),
-            "nomor" => 1,
-        ]);
-    }
-
-    public function edit_dosen(User $user)
-    {
-        return view('/superadmin/edit_dosen', [
-            "title" => "Halaman Edit Dosen",
-            "active" => "dosen",
-            "user" => $user,
-            "lab" => Lab::all(),
-            "nomor" => 1,
-        ]);
-    }
-
-    public function update_dosen(Request $request, User $user)
-    {
-        $rules = ([
-            'level' => 'required',
-            'lab_id' => 'required',
-            'email' => 'required|email:dns',
-            'photo' => 'image|file|max:2048',
-            'address' => "nullable"
-        ]);
-
-        if ($request->name != $user->name) {
-            $rules['name'] = 'required|max:50|unique:users';
-        }
-
-        if ($request->nip != $user->nip) {
-            $rules['nip'] = 'required|min:1|max:25|unique:users';
-        }
-
-        $validateData = $request->validate($rules);
-
-        if ($request->file('photo')) {
-
-            $rules['photo'] = 'image|file|max:2048';
-
-            $validateData = $request->validate($rules);
-
-            if ($user->photo != null) {
-                // File::delete('storage/' . $user->photo);
-                $file = 'public/storage/' . $user->photo;
-                @unlink($file);
-            }
-            // $validateData['photo'] = $request->file('photo')->store('/img/user');
-            $fileName = time() . '.' . $request->file('photo')->extension();
-            $path_url = '../public/storage/img/user';
-            $request->file('photo')->move(public_path($path_url), $fileName);
-            $validateData['photo'] =  'img/user/' . $fileName;
-        }
-
-        User::where('id', $user->id)
-            ->update($validateData);
-
-        return redirect('/admin/dosen')->with('success', 'Update Success !!');
-    }
-
-    public function destroy_dosen(User $user)
-    {
-        //
-        // File::delete('storage/' . $user->photo);
-        $file = 'public/storage/' . $user->photo;
-        @unlink($file);
-
-        User::destroy($user->id);
-
-        return redirect('/admin/dosen')->with('delete', 'Data Has Been Delated!');
-    }
-
-
     // LABORAN
     public function laboran()
     {
-        return view('/superadmin/laboran', [
+        $data = [
             "title" => "Halaman Daftar Laboran",
             "active" => "laboran",
-            "user" => User::latest()->get(),
+            "laboran" => User::where('level', '1')->get(),
+            // "user" => User::latest()->get(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/LaboranSuper', $data);
     }
 
     public function add_laboran()
     {
-        return view('/superadmin/add_laboran', [
+        $data = [
             "title" => "Halaman Tambah Laboran",
             "active" => "laboran",
             "user" => User::all(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/AddLaboranSuper', $data);
     }
 
-    public function show_laboran(User $user)
+    public function show_laboran(User $user, Request $request)
     {
-        return view('/superadmin/show_laboran', [
+        $data = [
             "title" => "Halaman Detail Laboran",
             "active" => "laboran",
-            "user" => $user,
+            "user" => User::where('id', $user->id)->where('name', $request->name)->get(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/DetailLaboranSuper', $data);
     }
 
-    public function edit_laboran(User $user)
+    public function edit_laboran(User $user, Request $request)
     {
-        return view('/superadmin/edit_laboran', [
+        $data = [
             "title" => "Halaman Edit Laboran",
             "active" => "laboran",
-            "user" => $user,
+            "user" => User::where('id', $user->id)->where('name', $request->name)->get(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/EditLaboranSuper', $data);
     }
 
     public function update_laboran(Request $request, User $user)
@@ -400,14 +312,16 @@ class SuperController extends Controller
     // Ruangan
     public function ruangan()
     {
-        return view('/superadmin/ruangan', [
+        $data = [
             "title" => "Halaman Daftar Ruangan",
             "active" => "ruangan",
             "user" => User::all(),
             "lab" => Lab::all(),
             "ruangan" => Ruangan::latest()->get(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/RuanganSuper', $data);
     }
 
     public function add_ruangan()
@@ -516,7 +430,7 @@ class SuperController extends Controller
     //Peminjaman Ruangan
     public function p_ruangan()
     {
-        return view('/superadmin/p_ruangan', [
+        $data = [
             "title" => "Daftar Peminjaman Ruangan",
             "active" => "p_ruangan",
             "user" => User::all(),
@@ -524,7 +438,34 @@ class SuperController extends Controller
             "ruangan" => Ruangan::all(),
             "p_ruangan" => P_ruangan::latest()->get(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/P_RuanganSuper', $data);
+    }
+    //Peminjaman alat
+    public function p_alat()
+    {
+        $data = [
+            "title" => "Daftar Peminjaman Alat",
+            "active" => "p_alat",
+            "user" => User::all(),
+            "lab" => Lab::all(),
+            "alat" =>  Alat::where('lab_id', '=', auth()->user()->lab_id)->latest()->get(),
+            "p_alat" => P_alat::where('lab_id', '=', auth()->user()->lab_id)->latest()->get(),
+            "nomor" => 1,
+        ];
+
+        return Inertia::render('Super/P_AlatSuper', $data);
+    }
+    // ANALISI
+    public function analisis()
+    {
+        $data = [
+            "title" => "Analisis",
+            "active" => "analisis",
+        ];
+
+        return Inertia::render('Super/AnalisisSuper', $data);
     }
 
     public function add_p_ruangan()

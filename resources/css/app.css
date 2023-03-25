@@ -6,16 +6,74 @@
     background-color: rgb(236, 235, 235);
     min-height: 100vh;
 }
+
+.login-form{
+    min-height: 100vh;
+    overflow: hidden;
+    z-index: 20;
+}
+.login-form .card-form{
+    background-color:rgb(255, 255, 255);
+    padding: 50px;
+    border-top-right-radius: 50px;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.13);
+    margin: 120px;
+    position: absolute;
+}
+.login-form .card-form .box-head {
+    /* margin-bottom: 30px; */
+}
+.login-form .card-form .box-head img{
+    height: 100px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+.login-form .card-form .box-head .card-head .head1{
+    margin-top: -20px;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.login-form .card-form .box-head .card-head .head2{
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.login-img{
+    min-height: 100vh;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.login-img img{
+    min-height: 100vh;
+    max-height: 100vh;
+    transform-origin: center;
+    animation: pulse 15s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.3);
+    }
+  }
 .navbar-user{
     background-color: rgb(255, 255, 255);
     color: rgb(0, 0, 0);
-    position: relative;
-    z-index: 1;
+    position: fixed;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.349);
 }
 
 .navbar-img {
-    /* height: 30px; */
-    margin: 10px;
+    margin-right: 10px;
+    image-resolution:300dpi ;
 }
 
 .navbar-brand{
@@ -29,48 +87,39 @@
     text-transform: uppercase;
 }
 
+.navbar-item .menu .active {
+    font-weight: bold;
+}
 .navbar-button{
     display: none;
 }
 
 #sidebar-on{
-    background: rgb(248, 248, 248);
-    /* position: absolute; */
-    width: 100%;
-    margin-top: 0px;
-    margin-bottom: 10px;
-    padding: 20px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-    display: flex;
-    justify-content: center;
-    z-index: 1;
-    transition: 0.5s;
     display: none;
 }
 #sidebar-off{
-    background: rgb(248, 248, 248);
-    /* position: absolute; */
-    width: 100%;
-    margin-top: -50px;
-    margin-bottom: 10px;
-    padding: 20px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-    display: flex;
-    justify-content: center;
-    z-index: 1;
-    transition: 0.5s;
     display: none;
 }
 .sidebar-item{
     margin-right: 20px;
 }
 
+.tron{
+    /* background-color: rgb(0, 140, 255); */
+    /* background: url('/img/tron.jpg'); */
+    background: url('/img/tron.jpg');
+    min-height: 250px;
+    margin-bottom: -100px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    z-index: -1;
+}
+
 .card-home{
     background-color: rgb(255, 255, 255);
     width: 100%;
     padding: 20px;
+    border-radius: 5px;
 }
 
 .event-ruangan{
@@ -82,6 +131,245 @@
 .event-ruangan{
     min-height: 100px;
 }
+
+.input-form{
+    border-color: rgba(0, 0, 0, 0.363);
+    border-radius: 10px;
+}
+
+.input-form:focus{
+    background-color: rgba(0, 0, 0, 0.048); 
+}
+
+.btn-blue{
+    background-color: rgb(0, 119, 255);
+    border: none;
+    color: rgb(255, 255, 255);
+}
+
+.btn-blue:hover{
+    background-color: rgb(7, 101, 207);
+    color: rgb(255, 255, 255);
+}
+/* BTN GREEN */
+.btn-green{
+    background-color: rgb(8, 177, 16);
+    border: none;
+    color: rgb(255, 255, 255);
+}
+
+.btn-green:hover{
+    background-color: rgb(10, 163, 18);
+    border: none;
+    color: rgb(255, 255, 255);
+}
+/* BTN ORANGE */
+.btn-orange{
+    background-color: rgb(255, 166, 0);
+    border: none;
+    color: rgb(255, 255, 255);
+}
+
+.btn-orange:hover{
+    background-color: rgb(218, 145, 11);
+    border: none;
+    color: rgb(255, 255, 255);
+}
+
+/* BTN RED */
+.btn-red{
+    background-color: rgb(192, 65, 27);
+    border: none;
+    color: rgb(255, 255, 255);
+}
+
+.btn-red:hover{
+    background-color: rgb(161, 46, 11);
+    border: none;
+    color: rgb(255, 255, 255);
+}
+
+.btn-green:hover{
+    background-color: rgb(10, 163, 18);
+    border: none;
+    color: rgb(255, 255, 255);
+}
+.btn-blue-nav:hover{
+    background-color: rgb(0, 119, 255);
+    color: rgb(255, 255, 255);
+}
+.btn-black{
+    background-color: rgb(83, 86, 90);
+    color: rgb(255, 255, 255);
+}
+.btn-black:hover {
+    background-color: rgb(57, 59, 61);
+    color: rgb(255, 255, 255);
+}
+
+.btn-black-nav:hover{
+    background-color: rgb(83, 86, 90);
+    color: rgb(255, 255, 255);
+}
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.date{
+    font-weight: bold;
+}
+.sidebar-admin{
+    background-color: rgb(255, 255, 255);
+    min-height: 100vh;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.123);
+    z-index: 100;
+    width: 22vw;
+    position: fixed;
+}
+.sidebar-admin .sa-base{
+    padding: 20px;
+}
+.dashboard-isi{
+    /* width: 77vw;
+    justify-content: end; */
+} 
+.sa-head img{
+    height: 70px;   
+}
+
+.sa-head .head1{
+    padding: 10px;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.sa-body .sa-item{
+    padding: 7px;
+    margin-bottom: 10px;
+}
+
+.sa-body .active{
+    padding-left: 25px;
+    /* background-color: rgb(0, 119, 255); */
+    background-color: rgb(83, 86, 90);
+    border-radius: 10px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    transition: 0.3s;
+}
+.sa-body .sa-item:hover{
+    padding-left: 25px;
+    /* background-color: rgb(0, 119, 255); */
+    background-color: rgb(83, 86, 90);
+    border-radius: 10px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    transition: 0.3s;
+}
+
+.sa-body .sa-item .text{
+    font-size: 18px;
+    margin-left: 20px;
+}
+
+.navbar-admin{
+    background-color: rgb(255, 255, 255);
+    padding: 15px;
+    color: rgb(0, 0, 0);
+    position: fixed;
+    width: 100vw;
+    z-index: 50;
+    top: 0;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.123);
+}
+
+.tron-admin{
+    background: url('/img/tronBlack.png');
+    min-height: 190px;
+    margin-bottom: -70px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius:  0px;
+    z-index: -1;
+}
+
+.dashboard-item{
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+
+.dashboard-item .card{
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 5px;
+}
+.dashboard-item .card .card-head{
+    background-color: rgb(57, 59, 61);
+    border-radius: 10px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-top: -20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 17px;
+    text-transform: uppercase;
+    text-align: center;
+    color: rgb(255, 255, 255);
+}
+.dashboard-item .card .card-body{
+    margin: -27px;
+}
+
+.dashboard-item .card .head{
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 15px;
+}
+
+.dashboard-item .card .body{
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 40px;
+}
+
+/* lab item */
+.lab-item{
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+.lab-item .card{
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 5px;
+}
+
+/* laboran item */
+.laboran-item{
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+
+.laboran-item h1{
+    margin-left: 10px;
+    margin-right: 20px;
+    color: rgb(255, 255, 255);
+    font-size: 25px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.laboran-item .card{
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 5px;
+}
 @media Screen and (max-width:800px){
     .navbar-item{
         display: none;
@@ -91,9 +379,9 @@
         display: block;
     }
     .navbar-img {
-        /* height: 30px; */
-        margin: 5px;
-        display: none;
+        margin-right: 10px;
+        height: 40px;
+        image-resolution:300dpi ;
     }
     
     .navbar-brand{
@@ -106,34 +394,51 @@
         font-weight: bold;
         text-transform: uppercase;
     }
+
+     .menu .active {
+        font-weight: bold;
+    }
     #sidebar-on{
         background: rgb(248, 248, 248);
-        /* position: absolute; */
-        z-index: 10;
+        z-index: 40;
         width: 100%;
-        margin-top: 0px;
-        margin-bottom: 10px;
         padding: 20px;
+        margin-bottom: 10px;
         border-bottom-right-radius: 20px;
         border-bottom-left-radius: 20px;
         display: flex;
         justify-content: center;
-        z-index: 1;
-        transition: 0.5s;
+        transition: 0.7s;
+        position: fixed;
+        top: 70px;
     }
     #sidebar-off{
         background: rgb(248, 248, 248);
-        /* position: absolute; */
-        z-index: 10;
+        z-index: 40;
         width: 100%;
-        margin-top: -50px;
-        margin-bottom: 10px;
         padding: 20px;
+        margin-bottom: 10px;
         border-bottom-right-radius: 20px;
         border-bottom-left-radius: 20px;
         display: flex;
         justify-content: center;
-        z-index: 1;
-        transition: 0.5s;
+        transition: 0.7s;
+        position: fixed;
+        top: 0;
+    }
+
+    .login-form .card-form{
+        margin: 20px;
+    }
+    .login-img{
+        display: none;
+    }   
+
+    .sidebar-admin{
+        background-color: rgb(255, 255, 255);
+        min-height: 100vh;
+        box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.123);
+        z-index: 100;
+        margin-left: -300px;
     }
 }

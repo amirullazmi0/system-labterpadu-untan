@@ -6,9 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class LoginController extends Controller
 {
@@ -20,39 +19,31 @@ class LoginController extends Controller
                 return redirect()->intended('/admin')->with('login', 'Anda Sudah login !');
             } elseif (auth()->user()->level == '1') {
                 return redirect()->intended('/aadmin')->with('login', 'Anda Sudah login !');
-            } elseif (auth()->user()->level == '2') {
-                return redirect()->intended('/aadmin')->with('login', 'Anda Sudah login !');
-            }
+            };
         }
-
-        return view('/login/login', [
-            "title" => "Halaman Login"
-        ]);
+        return Inertia::render('Login/Login');
     }
 
     public function authenticate(Request $request)
     {
-
         $credentials = $request->validate([
-            'nip' => 'required',
-            'password' => 'required'
+            'email' => ['required', 'email'],
+            'password' => ['required']
         ]);
 
         if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
             if (auth()->user()->level == '0') {
-                return redirect()->intended('/admin');
+                return redirect()->intended('/super');
             } elseif (auth()->user()->level == '1') {
-                return redirect()->intended('/aadmin');
-            } elseif (auth()->user()->level == '2') {
                 return redirect()->intended('/aadmin');
             }
 
-            $request->session()->regenerate();
-
-            return redirect()->intended('/login');
+            return redirect()->intended('/super');
         };
 
+        dd("GAGAL");
         return back()->with('error', 'Login Failed !');
     }
 

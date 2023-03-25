@@ -32,17 +32,7 @@ class UserController extends Controller
             "p_alat" => P_alat::all(),
         ];
 
-        $ruangan = Ruangan::all();
-        $p_ruangan = P_ruangan::all();
-
-        $alat = Alat::all();
-        $p_alat = P_alat::all();
-
-        $lab = Lab::all();
-        return Inertia::render('Home');
-        // return view('/user/index', ($data), compact('p_ruangan', 'p_alat', 'ruangan', 'alat', 'lab'));
-
-        // return response()->json('p_ruangan');
+        return Inertia::render('Home', $data);
     }
     public function ruangan()
     {

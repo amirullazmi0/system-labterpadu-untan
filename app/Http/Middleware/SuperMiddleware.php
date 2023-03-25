@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminMiddleware
+class SuperMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,9 +17,10 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next, $usertype)
     {
-        if (auth()->user()->level == "1") {
+        if (auth()->user()->level == "0") {
             return $next($request);
         }
+
         return redirect('/')->with('error', "Login gagal !!!");
     }
 }

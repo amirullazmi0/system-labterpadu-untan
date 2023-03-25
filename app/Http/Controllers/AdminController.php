@@ -13,6 +13,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class AdminController extends Controller
 {
@@ -34,8 +35,8 @@ class AdminController extends Controller
         $lab = Lab::where('id', '=', auth()->user()->lab_id)->get();
         $alat = Alat::where('lab_id', '=', auth()->user()->lab_id)->get();
         $p_alat = P_alat::where('lab_id', '=', auth()->user()->lab_id)->get();
-
-        return view('/admin/index', ($data), compact('alat', 'p_alat'));
+        return Inertia::render('Admin/DashboardAdmin', $data);
+        // return view('/admin/index', ($data), compact('alat', 'p_alat'));
     }
 
     public function profil(User $user)

@@ -20,31 +20,20 @@ class DatabaseSeeder extends Seeder
     {
         $user = [
             [
-                'nip' => 'Super00admin',
+                'email' => 'superadmin@gmail.com',
                 'name' => 'Admin Lab Terpadu',
-                'password' => bcrypt('Adminlabterpadu2023'),
+                'password' => bcrypt('11111111'),
                 'level' => 0,
                 'lab_id' => '1',
-                'email' => 'amirullazmi0@gmail.com',
                 'address' => '',
             ],
             [
-                'nip' => 'nipdosen',
-                'name' => 'Dummy Dosen',
-                'password' => bcrypt('11111'),
-                'level' => 1,
-                'lab_id' => '4',
-                'email' => 'amirullazmi0@gmail.com',
-                'address' => '',
-            ],
-            [
-                'nip' => 'niplaboran',
+                'email' => 'admin@gmail.com',
                 'name' => 'Dummy Laboran',
                 'password' => bcrypt('11111'),
-                'level' => 2,
+                'level' => 1,
                 'lab_id' => '7',
-                'email' => 'amirullazmi0@gmail.com',
-                'address' => '',
+                'address' => 'ini alamat laboran',
             ],
         ];
 
@@ -62,7 +51,7 @@ class DatabaseSeeder extends Seeder
                 'desc' => 'Laboratorium Data Intelligence Lab Terpadu',
             ],
             [
-                'name' => 'Fisika',
+                'name' => 'Instrumen dan Kalibrasi',
                 'desc' => 'Laboratorium Kimia Lab Terpadu',
             ],
             [

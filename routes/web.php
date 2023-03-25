@@ -1,10 +1,15 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SuperController;
+use App\Http\Controllers\LaboranController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,19 +23,29 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [UserController::class, 'index'])->name('home');
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'super:0'])->group(function () {
+    Route::get('/super', [SuperController::class, 'index'])->name('super');
+    Route::get('/super/profil', [SuperController::class, 'laboran'])->name('super-profil');
 
+    Route::get('/super/lab', [SuperController::class, 'lab'])->name('super-lab');
+
+    Route::get('/super/laboran', [SuperController::class, 'laboran'])->name('super-laboran');
+    Route::get('/super/add-laboran', [SuperController::class, 'add_laboran'])->name('super-add-laboran');
+    Route::post('/super/add-laboran', [LaboranController::class, 'store']);
+    Route::get('/super/laboran/{user:id}', [SuperController::class, 'show_laboran'])->name('super-show-laboran');
+    Route::get('/super/laboran/{user:id}/edit', [SuperController::class, 'edit_laboran'])->name('super-edit-laboran');
+    Route::post('/super/laboran/{user:id}/edit', [LaboranController::class, 'update', 'edit_laboran'])->name('super-edit-laboran');
+
+    Route::get('/super/ruangan', [SuperController::class, 'ruangan'])->name('super-ruangan');
+    Route::get('/super/p-ruangan', [SuperController::class, 'p_ruangan'])->name('super-p-ruangan');
+    Route::get('/super/p-alat', [SuperController::class, 'p_alat'])->name('super-p-alat');
+    Route::get('/super/analisis', [SuperController::class, 'analisis'])->name('super-analisis');
+});
+
+Route::middleware(['auth', 'admin:1'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index']);
+});
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -19,6 +19,14 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): Response
     {
+        if (Auth::check()) {
+            // The user is logged in...
+            if (auth()->user()->level == '0') {
+                return redirect()->intended('/super')->with('login', 'Anda Sudah login !');
+            } elseif (auth()->user()->level == '1') {
+                return redirect()->intended('/admin')->with('login', 'Anda Sudah login !');
+            };
+        }
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
@@ -34,6 +42,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if (auth()->user()->level == '0') {
+            return redirect()->intended('/super');
+        } elseif (auth()->user()->level == '1') {
+            return redirect()->intended('/admin');
+        }
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -48,6 +62,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 }

@@ -28,6 +28,7 @@
         "@fullcalendar/react": "^6.1.4",
         "@fullcalendar/timegrid": "^6.1.4",
         "daisyui": "^2.51.4",
-        "fullcalendar": "^6.1.4"
+        "fullcalendar": "^6.1.4",
+        "js-cookie": "^3.0.1"
     }
 }

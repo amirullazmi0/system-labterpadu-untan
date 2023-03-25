@@ -31,67 +31,71 @@ export default function Login({ status, canResetPassword }) {
     };
 
     return (
-        <GuestLayout>
+        <>
             <Head title="Log in" />
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+            <div className="bg-body">
+                <div className="grid grid-cols-1 lg:grid-cols-2 ">
+                    <div className="login-form flex justify-center items-center">
+                        <div className="card-form flex-1">
+                            <div className="box-head flex justify-center items-center">
+                                <img src="/img/untan.png" alt="" />
+                                <div className="card-head">
+                                    <div className="head1">upt laboratorium terpadu</div>
+                                    <div className="head2">universitas tanjungpura</div>
+                                </div>
+                            </div>
+                            <hr className='mt-3 mb-4' />
+                            <form onSubmit={submit}>
+                                <div>
+                                    <InputLabel htmlFor="email" value="Email" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                                    <TextInput
+                                        id="email"
+                                        type="email"
+                                        name="email"
+                                        value={data.email}
+                                        className="mt-1 block w-full"
+                                        autoComplete="username"
+                                        isFocused={true}
+                                        onChange={handleOnChange}
+                                    />
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={handleOnChange}
-                    />
+                                    <InputError message={errors.email} className="mt-2" />
+                                </div>
 
-                    <InputError message={errors.email} className="mt-2" />
+                                <div className="mt-4">
+                                    <InputLabel htmlFor="password" value="Password" />
+
+                                    <TextInput
+                                        id="password"
+                                        type="password"
+                                        name="password"
+                                        value={data.password}
+                                        className="mt-1 block w-full"
+                                        autoComplete="current-password"
+                                        onChange={handleOnChange}
+                                    />
+
+                                    <InputError message={errors.password} className="mt-2" />
+                                </div>
+                                <div className="flex items-center justify-center mt-5">
+                                    <PrimaryButton className="ml-4" disabled={processing}>
+                                        Log in
+                                    </PrimaryButton>
+                                </div>
+                            </form>
+                            <div className="card-form-footer mt-5 text-center">
+                                <small>Kembali Ke Dashboard <Link className='text-primary' href='/'>DISINI</Link> </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="login-img">
+                        <img src="/img/labterpadu.jpg" alt="" />
+                    </div>
                 </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={handleOnChange}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="block mt-4">
-                    <label className="flex items-center">
-                        <Checkbox name="remember" value={data.remember} onChange={handleOnChange} />
-                        <span className="ml-2 text-sm text-gray-600">Remember me</span>
-                    </label>
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
-                    <PrimaryButton className="ml-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
+            </div>
+        </>
     );
 }
