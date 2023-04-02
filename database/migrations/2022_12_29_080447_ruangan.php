@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('color')->nullable();
             $table->longText('desc')->nullable();
-            $table->string('photos')->nullable();
             $table->timestamps();
         });
     }

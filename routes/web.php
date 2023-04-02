@@ -39,6 +39,8 @@ Route::middleware(['auth', 'super:0'])->group(function () {
     Route::get('/super/laboran/{user:id}/delete', [LaboranController::class, 'destroy']);
 
     Route::get('/super/ruangan', [SuperController::class, 'ruangan'])->name('super-ruangan');
+    Route::get('/super/add-ruangan', [SuperController::class, 'add_ruangan'])->name('super-add-ruangan');
+
     Route::get('/super/p-ruangan', [SuperController::class, 'p_ruangan'])->name('super-p-ruangan');
     Route::get('/super/p-alat', [SuperController::class, 'p_alat'])->name('super-p-alat');
     Route::get('/super/analisis', [SuperController::class, 'analisis'])->name('super-analisis');

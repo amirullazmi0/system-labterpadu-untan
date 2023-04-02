@@ -17,7 +17,7 @@ export default function AddLaboranSuper(props) {
                 <Tron />
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
-                    <div className="col-span-7 dashboard-item">
+                    <div className="col-span-7 dashboard-isi">
                         <AddLaboranItem lab={props.lab} errors={props.errors} />
                     </div>
                 </div>

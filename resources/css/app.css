@@ -365,9 +365,9 @@
 }
 
 .laboran-item .card{
-    /* background-color: rgb(255, 255, 255); */
+    background-color: rgb(255, 255, 255);
     border-radius: 10px;
-    /* padding: 20px; */
+    padding: 20px;
     margin: 5px;
 }
 

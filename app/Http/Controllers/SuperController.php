@@ -326,13 +326,15 @@ class SuperController extends Controller
 
     public function add_ruangan()
     {
-        return view('/superadmin/add_ruangan', [
+        $data = [
             "title" => "Halaman Tambah ruangan",
             "active" => "ruangan",
             "user" => User::all(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/AddRuanganSuper', $data);
     }
 
     public function store_ruangan(Request $request)
