@@ -12,4 +12,10 @@ class Ruangan extends Model
     protected $table = 'ruangan';
 
     protected $guarded = ['id'];
+
+    protected $fillable = [
+        'name',
+        'color',
+        'desc'
+    ];
 }

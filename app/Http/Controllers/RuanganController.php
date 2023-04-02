@@ -36,6 +36,16 @@ class RuanganController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request);
+        $validateData = $request->validate([
+            'name' => 'required|max:50|unique:ruangan',
+            'color' => 'nullable',
+            'desc' => 'nullable',
+        ]);
+
+        Ruangan::create($validateData);
+
+        return redirect('/super/ruangan')->with('success', 'Tambah Ruangan Success!');
     }
 
     /**
@@ -70,6 +80,21 @@ class RuanganController extends Controller
     public function update(Request $request, Ruangan $ruangan)
     {
         //
+        $rules = ([
+            'desc' => 'nullable',
+            'color' => 'nullable',
+        ]);
+
+        if ($request->name != $ruangan->name) {
+            $rules['name'] = 'required|max:50|unique:ruangan';
+        }
+
+        $validateData = $request->validate($rules);
+
+        Ruangan::where('id', $ruangan->id)
+            ->update($validateData);
+
+        return redirect('/super/ruangan')->with('success', 'Edit Ruangan Success!');
     }
 
     /**
@@ -78,8 +103,13 @@ class RuanganController extends Controller
      * @param  \App\Models\Ruangan  $ruangan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ruangan $ruangan)
+    public function destroy(Ruangan $ruangan, Request $request)
     {
         //
+        if ($ruangan->name === $request->name) {
+            Ruangan::destroy($ruangan->id);
+        }
+
+        return redirect('/super/ruangan')->with('delete', 'Ruangan berhasil dihapus!');
     }
 }

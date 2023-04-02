@@ -254,61 +254,6 @@ class SuperController extends Controller
         return Inertia::render('Super/EditLaboranSuper', $data);
     }
 
-    public function update_laboran(Request $request, User $user)
-    {
-        $rules = ([
-            'name' => 'required|max:50',
-            'level' => 'required',
-            'lab_id' => 'required',
-            'email' => 'required|email:dns',
-            'photo' => 'image|file|max:2048',
-            'address' => "max:255"
-        ]);
-
-        if ($request->name != $user->name) {
-            $rules['name'] = 'required|max:50|unique:users';
-        }
-
-        if ($request->nip != $user->nip) {
-            $rules['nip'] = 'required|min:1|max:25|unique:users';
-        }
-
-        $validateData = $request->validate($rules);
-
-        if ($request->file('photo')) {
-            $rules['photo'] = 'image|file|max:2048';
-
-            $validateData = $request->validate($rules);
-
-            if ($user->photo) {
-                // File::delete('storage/' . $user->photo);
-                $file = 'public/storage/' . $user->photo;
-                @unlink($file);
-            }
-            // $validateData['photo'] = $request->file('photo')->store('/img/user');
-            $fileName = time() . '.' . $request->file('photo')->extension();
-            $path_url = '../public/storage/img/user';
-            $request->file('photo')->move(public_path($path_url), $fileName);
-            $validateData['photo'] =  'img/user/' . $fileName;
-        }
-
-        User::where('id', $user->id)
-            ->update($validateData);
-
-        return redirect('/admin/laboran')->with('success', 'Update Success !!');
-    }
-
-    public function destroy_laboran(User $user)
-    {
-        //
-        $file = 'public/storage/' . $user->photo;
-        @unlink($file);
-
-        User::destroy($user->id);
-
-        return redirect('/admin/laboran')->with('delete', 'Dosen Has Been Delated!');
-    }
-
     // Ruangan
     public function ruangan()
     {
@@ -337,84 +282,17 @@ class SuperController extends Controller
         return Inertia::render('Super/AddRuanganSuper', $data);
     }
 
-    public function store_ruangan(Request $request)
+    public function edit_ruangan(Ruangan $ruangan, Request $request)
     {
-        $validateData = $request->validate([
-            'name' => 'required|max:50|unique:ruangan',
-            'photos' => 'image|file|max:2048',
-            'desc' => 'nullable',
-            'color' => 'nullable',
-        ]);
-
-
-
-        if ($request->file('photos')) {
-            // $validateData['photos'] = $request->file('photos')->store('/img/ruangan');
-            $imageName = time() . '.' . $request->file('photos')->extension();
-            $path_url = '../public/storage/img/ruangan';
-            $request->file('photos')->move(public_path($path_url), $imageName);
-            $validateData['photos'] =  'img/ruangan/' . $imageName;
-        }
-
-        Ruangan::create($validateData);
-
-        return redirect('/admin/ruangan')->with('success', 'Add Ruangan Success !!');
-    }
-
-    public function show_ruangan(Ruangan $ruangan)
-    {
-        return view('/superadmin/show_ruangan', [
-            "title" => "Halaman Detail Ruangan",
-            "active" => "ruangan",
-            "ruangan" => $ruangan,
-            "nomor" => 1,
-        ]);
-    }
-
-    public function edit_ruangan(Ruangan $ruangan)
-    {
-        return view('/superadmin/edit_ruangan', [
+        $data = [
             "title" => "Halaman Edit Ruangan",
             "active" => "ruangan",
-            "ruangan" => $ruangan,
+            "ruangan" => Ruangan::where('id', $ruangan->id)->where('name', $request->name)->get(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
-    }
+        ];
 
-    public function update_ruangan(Request $request, Ruangan $ruangan)
-    {
-        $rules = ([
-            'desc' => 'nullable',
-            'color' => 'nullable',
-        ]);
-
-        if ($request->name != $ruangan->name) {
-            $rules['name'] = 'required|max:50|unique:ruangan';
-        }
-
-        $validateData = $request->validate($rules);
-
-        if ($request->file('photos')) {
-
-            $rules['photos'] = 'image|file|max:2048';
-
-            $validateData = $request->validate($rules);
-
-            if ($ruangan->photos != null) {
-                $file = 'public/storage/' . $ruangan->photos;
-                @unlink($file);
-            }
-            // $validateData['photos'] = $request->file('photos')->store('/img/ruangan');
-            $fileName = time() . '.' . $request->file('photos')->extension();
-            $path_url = '../public/storage/img/ruangan';
-            $request->file('photos')->move(public_path($path_url), $fileName);
-            $validateData['photos'] =  'img/ruangan/' . $fileName;
-        }
-        Ruangan::where('id', $ruangan->id)
-            ->update($validateData);
-
-        return redirect('/admin/ruangan')->with('success', 'Update Success !!');
+        return Inertia::render('Super/EditRuanganSuper', $data);
     }
 
     public function destroy_ruangan(Ruangan $ruangan)

@@ -1,10 +1,10 @@
 import Navbar from '@/Components/Admin/Navbar';
 import Sidebar from '@/Components/Admin/Sidebar';
 import Tron from '@/Components/Admin/Tron';
-import AddRuanganItem from '@/Components/Super/AddRuanganItem';
+import EditRuanganItem from '@/Components/Super/EditRuanganItem';
 import { Head, Link } from '@inertiajs/react';
 
-export default function AddRuanganSuper(props) {
+export default function EditRuanganSuper(props) {
     return (
         <>
             <Head title={props.title} />
@@ -17,7 +17,7 @@ export default function AddRuanganSuper(props) {
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        <AddRuanganItem errors={props.errors} />
+                        <EditRuanganItem ruangan={props.ruangan[0]} errors={props.errors} />
                     </div>
                 </div>
             </div>

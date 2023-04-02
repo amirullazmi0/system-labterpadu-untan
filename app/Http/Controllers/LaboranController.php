@@ -126,6 +126,6 @@ class LaboranController extends Controller
             User::destroy($user->id);
         }
 
-        return back()->with('delete', 'Laboran berhasil dihapus');
+        return back()->with('delete', 'Laboran berhasil dihapus!');
     }
 }

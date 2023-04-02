@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react"
+import { Link, router } from "@inertiajs/react"
 import { useState } from "react"
 const LaboranItem = ({ laboran, lab, notif }) => {
     const alertSuccess = () => {

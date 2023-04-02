@@ -10,6 +10,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SuperController;
 use App\Http\Controllers\LaboranController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RuanganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,10 @@ Route::middleware(['auth', 'super:0'])->group(function () {
 
     Route::get('/super/ruangan', [SuperController::class, 'ruangan'])->name('super-ruangan');
     Route::get('/super/add-ruangan', [SuperController::class, 'add_ruangan'])->name('super-add-ruangan');
+    Route::post('/super/add-ruangan', [RuanganController::class, 'store']);
+    Route::get('/super/ruangan/{ruangan:id}/edit', [SuperController::class, 'edit_ruangan'])->name('super-edit-ruangan');
+    Route::post('/super/ruangan/{ruangan:id}/edit', [RuanganController::class, 'update']);
+    Route::get('/super/ruangan/{ruangan:id}/delete', [RuanganController::class, 'destroy']);
 
     Route::get('/super/p-ruangan', [SuperController::class, 'p_ruangan'])->name('super-p-ruangan');
     Route::get('/super/p-alat', [SuperController::class, 'p_alat'])->name('super-p-alat');

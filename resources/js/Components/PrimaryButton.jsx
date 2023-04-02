@@ -3,10 +3,10 @@ export default function PrimaryButton({ className = '', disabled, children, ...p
         <button
             {...props}
             className={
-                `btn btn-wide btn-sm
+                `btn btn-wide btn-black btn-sm
                 } ` + className
             }
-            disabled={disabled}
+        // disabled={disabled}
         >
             {children}
         </button>

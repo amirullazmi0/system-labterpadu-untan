@@ -199,16 +199,20 @@
     color: rgb(255, 255, 255);
 }
 .btn-black{
-    background-color: rgb(83, 86, 90);
+    background-color: rgb(38, 38, 38);
     color: rgb(255, 255, 255);
 }
 .btn-black:hover {
-    background-color: rgb(57, 59, 61);
+    background-color: rgb(17, 17, 17);
     color: rgb(255, 255, 255);
 }
 
 .btn-black-nav:hover{
-    background-color: rgb(83, 86, 90);
+    background-color: rgb(38, 38 ,38);
+    color: rgb(255, 255, 255);
+}
+.btn-black-nav:active{
+    background-color: rgb(17, 17, 17);
     color: rgb(255, 255, 255);
 }
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -249,7 +253,7 @@
 .sa-body .active{
     padding-left: 25px;
     /* background-color: rgb(0, 119, 255); */
-    background-color: rgb(83, 86, 90);
+    background-color: rgb(38, 38, 38);
     border-radius: 10px;
     font-weight: bold;
     color: rgb(255, 255, 255);
@@ -258,7 +262,7 @@
 .sa-body .sa-item:hover{
     padding-left: 25px;
     /* background-color: rgb(0, 119, 255); */
-    background-color: rgb(83, 86, 90);
+    background-color: rgb(17, 17, 17);
     border-radius: 10px;
     font-weight: bold;
     color: rgb(255, 255, 255);
