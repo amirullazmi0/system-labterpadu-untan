@@ -10,13 +10,12 @@ const EditLaboranItem = ({ lab, errors, user }) => {
     const [level, setLevel] = useState('1')
     const [lab_id, setLab_id] = useState(user.lab_id)
     const [address, setAddress] = useState(user.address)
-    console.log('address : ', address);
+
     const handleSubmit = () => {
         const data = {
             name, email, password, level, lab_id, address
         }
-        router.post('/super/add-laboran', data)
-        console.log('data : ', data);
+        router.post('/super/laboran/' + user.id + '/edit', data)
         setNotif(true)
         // setName('')
         // setEmail('')
@@ -40,7 +39,7 @@ const EditLaboranItem = ({ lab, errors, user }) => {
                                 <label className="label">
                                     <span className="label-text">Nama Lengkap</span>
                                 </label>
-                                <input type="text" placeholder="Nama Lengkap" className="input input-bordered max-w-xs" value={name} onChange={(name) => setName(name.target.value)} />
+                                <input type="text" placeholder="Nama Lengkap" className="input input-bordered max-w-xs" value={name ? name : ""} onChange={(name) => setName(name.target.value)} />
                                 <label className="label">
                                     {errors.name &&
                                         <span className="label-text-alt text-error">{errors.name}</span>
@@ -51,7 +50,7 @@ const EditLaboranItem = ({ lab, errors, user }) => {
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
-                                <input type="email" value={email} onChange={(email) => setEmail(email.target.value)} placeholder="example@gmail.com" className="input input-bordered max-w-xs" />
+                                <input type="email" value={email ? email : ""} onChange={(email) => setEmail(email.target.value)} placeholder="example@gmail.com" className="input input-bordered max-w-xs" />
                                 <label className="label">
                                     {errors.email &&
                                         <span className="label-text-alt text-error">{errors.email}</span>
@@ -89,7 +88,7 @@ const EditLaboranItem = ({ lab, errors, user }) => {
                                 <label className="label">
                                     <span className="label-text">Alamat</span>
                                 </label>
-                                <textarea value={address} onChange={(address) => setAddress(address.target.value)} className="textarea textarea-bordered" placeholder="Alamat"></textarea>
+                                <textarea value={address ? address : ""} onChange={(address) => setAddress(address.target.value)} className="textarea textarea-bordered" placeholder="Alamat"></textarea>
                                 <label className="label">
                                     {errors.address &&
                                         <span className="label-text-alt text-error">{errors.address}</span>

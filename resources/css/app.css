@@ -178,13 +178,13 @@
 
 /* BTN RED */
 .btn-red{
-    background-color: rgb(192, 65, 27);
+    background-color: rgb(255, 15, 15);
     border: none;
     color: rgb(255, 255, 255);
 }
 
 .btn-red:hover{
-    background-color: rgb(161, 46, 11);
+    background-color: rgb(221, 17, 17);
     border: none;
     color: rgb(255, 255, 255);
 }
@@ -283,8 +283,8 @@
 
 .tron-admin{
     background: url('/img/tronBlack.png');
-    min-height: 190px;
-    margin-bottom: -70px;
+    min-height: 230px;
+    margin-bottom: -100px;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius:  0px;
     z-index: -1;
@@ -365,11 +365,12 @@
 }
 
 .laboran-item .card{
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 255, 255); */
     border-radius: 10px;
-    padding: 20px;
+    /* padding: 20px; */
     margin: 5px;
 }
+
 @media Screen and (max-width:800px){
     .navbar-item{
         display: none;

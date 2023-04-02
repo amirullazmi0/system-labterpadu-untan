@@ -89,6 +89,28 @@ class LaboranController extends Controller
     public function update(Request $request, User $user)
     {
         //
+        $rules = ([
+            'name' => 'required|max:50',
+            'level' => 'required',
+            'lab_id' => 'required',
+            'email' => 'required|email:dns',
+            'address' => "max:255"
+        ]);
+
+        if ($request->name != $user->name) {
+            $rules['name'] = 'required|max:50|unique:users';
+        }
+
+        if ($request->email != $user->email) {
+            $rules['email'] = 'required|email:dns|unique:users';
+        }
+
+        $validateData = $request->validate($rules);
+
+        User::where('id', $user->id)
+            ->update($validateData);
+
+        return redirect('/super/laboran')->with('success', 'Laboran berhasil diupdate!');
     }
 
     /**
@@ -97,8 +119,13 @@ class LaboranController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(User $user, Request $request)
     {
-        //
+        // dd($request->name);
+        if ($user->name === $request->name) {
+            User::destroy($user->id);
+        }
+
+        return back()->with('delete', 'Laboran berhasil dihapus');
     }
 }

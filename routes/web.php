@@ -35,7 +35,8 @@ Route::middleware(['auth', 'super:0'])->group(function () {
     Route::post('/super/add-laboran', [LaboranController::class, 'store']);
     Route::get('/super/laboran/{user:id}', [SuperController::class, 'show_laboran'])->name('super-show-laboran');
     Route::get('/super/laboran/{user:id}/edit', [SuperController::class, 'edit_laboran'])->name('super-edit-laboran');
-    Route::post('/super/laboran/{user:id}/edit', [LaboranController::class, 'update', 'edit_laboran'])->name('super-edit-laboran');
+    Route::post('/super/laboran/{user:id}/edit', [LaboranController::class, 'update']);
+    Route::get('/super/laboran/{user:id}/delete', [LaboranController::class, 'destroy']);
 
     Route::get('/super/ruangan', [SuperController::class, 'ruangan'])->name('super-ruangan');
     Route::get('/super/p-ruangan', [SuperController::class, 'p_ruangan'])->name('super-p-ruangan');
