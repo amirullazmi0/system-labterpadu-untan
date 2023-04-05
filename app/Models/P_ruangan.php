@@ -15,6 +15,9 @@ class P_ruangan extends Model
 
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'name', 'ruangan_id', 'event', 'date_start', 'date_end', 'time_start', 'time_end', 'desc', 'berkas'
+    ];
     public function ruangan()
 
     {

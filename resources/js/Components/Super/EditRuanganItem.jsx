@@ -34,7 +34,7 @@ const EditRuanganItem = ({ errors, ruangan }) => {
                                         <label className="label">
                                             <span className="label-text">Nama Ruangan</span>
                                         </label>
-                                        <input type="" placeholder="Nama Ruangan" className="input input-bordered  max-w-xs w-full" value={name ? name : ""} onChange={(name) => setName(name.target.value)} />
+                                        <input type="text" placeholder="Nama Ruangan" className="input input-bordered  max-w-xs w-full" value={name ? name : ""} onChange={(name) => setName(name.target.value)} />
                                         <label className="label">
                                             {errors.name &&
                                                 <span className="label-text-alt text-error">{errors.name}</span>

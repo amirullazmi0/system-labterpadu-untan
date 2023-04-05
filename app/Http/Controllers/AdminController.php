@@ -10,6 +10,7 @@ use App\Models\Ruangan;
 use App\Models\P_ruangan;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -20,23 +21,16 @@ class AdminController extends Controller
 
     public function index()
     {
-        //
-        $j_alat = Alat::where('lab_id', '=', auth()->user()->lab_id)->count();
-
         $data = [
             "title" => "Halaman Dashboard",
             "active" => "dashboard",
             "nomor" => 1,
             "lab" => Lab::all(),
+            "alat" => Alat::where('lab_id', auth()->user()->lab_id)->count(),
             "user" => User::all(),
-            "jumlah_alat" => $j_alat,
         ];
 
-        $lab = Lab::where('id', '=', auth()->user()->lab_id)->get();
-        $alat = Alat::where('lab_id', '=', auth()->user()->lab_id)->get();
-        $p_alat = P_alat::where('lab_id', '=', auth()->user()->lab_id)->get();
         return Inertia::render('Admin/DashboardAdmin', $data);
-        // return view('/admin/index', ($data), compact('alat', 'p_alat'));
     }
 
     public function profil(User $user)
@@ -118,71 +112,10 @@ class AdminController extends Controller
         return back()->with("successs", "Update Password Success");
     }
 
-    public function lab()
-    {
-        return view('/admin/lab', [
-            "title" => "Halaman Laboratorium",
-            "active" => "lab",
-            "users" => User::all(),
-            "lab" => Lab::all(),
-            "alat" => Alat::where('lab_id', '=', auth()->user()->lab_id)->latest()->get(),
-            "nomor" => 1,
-        ]);
-    }
-
-    public function edit_lab(Lab $lab)
-    {
-        return view('/admin/edit_lab', [
-            "title" => "Halaman Edit Laboratorium",
-            "active" => "lab",
-            "lab" => $lab,
-            "users" => User::all(),
-            "nomor" => 1,
-        ]);
-    }
-
-    public function update_lab(Request $request, Lab $lab)
-    {
-        $rules = ([
-            'desc' => "nullable",
-        ]);
-
-        if ($request->name != $lab->name) {
-            $rules['name'] = 'required|max:50|unique:users';
-        }
-
-        $validateData = $request->validate($rules);
-
-        if ($request->file('photo')) {
-
-            $rules['photo'] = 'image|file|max:2048';
-
-            $validateData = $request->validate($rules);
-
-            if ($lab->photo != null) {
-                // File::delete('storage/' . $lab->photo);
-                $file = 'public/storage/' . $lab->photo;
-                @unlink($file);
-            }
-
-            // $validateData['photo'] = $request->file('photo')->store('/img/lab');
-            $fileName = time() . '.' . $request->file('photo')->extension();
-            $path_url = '../public/storage/img/lab';
-            $request->file('photo')->move(public_path($path_url), $fileName);
-            $validateData['photo'] =  'img/lab/' . $fileName;
-        }
-
-        Lab::where('id', $lab->id)
-            ->update($validateData);
-
-        return redirect('/aadmin/laboratorium')->with('success', 'Update Success !!');
-    }
-
     // Alat
     public function alat()
     {
-        // $getalat = Alat::where('lab_id', '=', auth()->user()->lab_id)->get();
-        return view('/admin/alat', [
+        $data = [
             "title" => "Daftar Alat",
             "active" => "alat",
             "user" => User::all(),
@@ -190,7 +123,9 @@ class AdminController extends Controller
             // "getalat" => $getalat,
             "alat" => Alat::where('lab_id', '=', auth()->user()->lab_id)->latest()->get(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Admin/Alat', $data);
     }
 
     public function add_alat()

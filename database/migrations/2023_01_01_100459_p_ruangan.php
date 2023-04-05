@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('p_ruangan', function (Blueprint $table) {
             $table->id();
             $table->string('name', 30);
-            $table->foreignId('ruangan_id')->on('ruangan');
+            $table->foreignid('ruangan_id')->on('ruangan')->onDelete('cascade')->onUpdate('cascade');
             $table->string('event', 30);
             $table->date('date_start');
             $table->date('date_end')->nullable();

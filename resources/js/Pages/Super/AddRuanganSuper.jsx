@@ -1,6 +1,6 @@
-import Navbar from '@/Components/Admin/Navbar';
-import Sidebar from '@/Components/Admin/Sidebar';
-import Tron from '@/Components/Admin/Tron';
+import Navbar from '@/Components/Super/Navbar';
+import Sidebar from '@/Components/Super/Sidebar';
+import Tron from '@/Components/Super/Tron';
 import AddRuanganItem from '@/Components/Super/AddRuanganItem';
 import { Head, Link } from '@inertiajs/react';
 

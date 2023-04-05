@@ -374,7 +374,11 @@
     padding: 20px;
     margin: 5px;
 }
-
+.card-form{
+    padding: 10px;
+    background-color: rgb(228, 228, 228);
+    border-radius: 10px;
+}
 @media Screen and (max-width:800px){
     .navbar-item{
         display: none;

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Stmt\Return_;
 
 class SuperController extends Controller
 {
@@ -350,7 +351,7 @@ class SuperController extends Controller
 
     public function add_p_ruangan()
     {
-        return view('/superadmin/add_p_ruangan', [
+        $data = [
             "title" => "Tambah Peminjaman Ruangan",
             "active" => "p_ruangan",
             "user" => User::all(),
@@ -358,7 +359,9 @@ class SuperController extends Controller
             "ruangan" => Ruangan::all(),
             "p_ruangan" => P_ruangan::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/AddP_RuanganSuper', $data);
     }
 
     public function store_p_ruangan(Request $request)
@@ -388,27 +391,31 @@ class SuperController extends Controller
         return redirect('/admin/p-ruangan/')->with('success', 'Tambah Peminjaman Success !!');
     }
 
-    public function show_p_ruangan(P_ruangan $p_ruangan)
+    public function show_p_ruangan(P_ruangan $p_ruangan, Request $request)
     {
-        return view('/superadmin/show_p_ruangan', [
+        $data = [
             "title" => "Detail Peminjaman Ruangan",
             "active" => "p_ruangan",
-            "p_ruangan" => $p_ruangan,
+            "ruangan" => Ruangan::all(),
+            "p_ruangan" => P_ruangan::where('id', $p_ruangan->id)->where('name', $request->name)->get(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/DetailPRuanganSuper', $data);
     }
 
-    public function edit_p_ruangan(P_ruangan $p_ruangan)
+    public function edit_p_ruangan(P_ruangan $p_ruangan, Request $request)
     {
-        return view('/superadmin/edit_p_ruangan', [
-            "title" => "Edit Peminjaman Ruangan",
+        $data = [
             "active" => "p_ruangan",
             "user" => User::all(),
             "lab" => Lab::all(),
             "ruangan" => Ruangan::all(),
-            "p_ruangan" => $p_ruangan,
+            "p_ruangan" => P_ruangan::where('id', $p_ruangan->id)->where('name', $request->name)->get(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Super/EditP_RuanganSuper', $data);
     }
 
     public function update_p_ruangan(P_ruangan $p_ruangan, Request $request)
