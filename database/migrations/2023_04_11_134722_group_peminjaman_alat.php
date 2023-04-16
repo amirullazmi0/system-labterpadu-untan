@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('alat', function (Blueprint $table) {
+        Schema::create('GroupPeminjamanAlat', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->foreignId('lab_id')->on('lab');
-            $table->integer('total');
-            $table->string('color')->nullable();
-            $table->longText('desc')->nullable();
+            $table->foreignId('p_alat_id')->references('id')->on('p_alat')->onDelete('cascade');
+            $table->foreignId('alat_id')->references('id')->on('alat')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alat');
+        Schema::dropIfExists('GroupPeminjamanAlat');
     }
 };

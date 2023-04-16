@@ -120,7 +120,6 @@ class AdminController extends Controller
             "active" => "alat",
             "user" => User::all(),
             "lab" => Lab::all(),
-            // "getalat" => $getalat,
             "alat" => Alat::where('lab_id', '=', auth()->user()->lab_id)->latest()->get(),
             "nomor" => 1,
         ];
@@ -130,13 +129,15 @@ class AdminController extends Controller
 
     public function add_alat()
     {
-        return view('/admin/add_alat', [
+        $data = [
             "title" => "Halaman Tambah Alat",
             "active" => "alat",
             "user" => User::all(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Admin/AddAlat', $data);
     }
 
     public function store_alat(Request $request)
@@ -176,15 +177,17 @@ class AdminController extends Controller
         ]);
     }
 
-    public function edit_alat(Alat $alat)
+    public function edit_alat(Alat $alat, Request $request)
     {
-        return view('/admin/edit_alat', [
+        $data = [
             "title" => "Halaman Edit Alat",
             "active" => "alat",
-            "alat" => $alat,
+            "alat" => Alat::where('id', $alat->id)->where('name', $request->name)->get(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Admin/EditAlat', $data);
     }
 
     public function update_alat(Request $request, alat $alat)

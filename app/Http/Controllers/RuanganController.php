@@ -43,6 +43,8 @@ class RuanganController extends Controller
             'desc' => 'nullable',
         ]);
 
+
+
         Ruangan::create($validateData);
 
         return redirect('/super/ruangan')->with('success', 'Tambah Ruangan Success!');

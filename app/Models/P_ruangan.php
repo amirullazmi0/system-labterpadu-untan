@@ -19,7 +19,6 @@ class P_ruangan extends Model
         'name', 'ruangan_id', 'event', 'date_start', 'date_end', 'time_start', 'time_end', 'desc', 'berkas'
     ];
     public function ruangan()
-
     {
         return $this->belongsTo(Ruangan::class);
     }

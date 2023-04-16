@@ -1,10 +1,10 @@
-import Navbar from '@/Components/Super/Navbar';
-import P_AlatItem from '@/Components/Super/P_AlatItem';
-import Sidebar from '@/Components/Super/Sidebar';
-import Tron from '@/Components/Super/Tron';
+import EditAlatItem from '@/Components/Admin/EditAlatItem';
+import Navbar from '@/Components/Admin/Navbar';
+import Sidebar from '@/Components/Admin/Sidebar';
+import Tron from '@/Components/Admin/Tron'
 import { Head, Link } from '@inertiajs/react';
 
-export default function P_AlatSuper(props) {
+export default function EditAlat(props) {
     return (
         <>
             <Head title={props.title} />
@@ -12,12 +12,12 @@ export default function P_AlatSuper(props) {
                 <div className="sidebar-admin">
                     <Sidebar active={props.active} />
                 </div>
-                <Navbar auth={props.auth} />
+                <Navbar lab={props.lab} auth={props.auth} />
                 <Tron />
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        <P_AlatItem notif={props.flash} p_alat={props.p_alat} alat={props.alat} />
+                        <EditAlatItem alat={props.alat[0]} errors={props.errors} />
                     </div>
                 </div>
             </div>

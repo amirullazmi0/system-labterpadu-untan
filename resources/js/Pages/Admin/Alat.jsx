@@ -1,4 +1,4 @@
-import AlatItem from '@/Components/Admin/ALatItem';
+import AlatItem from '@/Components/Admin/AlatItem';
 import Navbar from '@/Components/Admin/Navbar';
 import Sidebar from '@/Components/Admin/Sidebar';
 import Tron from '@/Components/Admin/Tron';
@@ -17,7 +17,7 @@ export default function Alat(props) {
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        {/* <AlatItem notif={props.flash} ruangan={props.ruangan} /> */}
+                        <AlatItem notif={props.flash} alat={props.alat} />
                     </div>
                 </div>
             </div>

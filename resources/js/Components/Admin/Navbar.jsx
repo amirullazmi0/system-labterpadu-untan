@@ -2,7 +2,6 @@ import { Link } from "@inertiajs/react"
 import { useState } from "react"
 
 const Navbar = ({ lab, auth }) => {
-    console.log('lab : ', lab);
     const [authName, setAuthName] = useState(auth.user.name)
     const [authLevel, setAuthKelas] = useState(auth.user.level)
     return (

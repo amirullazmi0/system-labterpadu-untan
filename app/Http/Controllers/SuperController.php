@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lab;
 use App\Models\Alat;
+use App\Models\GroupPAlat;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\P_alat;
@@ -331,12 +332,58 @@ class SuperController extends Controller
             "active" => "p_alat",
             "user" => User::all(),
             "lab" => Lab::all(),
-            "alat" =>  Alat::where('lab_id', '=', auth()->user()->lab_id)->latest()->get(),
-            "p_alat" => P_alat::where('lab_id', '=', auth()->user()->lab_id)->latest()->get(),
+            "alat" =>  Alat::all(),
+            "p_alat" => P_alat::latest()->get(),
             "nomor" => 1,
         ];
 
         return Inertia::render('Super/P_AlatSuper', $data);
+    }
+
+    public function add_p_alat()
+    {
+        $data = [
+            "title" => "Tambah Peminjaman Alat",
+            "active" => "p_alat",
+            "lab" => Lab::all(),
+            "alat" =>  Alat::all(),
+            "p_alat" => P_alat::latest()->get(),
+            "nomor" => 1,
+        ];
+
+
+        return Inertia::render('Super/AddP_AlatSuper', $data);
+    }
+
+    public function show_p_alat(P_alat $p_alat, Request $request)
+    {
+        $data = [
+            "title" => "Detail Peminjaman Alat",
+            "active" => "p_alat",
+            "user" => User::all(),
+            "lab" => Lab::all(),
+            "alat" =>  Alat::all(),
+            "p_alat" => P_alat::where('primary_id', $request->primary_id)->get(),
+            "nomor" => 1,
+        ];
+
+        return Inertia::render('Super/DetailPAlatSuper', $data);
+    }
+
+    public function edit_p_alat(P_alat $p_alat, Request $request)
+    {
+        $data = [
+            "title" => "Tambah Peminjaman Alat",
+            "active" => "p_alat",
+            "lab" => Lab::all(),
+            "alat" =>  Alat::all(),
+            "p_alat" => P_alat::where('primary_id', $request->primary_id)->get(),
+            "count_p_alat" => P_alat::where('primary_id', $request->primary_id)->count(),
+            "nomor" => 1,
+        ];
+
+
+        return Inertia::render('Super/EditP_AlatSuper', $data);
     }
     // ANALISI
     public function analisis()

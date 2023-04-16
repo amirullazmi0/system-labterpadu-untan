@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Alat;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Lab extends Model
 {
@@ -13,7 +14,7 @@ class Lab extends Model
 
     protected $guarded = ['id'];
 
-    public function alats()
+    public function alat()
     {
         return $this->hasMany(Alat::class);
     }

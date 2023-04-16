@@ -17,6 +17,7 @@ const EditP_RuanganItem = ({ pr, ruangan, errors }) => {
 
 
     const [banyakHari, setBanyakHari] = useState(false)
+    
     useEffect(() => {
         <>
             {pr.date_end && setBanyakHari(true)}

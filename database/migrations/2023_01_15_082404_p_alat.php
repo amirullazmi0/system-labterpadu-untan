@@ -15,14 +15,15 @@ return new class extends Migration
     {
         Schema::create('p_alat', function (Blueprint $table) {
             $table->id();
+            $table->string('primary_id', 50);
             $table->string('name', 30);
-            $table->foreignid('alat_id')->on('alat');
-            $table->foreignId('lab_id')->on('lab');
+            $table->unsignedBigInteger('alat_id');
+            $table->integer('total');
             $table->string('event', 30);
             $table->date('date_start');
             $table->date('date_end')->nullable();
-            // $table->time('time_start');
-            // $table->time('time_end');
+            $table->time('time_start');
+            $table->time('time_end');
             $table->longText('desc')->nullable();
             $table->string('berkas')->nullable();
             $table->timestamps();

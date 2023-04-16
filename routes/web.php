@@ -4,10 +4,12 @@ use Inertia\Inertia;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\AlatController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SuperController;
+use App\Http\Controllers\P_alatController;
 use App\Http\Controllers\LaboranController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RuanganController;
@@ -56,6 +58,12 @@ Route::middleware(['auth', 'super:0'])->group(function () {
     Route::get('/super/p-ruangan/{p_ruangan:id}/delete', [P_ruanganController::class, 'destroy']);
 
     Route::get('/super/p-alat', [SuperController::class, 'p_alat'])->name('super-p-alat');
+    Route::get('/super/add-p-alat', [SuperController::class, 'add_p_alat'])->name('super-add-p-alat');
+    Route::post('/super/add-p-alat', [P_alatController::class, 'store']);
+    Route::get('/super/p-alat/{p_alat:id}', [SuperController::class, 'show_p_alat'])->name('super-show-p-alat');
+    Route::get('/super/p-alat/{p_alat:id}/edit', [SuperController::class, 'edit_p_alat'])->name('super-edit-p-alat');
+    Route::post('/super/p-alat/{p_alat:id}/edit', [P_alatController::class, 'update']);
+
     Route::get('/super/analisis', [SuperController::class, 'analisis'])->name('super-analisis');
 });
 
