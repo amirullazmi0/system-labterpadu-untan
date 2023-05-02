@@ -71,6 +71,7 @@ const AlatItem = ({ alat, notif }) => {
                                                     <th>Alat</th>
                                                     <th>Warna Label</th>
                                                     <th>Total Tersedia</th>
+                                                    <th>Deskripsi</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -84,6 +85,7 @@ const AlatItem = ({ alat, notif }) => {
                                                                 <div style={{ backgroundColor: alat.color, color: 'rgb(255, 255, 255)', borderRadius: '5px', padding: '10px', width: '50px', marginTop: '5px' }} ></div>
                                                             </td>
                                                             <td>{alat.total}</td>
+                                                            <td>{alat.desc ? alat.desc : "-"}</td>
                                                             <td>
                                                                 <Link method="get" href={'/admin/alat/' + alat.id + '/edit'} data={{ name: alat.name }} className="btn btn-sm btn-orange mr-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

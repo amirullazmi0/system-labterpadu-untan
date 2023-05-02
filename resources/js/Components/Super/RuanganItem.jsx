@@ -72,6 +72,7 @@ const RuanganItem = ({ ruangan, notif }) => {
                                                     <th>No</th>
                                                     <th>Ruangan</th>
                                                     <th>Warna Label</th>
+                                                    <th>Deskripsi</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -85,6 +86,7 @@ const RuanganItem = ({ ruangan, notif }) => {
                                                                 <p style={{ backgroundColor: ruangan.color, color: 'rgb(255, 255, 255)', borderRadius: '5px', padding: '10px', width: '50px' }}>
                                                                 </p>
                                                             </td>
+                                                            <td>{ruangan.desc ? ruangan.desc : "-"}</td>
                                                             <td>
                                                                 <Link method="get" href={'/super/ruangan/' + ruangan.id + '/edit'} data={{ name: ruangan.name }} className="btn btn-sm btn-orange mr-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

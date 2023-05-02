@@ -134,6 +134,7 @@ class AdminController extends Controller
             "active" => "alat",
             "user" => User::all(),
             "lab" => Lab::all(),
+            "alat" => Alat::all(),
             "nomor" => 1,
         ];
 

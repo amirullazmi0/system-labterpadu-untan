@@ -1,13 +1,47 @@
 import { Link } from "@inertiajs/react"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
+import Sidebar from "./Sidebar"
 
-const Navbar = ({ auth }) => {
+const Navbar = ({ auth, active }) => {
+    console.log("Active : ", active);
     const [authName, setAuthName] = useState(auth.user.name)
     const [authLevel, setAuthKelas] = useState(auth.user.level)
+    const myRef = useRef(null);
+
+    const [sidebarActive, setSidebarActive] = useState(false)
+    const sidebarOn = () => {
+        return (
+            setSidebarActive()
+        )
+    }
+
+    useEffect(() => {
+        // Fungsi untuk menyembunyikan elemen ketika pengguna mengklik di luar elemen tersebut
+        function handleClickOutside(event) {
+            if (myRef.current && !myRef.current.contains(event.target)) {
+                myRef.current.classList.remove("show");
+                setSidebarActive(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+    }, [myRef]);
+
     return (
         <>
+            <div className={sidebarActive == false ? "sidebar-none" : "sidebar-active"} ref={myRef}>
+                <div className="sidebar-admin">
+                    <Sidebar active={active} />
+                </div>
+            </div>
             <div className="navbar-admin">
-                <div className="flex justify-end mr-5">
+                <div className="flex items-center justify-end mr-5">
+                    <div className="mr-auto" >
+                        <button className="block lg:hidden button-nav" onClick={() => sidebarOn()}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5" />
+                            </svg>
+                        </button>
+                    </div>
                     <div className="dropdown dropdown-end dropdown-hover">
                         <label tabIndex={0} className="grid">
                             <div className="na-head1">{authName}</div>

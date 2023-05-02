@@ -22,7 +22,7 @@ const DetailPAlatItem = ({ props }) => {
         <>
             <div className="laboran-item">
                 <div className="grid grid-cols-1">
-                    <div className="flex items-center ml-1">
+                    <div className="lg:flex grid lg:items-center ml-1">
                         <Link className="btn btn-sm btn-green" method="get" href={route('super-p-alat')}>
                             Daftar Peminjaman
                         </Link>
@@ -75,7 +75,7 @@ const DetailPAlatItem = ({ props }) => {
                                             p.alat_id === a.id &&
                                             <>
                                                 < li className="m-1">
-                                                    {a.name} ({p.total})
+                                                    {a.name} ( x {p.total} )
                                                 </li>
                                             </>
                                         ))

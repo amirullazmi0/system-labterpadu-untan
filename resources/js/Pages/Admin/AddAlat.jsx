@@ -17,7 +17,7 @@ export default function AddAlat(props) {
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        <AddAlatItem errors={props.errors} />
+                        <AddAlatItem errors={props.errors} alat={props.alat} />
                     </div>
                 </div>
             </div>

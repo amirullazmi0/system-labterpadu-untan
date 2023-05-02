@@ -373,11 +373,22 @@
     border-radius: 10px;
     padding: 20px;
     margin: 5px;
+    margin-bottom: 50px;
 }
 .card-form{
     padding: 10px;
     background-color: rgb(228, 228, 228);
     border-radius: 10px;
+}
+
+.button-nav{
+    padding: 5px;
+    /* transition: 0.2s; */
+    transition: transform 0.2s ease-in-out;
+}
+.button-nav:active{
+    transform: scale(0.7);
+    transition: 0.2s;
 }
 @media Screen and (max-width:800px){
     .navbar-item{
@@ -448,6 +459,18 @@
         min-height: 100vh;
         box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.123);
         z-index: 100;
-        margin-left: -300px;
+        width: 70vw;
+        position: fixed;
     }
+
+    .sidebar-none{
+        margin-left: -300px;
+        transition: 0.7s;
+
+    }
+    .sidebar-active{
+        margin-left: 00px;
+        transition: 0.7s;
+    }
+
 }

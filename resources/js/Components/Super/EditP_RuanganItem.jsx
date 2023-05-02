@@ -17,7 +17,7 @@ const EditP_RuanganItem = ({ pr, ruangan, errors }) => {
 
 
     const [banyakHari, setBanyakHari] = useState(false)
-    
+
     useEffect(() => {
         <>
             {pr.date_end && setBanyakHari(true)}
@@ -38,11 +38,11 @@ const EditP_RuanganItem = ({ pr, ruangan, errors }) => {
         <>
             <div className="laboran-item">
                 <div className="grid grid-cols-1">
-                    <div className="flex items-center ml-1">
+                    <div className="lg:flex grid lg:items-center ml-1">
                         <Link className="btn btn-sm btn-green" method="get" href={route('super-p-ruangan')}>
                             Daftar Peminjaman
                         </Link>
-                        <h1>Form Edit Peminjaman Ruangan</h1>
+                        <h1 className="hidden lg:block">Form Edit Peminjaman Ruangan</h1>
                     </div>
                     <div className="card">
                         <div className="lg:grid lg:grid-cols-3">

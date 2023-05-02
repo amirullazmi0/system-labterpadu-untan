@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('ruangan', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('color')->nullable();
             $table->longText('desc')->nullable();
             $table->timestamps();

@@ -17,7 +17,7 @@ const DetailLaboranItem = ({ props }) => {
         <>
             <div className="laboran-item">
                 <div className="grid grid-cols-1">
-                    <div className="flex items-center ml-1">
+                    <div className="lg:flex grid lg:items-center ml-1">
                         <Link className="btn btn-sm btn-green" method="get" href={route('super-laboran')}>
                             Daftar Laboran
                         </Link>

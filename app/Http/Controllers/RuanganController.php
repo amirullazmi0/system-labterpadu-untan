@@ -38,14 +38,26 @@ class RuanganController extends Controller
         //
         // dd($request);
         $validateData = $request->validate([
-            'name' => 'required|max:50|unique:ruangan',
+            'name' => 'required|max:50',
             'color' => 'nullable',
             'desc' => 'nullable',
         ]);
 
+        // dd($request->name);
+        $i = 0;
 
+        foreach ($request->name as $name) {
+            // dd($request->name[$i]);
+            if (isset($request->name[$i]) || isset($request->color[$i]) || isset($request->desc[$i])) {
 
-        Ruangan::create($validateData);
+                $validateData['name'] = $request->name[$i];
+                $validateData['color'] = $request->color[$i];
+                $validateData['desc'] = $request->desc[$i];
+                Ruangan::create($validateData);
+                $i = $i + 1;
+            }
+        }
+        // Ruangan::create($validateData);
 
         return redirect('/super/ruangan')->with('success', 'Tambah Ruangan Success!');
     }

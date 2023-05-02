@@ -1,12 +1,16 @@
 import { Link, router } from "@inertiajs/react"
 import { useState, useEffect } from "react"
 
-const EditP_AlatItem = ({ count_p_alat, p_alat, lab, alat, errors }) => {
+const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat, errors }) => {
     const [Notif, setNotif] = useState(false);
     const [jumlah, setJumlah] = useState(count_p_alat)
     const [name, setName] = useState(p_alat[0].name)
 
-    const [alat_id, setAlatId] = useState([])
+    const [alat_id, setAlatId] = useState(p_alatId)
+    // const [alat_id, setAlatId] = useState(
+    //     {count_p_alat }
+    // )
+
     const valueAlatId = (event) => {
         const selectedIndex = event.target.selectedIndex
         const selectedOption = event.target.options[selectedIndex]
@@ -18,7 +22,7 @@ const EditP_AlatItem = ({ count_p_alat, p_alat, lab, alat, errors }) => {
         })
     }
 
-    const [total, setTotal] = useState([])
+    const [total, setTotal] = useState(p_alatTotal)
     const valueTotal = (event) => {
         const no = event.target.getAttribute("no");
         setTotal(prevItems => {
@@ -49,7 +53,6 @@ const EditP_AlatItem = ({ count_p_alat, p_alat, lab, alat, errors }) => {
         { banyakHari == false && setBanyakHari(true) }
         { banyakHari == true && setBanyakHari(false), setDateEnd('') }
     }
-    // Banyak Alat
 
     const [banyakAlat, setBanyakAlat] = useState(jumlah)
 
@@ -58,7 +61,29 @@ const EditP_AlatItem = ({ count_p_alat, p_alat, lab, alat, errors }) => {
     }
     const kurangFormAlat = () => {
         setBanyakAlat(banyakAlat - 1)
+        alat_id.splice(banyakAlat - 1, 1)
+        total.splice(banyakAlat - 1, 1)
     }
+
+    const tambahTotal = (i) => {
+        !total[i] || total[i] == null || total[i] == 0 ?
+            total[i] = 1 : total[i].splice(i, 1, total[i] + 1)
+
+        console.log(total[i]);
+        // alat.map((a) => {
+        //     {
+        //         a.id === alat_id[i] && total[i] <= a.total ?
+        //             total[i] = total[i] + 1 : total[i] = total[i]
+        //     }
+        // })
+    }
+    const kurangTotal = (i) => {
+        {
+            total[i] !== 0 ?
+                total[i] = total[i] - 1 : total[i] = total[i]
+        }
+    }
+
     const renderFormAlat = () => {
         const formAlat = []
         for (let i = 0; i < banyakAlat; i++) {
@@ -117,9 +142,25 @@ const EditP_AlatItem = ({ count_p_alat, p_alat, lab, alat, errors }) => {
                                 <label className="label">
                                     <span className="label-text">Total</span>
                                 </label>
-                                {i < count_p_alat ?
+                                {alat.map((e) => (
+                                    e.id == alat_id[i] &&
+                                    <input no={i} defaultValue={total[i]} onChange={valueTotal} type="number" min={1} max={e.total} className="input w-44 text-center bg-white" />
+
+                                ))}
+                                {i > 0 &&
+                                    <button className="text-red-500 w-10 h-10 rounded-full" onClick={kurangFormAlat}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                }
+                                {/* {i < count_p_alat ?
                                     <>
-                                        <input no={i} onChange={valueTotal} value={p_alat[i].total} type="number" min="0" max="10" className="input input-bordered lg:w-32 w-32 text-center bg-white" />
+                                        <div className="btn-group-horizontal flex">
+                                            <button className="btn">-</button>
+                                            <input no={i} onChange={valueTotal} value={p_alat[i].total} min="0" max="10" className=" input-bordered w-32 text-center bg-white" />
+                                            <button className="btn">+</button>
+                                        </div>
                                         <button className="text-red-500 w-10 h-10 rounded-full" onClick={kurangFormAlat}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -127,14 +168,18 @@ const EditP_AlatItem = ({ count_p_alat, p_alat, lab, alat, errors }) => {
                                         </button>
                                     </> :
                                     <>
-                                        <input no={i} onChange={valueTotal} value={""} type="number" min="0" max="10" className="input input-bordered lg:w-32 w-32 text-center bg-white" />
+                                        <div className="btn-group-horizontal flex">
+                                            <button className="btn" onClick={kurangTotal(i)}>-</button>
+                                            <input no={i} value={!total[i] ? 1 : total[i]} onChange={valueTotal} className=" input-bordered w-32 text-center bg-white" disabled />
+                                            <button className="btn" onClick={() => tambahTotal(i)}>+</button>
+                                        </div>
                                         <button className="text-red-500 w-10 h-10 rounded-full" onClick={kurangFormAlat}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                                             </svg>
                                         </button>
                                     </>
-                                }
+                                } */}
                             </div>
                         </div>
                     </div >
@@ -148,15 +193,13 @@ const EditP_AlatItem = ({ count_p_alat, p_alat, lab, alat, errors }) => {
         const data = {
             name, alat_id, total, event, date_start, date_end, time_start, time_end, desc, berkas
         }
-        console.log('data : ', data);
-
         router.post('/super/p-alat/' + p_alat[0].id + '/edit', data)
     }
     return (
         <>
             <div className="laboran-item">
                 <div className="grid grid-cols-1">
-                    <div className="flex items-center ml-1">
+                    <div className="lg:flex grid lg:items-center ml-1">
                         <Link className="btn btn-sm btn-green" method="get" href={route('super-p-ruangan')}>
                             Daftar Peminjaman
                         </Link>
@@ -303,7 +346,7 @@ const EditP_AlatItem = ({ count_p_alat, p_alat, lab, alat, errors }) => {
                             </div>
                         </div>
                         <div className="flex justify-center">
-                            <button className="btn btn-sm btn-wide btn-blue mt-5" onClick={() => handleSubmit()}>Submit</button>
+                            <button className="btn btn-sm btn-wide btn-blue mt-5" onClick={() => handleSubmit()}>Update</button>
                         </div>
                     </div>
                 </div>

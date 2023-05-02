@@ -26,16 +26,31 @@ class AlatController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $validateData = $request->validate([
-            'name' => 'required|max:50|unique:alat',
-            'total' => 'required|integer',
+            'name' => 'required|max:50',
+            'total' => 'required',
             'color' => 'nullable',
+            'desc' => 'nullable',
         ]);
 
-        $validateData['lab_id'] = auth()->user()->lab_id;
+        $i = 0;
 
-        Alat::create($validateData);
+        foreach ($request->name as $name) {
+            // dd($request->alat_id[$i]);
+            if (isset($request->name[$i]) || isset($request->total[$i]) || isset($request->color[$i]) || isset($request->desc[$i])) {
+
+                $validateData['name'] = $request->name[$i];
+                $validateData['total'] = $request->total[$i];
+                $validateData['color'] = $request->color[$i];
+                $validateData['desc'] = $request->desc[$i];
+                $validateData['lab_id'] = auth()->user()->lab_id;
+                // dd($validateData);
+                Alat::create($validateData);
+                $i = $i + 1;
+            }
+        }
+
+        // Alat::create($validateData);
 
         return redirect('/admin/alat')->with('success', 'Tambah Alat Berhasil!');
     }

@@ -1,7 +1,10 @@
 import { Link } from "@inertiajs/react"
 import { useState } from "react"
 
-const Sidebar = ({ active }) => {
+const Sidebar = ({ active, gass }) => {
+    const [sidebarOn, setSideBarOn] = useState(gass)
+
+    console.log("adadas : ", sidebarOn  );
     const [iniActive, setActive] = useState(active)
     return (
         <>

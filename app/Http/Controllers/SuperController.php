@@ -333,7 +333,7 @@ class SuperController extends Controller
             "user" => User::all(),
             "lab" => Lab::all(),
             "alat" =>  Alat::all(),
-            "p_alat" => P_alat::latest()->get(),
+            "p_alat" => P_alat::orderByDesc('created_at')->get(),
             "nomor" => 1,
         ];
 
@@ -378,6 +378,8 @@ class SuperController extends Controller
             "lab" => Lab::all(),
             "alat" =>  Alat::all(),
             "p_alat" => P_alat::where('primary_id', $request->primary_id)->get(),
+            "p_alatId" => P_alat::where('primary_id', $request->primary_id)->pluck('alat_id'),
+            "p_alatTotal" => P_alat::where('primary_id', $request->primary_id)->pluck('total'),
             "count_p_alat" => P_alat::where('primary_id', $request->primary_id)->count(),
             "nomor" => 1,
         ];

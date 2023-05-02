@@ -6,6 +6,7 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
     const [jumlah, setJumlah] = useState(1)
     const [name, setName] = useState('')
 
+    const empty = 0
     const [alat_id, setAlatId] = useState([])
     const valueAlatId = (event) => {
         const selectedIndex = event.target.selectedIndex; // mendapatkan index dari opsi yang dipilih
@@ -18,8 +19,7 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
             return alatID
         })
     }
-
-    const [total, setTotal] = useState([])
+    const [total, setTotal] = useState([1])
     const valueTotal = (event) => {
         const no = event.target.getAttribute("no");
         setTotal(prevItems => {
@@ -28,9 +28,6 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
             return Ntotal
         })
     }
-
-    console.log('full alat : ', alat_id, total);
-
     const [event, setEvent] = useState('')
     const [date_start, setDateStart] = useState('')
     const [date_end, setDateEnd] = useState('')
@@ -45,16 +42,28 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
         { banyakHari == false && setBanyakHari(true) }
         { banyakHari == true && setBanyakHari(false), setDateEnd('') }
     }
-    // Banyak Alat
+
 
     const [banyakAlat, setBanyakAlat] = useState(jumlah)
 
-    const tambahFormAlat = () => {
-        setBanyakAlat(banyakAlat + 1)
+    const tambahFormAlat = (e) => {
+        {
+            alat_id[e - 1] != null && setBanyakAlat(banyakAlat + 1)
+            setTotal(prevItems => {
+                const Ntotal = [...prevItems];
+                Ntotal[e] = 1
+                return Ntotal
+            })
+
+        }
     }
     const kurangFormAlat = () => {
         setBanyakAlat(banyakAlat - 1)
+        alat_id.splice(banyakAlat - 1, 1)
+        total.splice(banyakAlat - 1, 1)
     }
+
+    let zz = 0;
     const renderFormAlat = () => {
         const formAlat = []
         for (let i = 0; i < banyakAlat; i++) {
@@ -65,23 +74,29 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
                         <div className="lg:col-span-5 col-span-5 form-control m-1">
                             <select defaultValue={'DEFAULT'} className="select select-bordered w-full" onChange={valueAlatId} disabled={alat == null || alat.length == 0 ? true : false}>
                                 <option value="DEFAULT" className="hidden" disabled>Pilih Alat</option>
-                                {alat.map((e) => (
-                                    <option
-                                        key={e.id}
-                                        no={i}
-                                        value={e.id}>
-                                        {e.name}
-                                        {
-                                            lab.map((labzz) => (
-                                                e.lab_id == labzz.id &&
-                                                " - " + labzz.name
-                                            ))
-                                        }
-                                    </option>
-                                ))}
+                                {
+                                    alat.map((e) => (
+                                        <>
+                                            < option
+                                                key={e.id}
+                                                no={i}
+                                                value={e.id}
+                                            >
+                                                {e.name}
+                                                {
+                                                    lab.map((labzz) => (
+                                                        e.lab_id == labzz.id &&
+                                                        " - " + labzz.name
+                                                    ))
+                                                }
+                                            </option>
+                                        </>
+                                    ))
+                                }
+
                             </select>
                             <label className="label">
-                                {errors.alat_id && !alat_id &&
+                                {errors.alat_id && !alat_id[i] &&
                                     <span className="label-text-alt text-error">Please select alat</span>
                                 }
                             </label>
@@ -91,7 +106,11 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
                                 <label className="label">
                                     <span className="label-text">Total</span>
                                 </label>
-                                <input no={i} onChange={valueTotal} type="number" min="0" max="10" className="input input-bordered lg:w-32 w-32 text-center bg-white" />
+                                {alat.map((e) => (
+                                    e.id == alat_id[i] &&
+                                    <input no={i} defaultValue={1} onChange={valueTotal} type="number" min={1} max={e.total} className="input w-44 text-center bg-white" />
+
+                                ))}
                                 {i > 0 &&
                                     <button className="text-red-500 w-10 h-10 rounded-full" onClick={kurangFormAlat}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -108,19 +127,10 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
 
         return formAlat
     }
-
-    const cobaHandleSubmit = () => {
-        const data = [
-            alat_id, total
-        ]
-
-    }
     const handleSubmit = () => {
         const data = {
             name, alat_id, total, event, date_start, date_end, time_start, time_end, desc, berkas
         }
-        console.log('data : ', data);
-
         router.post('/super/add-p-alat', data)
     }
     return (
@@ -172,7 +182,7 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
                                 <div className="card-form m-1">
                                     {renderFormAlat()}
                                     <div className="flex justify-end items-center">
-                                        <button className="btn btn-sm" onClick={tambahFormAlat}>
+                                        <button className="btn btn-sm" onClick={() => tambahFormAlat(banyakAlat)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                             </svg>

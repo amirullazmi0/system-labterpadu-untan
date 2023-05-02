@@ -44,7 +44,7 @@ const P_AlatItem = ({ alat, p_alat, notif }) => {
     const [lastItem, setLastItem] = useState(null);
 
     let last = null
-
+    let number = 1
     const handleLastItem = (e) => {
         setLastItem(e)
     }
@@ -89,12 +89,12 @@ const P_AlatItem = ({ alat, p_alat, notif }) => {
                                                 </tr>
                                             </thead>
                                             <tbody className="text-center">
-                                                {p_alat.map((p, index, r) => {
+                                                {p_alat.map((p, index) => {
                                                     if (p.primary_id !== last) {
                                                         last = p.primary_id
                                                         return (
                                                             < tr key={index} >
-                                                                <th>{index + 1}</th>
+                                                                <th>{number++}</th>
                                                                 <td>
                                                                     <Link className="font-bold " method="get" href={'/super/p-alat/' + p.id} data={{ primary_id: p.primary_id }}>
                                                                         {p.primary_id}
