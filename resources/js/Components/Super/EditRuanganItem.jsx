@@ -7,8 +7,6 @@ const EditRuanganItem = ({ errors, ruangan }) => {
     const [name, setName] = useState(ruangan.name)
     const [color, setColor] = useState(ruangan.color)
     const [desc, setDesc] = useState(ruangan.desc)
-
-    console.log('get ruangan : ', ruangan);
     const handleSubmit = () => {
         const data = {
             name, color, desc

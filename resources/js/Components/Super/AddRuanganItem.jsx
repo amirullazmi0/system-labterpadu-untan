@@ -60,7 +60,7 @@ const AddRuanganItem = ({ errors }) => {
         const formRuangan = []
         for (let i = 0; i < banyakAlat; i++) {
             formRuangan.push(
-                <>
+                <div key={i}>
                     <div className="grid grid-cols-2 lg:grid-cols-6">
                         <div className="col-span-2 lg:col-span-6">
                             <h2 className="font-bold">Form Ruangan {i + 1}</h2>
@@ -111,7 +111,7 @@ const AddRuanganItem = ({ errors }) => {
                             </div>
                         </div>
                     </div>
-                </>
+                </div>
             )
         }
 

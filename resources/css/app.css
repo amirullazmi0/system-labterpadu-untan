@@ -94,6 +94,11 @@
     display: none;
 }
 
+.navnav .active{
+    background-color: rgb(17, 17, 17);
+    color: rgb(255, 255, 255);
+}
+
 #sidebar-on{
     display: none;
 }
@@ -226,6 +231,7 @@
     z-index: 100;
     width: 22vw;
     position: fixed;
+    transition: 0.7s;
 }
 .sidebar-admin .sa-base{
     padding: 20px;
@@ -295,8 +301,8 @@
 }
 
 .dashboard-item{
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
     border-radius: 10px;
 }
 
@@ -341,8 +347,8 @@
 
 /* lab item */
 .lab-item{
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
     border-radius: 10px;
 }
 .lab-item .card{
@@ -354,8 +360,8 @@
 
 /* laboran item */
 .laboran-item{
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
     border-radius: 10px;
 }
 
@@ -389,6 +395,10 @@
 .button-nav:active{
     transform: scale(0.7);
     transition: 0.2s;
+}
+
+.btn-sidebar{
+    display: none;
 }
 @media Screen and (max-width:800px){
     .navbar-item{
@@ -464,13 +474,19 @@
     }
 
     .sidebar-none{
-        margin-left: -300px;
-        transition: 0.7s;
+        margin-left: -350px;
+        transition: 1s;
 
     }
     .sidebar-active{
         margin-left: 00px;
-        transition: 0.7s;
+        transition: 1s;
+    }
+    .btn-sidebar{
+        display: block;
+        position: absolute;
+        top: 50vh;
+        left: 65vw;
     }
 
 }

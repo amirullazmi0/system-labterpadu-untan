@@ -1,12 +1,11 @@
-import EditP_AlatItem from '@/Components/Super/EditP_AlatItem';
 import Navbar from '@/Components/Super/Navbar';
-import Sidebar from '@/Components/Super/Sidebar';
+import ProfilItem from '@/Components/Super/ProfilItem';
 import Tron from '@/Components/Super/Tron';
-
-
 import { Head, Link } from '@inertiajs/react';
 
-export default function EditP_AlatSuper(props) {
+export default function ProfilSuper(props) {
+
+    console.log('user : ', props.user);
     return (
         <>
             <Head title={props.title} />
@@ -16,15 +15,7 @@ export default function EditP_AlatSuper(props) {
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        <EditP_AlatItem
-                            p_alat={props.p_alat}
-                            p_alatId={props.p_alatId}
-                            p_alatTotal={props.p_alatTotal}
-                            count_p_alat={props.count_p_alat}
-                            lab={props.lab}
-                            alat={props.alat}
-                            errors={props.errors}
-                        />
+                        <ProfilItem user={props.user[0]} berkas={props.temp_berkas} />
                     </div>
                 </div>
             </div>

@@ -17,7 +17,7 @@ const P_AlatItem = ({ alat, p_alat, notif }) => {
     }
     const alertDelete = () => {
         return (
-            <>
+                <>
                 <div className="alert alert-warning shadow-lg mb-5">
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -93,7 +93,7 @@ const P_AlatItem = ({ alat, p_alat, notif }) => {
                                                     if (p.primary_id !== last) {
                                                         last = p.primary_id
                                                         return (
-                                                            < tr key={index} >
+                                                            <tr key={p.id} >
                                                                 <th>{number++}</th>
                                                                 <td>
                                                                     <Link className="font-bold " method="get" href={'/super/p-alat/' + p.id} data={{ primary_id: p.primary_id }}>
@@ -109,16 +109,15 @@ const P_AlatItem = ({ alat, p_alat, notif }) => {
                                                                 <td>
                                                                     <div className="text-left" >
                                                                         {p_alat.map((e) => (
-                                                                            <>
-                                                                                {alat.map((alat) => (
-                                                                                    <>
+                                                                            <div key={e.id}>
+                                                                                {alat.map((alat) => {
+                                                                                    <div key={alat.id}>
                                                                                         {e.primary_id === p.primary_id && e.alat_id === alat.id &&
                                                                                             <li className="m-1">{alat.name}</li>
                                                                                         }
-                                                                                    </>
-                                                                                ))}
-                                                                            </>
-
+                                                                                    </div>
+                                                                                })}
+                                                                            </div>
                                                                         ))}
                                                                     </div>
                                                                 </td>

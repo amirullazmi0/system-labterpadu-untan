@@ -23,7 +23,6 @@ const DashboardItem = ({ props }) => {
         <>
             <div className="dashboard-item">
                 <div className="grid grid-cols-1 lg:grid-cols-7">
-                    {/* Lab */}
                     <div className="lg:col-span-5">
                         <div className="grid grid-cols-3">
                             <div className="card">

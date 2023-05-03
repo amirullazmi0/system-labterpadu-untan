@@ -30,7 +30,7 @@ Route::get('/', [UserController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'super:0'])->group(function () {
     Route::get('/super', [SuperController::class, 'index'])->name('super');
-    Route::get('/super/profil', [SuperController::class, 'laboran'])->name('super-profil');
+    Route::get('/super/{user:id}/profil', [SuperController::class, 'profil'])->name('super-profil');
 
     Route::get('/super/lab', [SuperController::class, 'lab'])->name('super-lab');
 

@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('p_alat', function (Blueprint $table) {
+        Schema::create('analisis', function (Blueprint $table) {
             $table->id();
             $table->string('primary_id', 50);
             $table->string('name', 30);
-            // $table->unsignedBigInteger('alat_id');
+            $table->foreignId('ruangan_id')->references('id')->on('ruangan')->onDelete('cascade');
             $table->foreignId('alat_id')->references('id')->on('alat')->onDelete('cascade');
             $table->integer('total');
             $table->string('event', 30);
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('p_alat');
+        Schema::dropIfExists('analises');
     }
 };

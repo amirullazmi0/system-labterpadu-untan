@@ -51,16 +51,21 @@ class SuperController extends Controller
         // return view('/superadmin/index', ($data), compact('p_ruangan', 'ruangan'));
     }
 
-    public function profil(User $user)
+    public function profil(User $user, Request $request)
     {
-        return view('/superadmin/profil', [
+
+        $data = [
             "title" => "Halaman Profil",
-            "active" => "",
-            "user" => $user,
+            "active" => "profil",
+            "user" => User::where('id', $user->id)->where('name', auth()->user()->name)->get(),
             "temp_berkas" => Temp_berkas::all(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        // dd($data);
+
+        return Inertia::render('Super/ProfilSuper', $data);
     }
 
     public function update_password(Request $request)

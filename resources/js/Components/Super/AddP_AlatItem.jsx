@@ -76,21 +76,19 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
                                 <option value="DEFAULT" className="hidden" disabled>Pilih Alat</option>
                                 {
                                     alat.map((e) => (
-                                        <>
-                                            < option
-                                                key={e.id}
-                                                no={i}
-                                                value={e.id}
-                                            >
-                                                {e.name}
-                                                {
-                                                    lab.map((labzz) => (
-                                                        e.lab_id == labzz.id &&
-                                                        " - " + labzz.name
-                                                    ))
-                                                }
-                                            </option>
-                                        </>
+                                        < option
+                                            key={e.id}
+                                            no={i}
+                                            value={e.id}
+                                        >
+                                            {e.name}
+                                            {
+                                                lab.map((labzz) => (
+                                                    e.lab_id == labzz.id &&
+                                                    " - " + labzz.name
+                                                ))
+                                            }
+                                        </option>
                                     ))
                                 }
 
@@ -108,7 +106,7 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
                                 </label>
                                 {alat.map((e) => (
                                     e.id == alat_id[i] &&
-                                    <input no={i} defaultValue={1} onChange={valueTotal} type="number" min={1} max={e.total} className="input w-44 text-center bg-white" />
+                                    <input key={e.id} no={i} defaultValue={1} onChange={valueTotal} type="number" min={1} max={e.total} className="input w-44 text-center bg-white" />
 
                                 ))}
                                 {i > 0 &&
@@ -137,7 +135,7 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
         <>
             <div className="laboran-item">
                 <div className="grid grid-cols-1">
-                    <div className="flex items-center ml-1">
+                    <div className="lg:flex grid lg:items-center ml-1">
                         <Link className="btn btn-sm btn-green" method="get" href={route('super-p-ruangan')}>
                             Daftar Peminjaman
                         </Link>

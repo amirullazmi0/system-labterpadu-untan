@@ -79,11 +79,15 @@ class DatabaseSeeder extends Seeder
 
         $temp_berkas = [
             [
-                'name' => 'Template Peminjaman Ruangan',
+                'name' => 'Peminjaman Ruangan',
                 'berkas' => '',
             ],
             [
-                'name' => 'Template Peminjaman Alat',
+                'name' => 'Peminjaman Alat',
+                'berkas' => '',
+            ],
+            [
+                'name' => 'Analisis',
                 'berkas' => '',
             ],
         ];

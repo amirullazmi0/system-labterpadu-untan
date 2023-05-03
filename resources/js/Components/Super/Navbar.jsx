@@ -1,22 +1,26 @@
-import { Link } from "@inertiajs/react"
+import { Link, router } from "@inertiajs/react"
 import { useState, useEffect, useRef } from "react"
 import Sidebar from "./Sidebar"
 
 const Navbar = ({ auth, active }) => {
-    console.log("Active : ", active);
     const [authName, setAuthName] = useState(auth.user.name)
     const [authLevel, setAuthKelas] = useState(auth.user.level)
+    const [name, setName] = useState(auth.user.name)
     const myRef = useRef(null);
 
     const [sidebarActive, setSidebarActive] = useState(false)
     const sidebarOn = () => {
         return (
-            setSidebarActive()
+            setSidebarActive(true)
         )
     }
-
+    const sidebarOff = () => {
+        return (
+            setSidebarActive(false)
+        )
+    }
+    console.log("auth", auth.user.name);
     useEffect(() => {
-        // Fungsi untuk menyembunyikan elemen ketika pengguna mengklik di luar elemen tersebut
         function handleClickOutside(event) {
             if (myRef.current && !myRef.current.contains(event.target)) {
                 myRef.current.classList.remove("show");
@@ -26,10 +30,21 @@ const Navbar = ({ auth, active }) => {
         document.addEventListener("mousedown", handleClickOutside);
     }, [myRef]);
 
+    const handleClick = () => {
+        const data = [
+            name
+        ]
+        router.get('/super/' + auth.user.id + "/profil", data)
+    }
     return (
         <>
             <div className={sidebarActive == false ? "sidebar-none" : "sidebar-active"} ref={myRef}>
                 <div className="sidebar-admin">
+                    <button className="btn btn-blue btn-sidebar" onClick={() => sidebarOff()}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                     <Sidebar active={active} />
                 </div>
             </div>
@@ -53,8 +68,9 @@ const Navbar = ({ auth, active }) => {
                             }
                         </label>
                         <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32">
-                            <div className="">
-                                <Link className="btn btn-block btn-ghost btn-black-nav mb-1">Profil</Link>
+                            <div className="navnav">
+                                {/* <button onClick={handleClick} className={active == "profil" ? "btn btn-block btn-ghost btn-black-nav mb-1 active" : "btn btn-block btn-ghost btn-black-nav mb-1"}>Profil</button> */}
+                                <Link hmethod="get" href={'/super/' + auth.user.id + '/profil'} data={{ name: authName }} className={active == "profil" ? "btn btn-block btn-ghost btn-black-nav mb-1 active" : "btn btn-block btn-ghost btn-black-nav mb-1"}>Profil</Link>
                                 <Link className="btn btn-block btn-ghost btn-black-nav" method="post" href={route('logout')} as="button">Log Out</Link>
                             </div>
                         </ul>
