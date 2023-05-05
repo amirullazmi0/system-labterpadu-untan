@@ -7,7 +7,7 @@ const Navbar = ({ auth, active }) => {
     const [authLevel, setAuthKelas] = useState(auth.user.level)
     const [name, setName] = useState(auth.user.name)
     const myRef = useRef(null);
-
+    
     const [sidebarActive, setSidebarActive] = useState(false)
     const sidebarOn = () => {
         return (
@@ -19,7 +19,6 @@ const Navbar = ({ auth, active }) => {
             setSidebarActive(false)
         )
     }
-    console.log("auth", auth.user.name);
     useEffect(() => {
         function handleClickOutside(event) {
             if (myRef.current && !myRef.current.contains(event.target)) {

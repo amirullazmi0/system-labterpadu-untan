@@ -57,7 +57,7 @@ class SuperController extends Controller
         $data = [
             "title" => "Halaman Profil",
             "active" => "profil",
-            "user" => User::where('id', $user->id)->where('name', auth()->user()->name)->get(),
+            "user" => User::where('id', $user->id)->where('name', auth()->user()->name)->where('name', $request->name)->get(),
             "temp_berkas" => Temp_berkas::all(),
             "lab" => Lab::all(),
             "nomor" => 1,
@@ -68,28 +68,52 @@ class SuperController extends Controller
         return Inertia::render('Super/ProfilSuper', $data);
     }
 
-    public function update_password(Request $request)
+    public function profil_update(User $user, Request $request)
     {
+        $rules = ([
+            'name' => 'required',
+            // 'email' => 'required|email',
+            'address' => 'nullable'
+        ]);
+
+        if ($request->email != $user->email) {
+            $rules['email'] = 'required|email:dns|unique:users';
+        }
+
+        $validateData = $request->validate($rules);
+
+        // dd($validateData);
+        User::where('id', $user->id)
+            ->update($validateData);
+
+        return back()->with("success", "Update Profil Berhasil");
+
+        // return Inertia::render('Super/ProfilSuper', $data);
+    }
+
+    public function password_update(Request $request)
+    {
+        // dd($request);
         $request->validate([
-            'oldpassword' => 'required',
-            'newpassword1' => 'required',
-            'newpassword2' => 'required',
+            'oldPassword' => 'required',
+            'newPassword1' => 'required',
+            'newPassword2' => 'required',
         ]);
 
         #Match The Old Password
-        if (!Hash::check($request->oldpassword, auth()->user()->password)) {
-            return back()->with("error", "Password Lama Salah");
+        if (!Hash::check($request->oldPassword, auth()->user()->password)) {
+            return back()->with("error", "Gagal !! Password Lama Salah");
         }
 
-        if ($request->newpassword1 != $request->newpassword2) {
-            return back()->with("error", "Konfirmasi Password Tidak Sama");
+        if ($request->newPassword1 != $request->newPassword2) {
+            return back()->with("error", "Gagal !! Konfirmasi Password Tidak Sama");
         }
 
         User::whereId(auth()->user()->id)->update([
             'password' => Hash::make($request->newpassword1)
         ]);
 
-        return back()->with("success", "Update Password Success");
+        return back()->with("update", "Update Password Berhasil");
     }
 
     public function user_password(User $user, Request $request)

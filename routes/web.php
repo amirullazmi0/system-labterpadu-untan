@@ -14,6 +14,7 @@ use App\Http\Controllers\LaboranController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\P_ruanganController;
+use App\Http\Controllers\tempBerkasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,10 @@ Route::get('/', [UserController::class, 'index'])->name('home');
 Route::middleware(['auth', 'super:0'])->group(function () {
     Route::get('/super', [SuperController::class, 'index'])->name('super');
     Route::get('/super/{user:id}/profil', [SuperController::class, 'profil'])->name('super-profil');
+    Route::post('/super/{user:id}/profil', [SuperController::class, 'profil_update']);
+    Route::post('/super/{user:id}/password/update', [SuperController::class, 'password_update']);
+
+    Route::post('/super/berkas/{temp_berkas:id}/update', [tempBerkasController::class, 'update']);
 
     Route::get('/super/lab', [SuperController::class, 'lab'])->name('super-lab');
 

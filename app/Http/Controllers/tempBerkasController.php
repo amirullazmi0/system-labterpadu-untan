@@ -69,7 +69,29 @@ class tempBerkasController extends Controller
      */
     public function update(Request $request, Temp_berkas $temp_berkas)
     {
-        //
+        // dd($request->file('berkas'));
+        if ($request->file('berkas') !=  null) {
+            $validateData = $request->validate([
+                'berkas' => 'required|file|max:2048|mimes:pdf',
+            ]);
+
+            if ($temp_berkas->berkas != null) {
+                $file = 'file/berkas/' . $temp_berkas->berkas;
+                unlink($file);
+            }
+
+            $fileName = 'File-B' . $temp_berkas->id . '-' . time() . '.' . $request->file('berkas')->extension();
+            $path_url = 'file/berkas';
+            $request->file('berkas')->move(public_path($path_url), $fileName);
+            $validateData['berkas'] =  $fileName;
+
+            Temp_berkas::where('id', $temp_berkas->id)
+                ->update($validateData);
+
+            return back()->with("message", "Update Berkas Berhasil");
+        }
+
+        return back();
     }
 
     /**

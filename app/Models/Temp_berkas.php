@@ -12,4 +12,8 @@ class Temp_berkas extends Model
     protected $table = 'temp_berkas';
 
     protected $guarded = ['id'];
+
+    protected $fillable = [
+        'name', 'berkas'
+    ];
 }
