@@ -21,8 +21,8 @@ class P_alat extends Model
         'primary_id', 'name', 'alat_id', 'total', 'event', 'date_start', 'date_end', 'time_start', 'time_end', 'desc', 'berkas'
     ];
 
-    public function peminjaman_alat()
+    public function alat()
     {
-        return $this->belongsToMany(Alat::class);
+        return $this->belongsTo(Alat::class);
     }
 }

@@ -400,6 +400,10 @@
 .btn-sidebar{
     display: none;
 }
+
+.my-today-class {
+    background-color: rgb(0, 0, 0);
+}
 @media Screen and (max-width:800px){
     .navbar-item{
         display: none;

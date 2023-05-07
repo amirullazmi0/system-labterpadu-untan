@@ -3,26 +3,89 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import { Link } from '@inertiajs/react'
 import { useEffect, useState } from 'react'
+import moment from 'moment/moment'
 
 const DashboardItem = ({ props }) => {
-    const today = new Date()
-    const months = [
-        "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-    ];
-    const formatToday = `${today.getDate()} ${months[today.getMonth()]} ${today.getFullYear()}`;
+    const today = moment();
+    const [theDay, setTheDay] = useState(today)
+
     const events = [
         { title: 'Meeting', start: new Date() }
     ]
     const handleDateClick = (arg) => { // bind with an arrow function
-        console.log(arg);
+        setTheDay(arg.date)
     }
+
     const handleEventClick = (arg) => { // bind with an arrow function
         console.log(arg);
     }
+
+    const formatToday = moment(theDay).format('DD MMMM YYYY')
+    const formatToday2 = moment(theDay).format('YYYY-MM-DD')
+
+    const [dateRuangan, setDateRuangan] = useState()
+
+    const [p_ruangan, setPRuangan] = useState(props.p_ruangan)
+    const [p_alat, setPAlat] = useState(props.p_alat)
+    const eventRuangan = (
+        p_ruangan.map((pp) => {
+            return (
+                {
+                    title: pp.ruangan.name,
+                    start: pp.date_start + 'T' + pp.time_start,
+                    end: pp.date_end + 'T' + pp.time_end,
+                    backgroundColor: pp.ruangan.color,
+                    borderColor: pp.ruangan.color,
+                }
+            )
+        })
+    )
+
+    const eventAlat = (
+        p_alat.map((aa) => {
+            return (
+                {
+                    title: aa.alat.name,
+                    start: aa.date_start + 'T' + aa.time_start,
+                    end: aa.date_end + 'T' + aa.time_end,
+                    backgroundColor: aa.alat.color,
+                    borderColor: aa.alat.color
+                }
+            )
+        })
+    )
+    const eventAll = [...eventAlat, ...eventRuangan]
+
+    const renderPRuangan = (
+        p_ruangan.map((pp) => {
+            const DateStart = moment(pp.date_start)._i
+            const DateEnd = moment(pp.date_end)._i
+
+            return (
+                DateStart == formatToday2 || (pp.date_end && DateEnd == formatToday2) || (pp.date_end && moment(formatToday2).isBetween(DateStart, DateEnd)) ?
+                    <li> {pp.ruangan.name} ({pp.event})</li >
+                    : ""
+            )
+        })
+    )
+    const renderPAlat = (
+        p_alat.map((aa) => {
+            const DateStart = moment(aa.date_start)._i
+            const DateEnd = moment(aa.date_end)._i
+
+            return (
+                DateStart == formatToday2 || (aa.date_end && DateEnd == formatToday2) || (aa.date_end && moment(formatToday2).isBetween(DateStart, DateEnd)) ?
+                    <li> {aa.alat.name} ({aa.event})</li >
+                    : ""
+            )
+        })
+    )
+
+
     return (
         <>
             <div className="dashboard-item">
-                <div className="grid grid-cols-1 lg:grid-cols-7">
+                {/* <div className="grid grid-cols-1 lg:grid-cols-7">
                     <div className="lg:col-span-5">
                         <div className="grid grid-cols-3">
                             <div className="card">
@@ -36,8 +99,6 @@ const DashboardItem = ({ props }) => {
                                     </Link>
                                 </div>
                             </div>
-
-                            {/* laboran */}
                             <div className="card">
                                 <div className="head">Laboran</div>
                                 <div className="body">{props.jumlah_laboran}</div>
@@ -49,8 +110,6 @@ const DashboardItem = ({ props }) => {
                                     </Link>
                                 </div>
                             </div>
-
-                            {/* Ruangan */}
                             <div className="card">
                                 <div className="head">Ruangan</div>
                                 <div className="body">{props.jumlah_ruangan}</div>
@@ -64,7 +123,7 @@ const DashboardItem = ({ props }) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="grid lg:grid-cols-7">
                     <div className="lg:col-span-5">
                         <div className="card">
@@ -72,10 +131,9 @@ const DashboardItem = ({ props }) => {
                                 plugins={[dayGridPlugin, interactionPlugin]}
                                 dateClick={handleDateClick}
                                 initialView="dayGridMonth"
-                                events={[
-                                    { title: 'event 1', date: '2023-03-01', color: 'red' },
-                                    { title: 'event 2', date: '2023-03-22' }
-                                ]}
+                                events={eventAll}
+                                locale={'id'}
+                                todayClass={'my-today-class'}
                                 eventClick={handleEventClick}
                             />
                         </div>
@@ -84,38 +142,25 @@ const DashboardItem = ({ props }) => {
                         <div className="card mb-2">
                             <div className="card-head ">Keterangan</div>
                             <div className="card-body">
-                                {/* {today.toDateString()} */}
                                 <div className="date">
                                     {formatToday}
                                 </div>
                                 <hr />
                                 <div className='ml-5 mb-3'>
-                                    <div className="font-bold">
-                                        Peminjaman Alat
-                                    </div>
-                                    <li>asdas</li>
-                                    <li>asdas</li>
-                                    <li>asdas</li>
-                                    <li>asdas</li>
+                                    <div className="font-bold">Peminjaman Ruangan</div>
+                                    {renderPRuangan}
                                 </div>
                                 <div className='ml-5 mb-3'>
                                     <div className="font-bold">
-                                        Peminjaman Ruangan
+                                        Peminjaman Alat
                                     </div>
-                                    <li>asdas</li>
-                                    <li>asdas</li>
-                                    <li>asdas</li>
-                                    <li>asdas</li>
+                                    {renderPAlat}
                                 </div>
 
                                 <div className='ml-5 mb-3'>
                                     <div className="font-bold">
                                         Analisis Penelitian
                                     </div>
-                                    <li>asdas</li>
-                                    <li>asdas</li>
-                                    <li>asdas</li>
-                                    <li>asdas</li>
                                 </div>
                             </div>
                         </div>

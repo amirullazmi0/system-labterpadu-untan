@@ -24,7 +24,7 @@ class Alat extends Model
     {
         return $this->belongsTo(Lab::class);
     }
-    public function peminjaman_alat()
+    public function alat()
     {
         return $this->belongsToMany(P_alat::class);
     }

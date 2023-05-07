@@ -32,6 +32,8 @@ class SuperController extends Controller
         $j_dosen = DB::table('users')->where('level', '1')->count();
         $j_laboran = DB::table('users')->where('level', '2')->count();
 
+        $pemijaman_ruangan = P_ruangan::with('ruangan')->get();
+        // dd($pemijaman_ruangan);
         $data = [
             "title" => "Halaman Dashboard",
             "active" => "dashboard",
@@ -40,7 +42,10 @@ class SuperController extends Controller
             "user" => User::all(),
             "jumlah_laboran" => User::where('level', '1')->count(),
             "jumlah_lab" => Lab::count(),
-            "jumlah_ruangan" => Ruangan::count()
+            "jumlah_ruangan" => Ruangan::count(),
+            "p_ruangan" => P_ruangan::with('ruangan')->get(),
+            "p_alat" => P_alat::with('alat')->get(),
+            "ruangan" => Ruangan::all(),
         ];
 
         $ruangan = Ruangan::all();
@@ -362,7 +367,7 @@ class SuperController extends Controller
             "user" => User::all(),
             "lab" => Lab::all(),
             "alat" =>  Alat::all(),
-            "p_alat" => P_alat::orderByDesc('created_at')->get(),
+            "p_alat" => P_alat::with('alat')->orderByDesc('created_at')->get(),
             "nomor" => 1,
         ];
 
