@@ -1,11 +1,9 @@
 import Navbar from '@/Components/Admin/Navbar';
-import Sidebar from '@/Components/Admin/Sidebar';
+import ProfilItem from '@/Components/Admin/ProfilItem';
 import Tron from '@/Components/Admin/Tron';
-import DashboardItem from '@/Components/Admin/DashboardItem';
 import { Head, Link } from '@inertiajs/react';
 
-
-export default function DashboardAdmin(props) {
+export default function ProfilAdmin(props) {
     return (
         <>
             <Head title={props.title} />
@@ -15,7 +13,7 @@ export default function DashboardAdmin(props) {
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        <DashboardItem props={props} />
+                        <ProfilItem user={props.user[0]} notif={props.flash} errors={props.errors} />
                     </div>
                 </div>
             </div>

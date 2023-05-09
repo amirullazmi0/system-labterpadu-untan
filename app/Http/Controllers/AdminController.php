@@ -5,111 +5,101 @@ namespace App\Http\Controllers;
 use App\Models\Lab;
 use App\Models\Alat;
 use App\Models\User;
+use Inertia\Inertia;
 use App\Models\P_alat;
 use App\Models\Ruangan;
 use App\Models\P_ruangan;
+use App\Models\Temp_berkas;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Inertia\Inertia;
 
 class AdminController extends Controller
 {
 
     public function index()
     {
+        $pp = DB::table('p_alat')
+            ->join('alat', 'p_alat.alat_id', '=', 'alat.id')
+            ->join('lab', 'alat.lab_id', '=', 'lab.id')
+            ->join('users', 'lab.id', '=', 'users.lab_id')
+            ->select('p_alat.*', 'alat.total as aa_total', 'alat.name as aa_name', 'alat.color as aa_color')
+            ->where('alat.lab_id', '=', auth()->user()->lab_id)
+            ->get();
         $data = [
             "title" => "Halaman Dashboard",
             "active" => "dashboard",
             "nomor" => 1,
             "lab" => Lab::all(),
             "alat" => Alat::where('lab_id', auth()->user()->lab_id)->count(),
+            "aalat" => Alat::where('lab_id', auth()->user()->lab_id)->get(),
+            "p_alat" => $pp,
             "user" => User::all(),
         ];
 
         return Inertia::render('Admin/DashboardAdmin', $data);
     }
 
-    public function profil(User $user)
+    public function profil(User $user, Request $request)
     {
-        return view('/admin/profil', [
+        $data = [
             "title" => "Halaman Profil",
-            "active" => "",
-            "user" => $user,
+            "active" => "profil",
+            "user" => User::where('id', $user->id)->where('name', auth()->user()->name)->where('name', $request->name)->get(),
             "lab" => Lab::all(),
             "nomor" => 1,
-        ]);
+        ];
+
+        return Inertia::render('Admin/ProfilAdmin', $data);
     }
 
-    public function update_profil(Request $request, User $user)
+    public function profil_update(Request $request, User $user)
+
     {
         $rules = ([
-            'level' => 'required',
-            'lab_id' => 'required',
-            'email' => 'required|email',
-            // 'photo' => 'image|file|max:2048',
-            'address' => "nullable"
+            'name' => 'required',
+            // 'email' => 'required|email',
+            'address' => 'nullable'
         ]);
 
-        if ($request->name != $user->name) {
-            $rules['name'] = 'required|max:50|unique:users';
-        }
-
-        if ($request->nip != $user->nip) {
-            $rules['nip'] = 'required|min:1|max:25|unique:users';
+        if ($request->email != $user->email) {
+            $rules['email'] = 'required|email:dns|unique:users';
         }
 
         $validateData = $request->validate($rules);
 
-        if ($request->file('photo')) {
-
-            $rules['photo'] = 'image|file|max:2048';
-
-            $validateData = $request->validate($rules);
-
-            if ($user->photo != null) {
-                // File::delete('storage/' . $user->photo);
-                $file = 'public/storage/' . $user->photo;
-                @unlink($file);
-            }
-            // $validateData['photo'] = $request->file('photo')->store('/img/user');
-            $fileName = time() . '.' . $request->file('photo')->extension();
-            $path_url = '../public/storage/img/user';
-            $request->file('photo')->move(public_path($path_url), $fileName);
-            $validateData['photo'] =  'img/user/' . $fileName;
-        }
-
+        // dd($validateData);
         User::where('id', $user->id)
             ->update($validateData);
 
-        return redirect('/aadmin/profil/' . auth()->user()->name)->with('success', 'Update Success !!');
+        return redirect('/admin/' . auth()->user()->id . '/profil?name=' . $request->name)->with('success', 'Update Profil Berhasil');
     }
 
-    public function update_password(Request $request)
+    public function password_update(Request $request)
     {
         $request->validate([
-            'oldpassword' => 'required',
-            'newpassword1' => 'required',
-            'newpassword2' => 'required',
+            'oldPassword' => 'required',
+            'newPassword1' => 'required',
+            'newPassword2' => 'required',
         ]);
 
         #Match The Old Password
-        if (!Hash::check($request->oldpassword, auth()->user()->password)) {
-            return back()->with("error", "Password Lama Salah");
+        if (!Hash::check($request->oldPassword, auth()->user()->password)) {
+            return back()->with("error", "Gagal !! Password Lama Salah");
         }
 
-        if ($request->newpassword1 != $request->newpassword2) {
-            return back()->with("error", "Konfirmasi Password Tidak Sama");
+        if ($request->newPassword1 != $request->newPassword2) {
+            return back()->with("error", "Gagal !! Konfirmasi Password Tidak Sama");
         }
 
         User::whereId(auth()->user()->id)->update([
             'password' => Hash::make($request->newpassword1)
         ]);
 
-        return back()->with("successs", "Update Password Success");
+        return back()->with("update", "Update Password Berhasil");
     }
 
     // Alat

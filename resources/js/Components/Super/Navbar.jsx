@@ -7,7 +7,7 @@ const Navbar = ({ auth, active }) => {
     const [authLevel, setAuthKelas] = useState(auth.user.level)
     const [name, setName] = useState(auth.user.name)
     const myRef = useRef(null);
-    
+
     const [sidebarActive, setSidebarActive] = useState(false)
     const sidebarOn = () => {
         return (
@@ -68,8 +68,7 @@ const Navbar = ({ auth, active }) => {
                         </label>
                         <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32">
                             <div className="navnav">
-                                {/* <button onClick={handleClick} className={active == "profil" ? "btn btn-block btn-ghost btn-black-nav mb-1 active" : "btn btn-block btn-ghost btn-black-nav mb-1"}>Profil</button> */}
-                                <Link hmethod="get" href={'/super/' + auth.user.id + '/profil'} data={{ name: authName }} className={active == "profil" ? "btn btn-block btn-ghost btn-black-nav mb-1 active" : "btn btn-block btn-ghost btn-black-nav mb-1"}>Profil</Link>
+                                <Link method="get" href={'/super/' + auth.user.id + '/profil'} data={{ name: authName }} className={active == "profil" ? "btn btn-block btn-ghost btn-black-nav mb-1 active" : "btn btn-block btn-ghost btn-black-nav mb-1"}>Profil</Link>
                                 <Link className="btn btn-block btn-ghost btn-black-nav" method="post" href={route('logout')} as="button">Log Out</Link>
                             </div>
                         </ul>

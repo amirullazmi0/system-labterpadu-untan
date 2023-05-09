@@ -34,10 +34,11 @@ const P_AlatItem = ({ alat, p_alat, notif }) => {
     const handleDelete = (e) => {
         if (window.confirm('Are you sure you want to delete this data?')) {
             const name = e.name
+            const primary_id = e.primary_id
             const data = {
-                name
+                name, primary_id
             }
-            router.get('/super/p-ruangan/' + e.id + '/delete', data)
+            router.get('/super/p-alat/' + e.id + '/delete', data)
         }
     };
 

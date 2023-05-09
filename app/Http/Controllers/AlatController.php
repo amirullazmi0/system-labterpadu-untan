@@ -79,6 +79,7 @@ class AlatController extends Controller
         $rules = ([
             'total' => "required|integer",
             'color' => 'nullable',
+            'desc' => 'nullable'
         ]);
 
         if ($request->name != $alat->name) {

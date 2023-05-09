@@ -9,10 +9,7 @@ export default function AddAlat(props) {
         <>
             <Head title={props.title} />
             <div className="bg-body">
-                <div className="sidebar-admin">
-                    <Sidebar active={props.active} />
-                </div>
-                <Navbar lab={props.lab} auth={props.auth} />
+                <Navbar lab={props.lab} auth={props.auth} active={props.active} />
                 <Tron />
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>

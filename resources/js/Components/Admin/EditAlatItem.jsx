@@ -7,12 +7,13 @@ const EditAlatItem = ({ alat, errors }) => {
     const [name, setName] = useState(alat.name)
     const [total, setTotal] = useState(alat.total)
     const [color, setColor] = useState(alat.color)
-    const [desc, setDesc] = useState('')
+    const [desc, setDesc] = useState(alat.desc)
 
     const handleSubmit = (e) => {
         const data = {
             name, total, color, desc
         }
+        // console.log('data : ', data);
         router.post('/admin/alat/' + e.id + '/edit', data)
     }
     return (
@@ -59,6 +60,21 @@ const EditAlatItem = ({ alat, errors }) => {
                                         <span className="label-text-alt text-error">{errors.color}</span>
                                     }
                                 </label>
+                            </div>
+                            <div className="col-span-4 lg:col-span-4 form-control m-2">
+                                <div className="items-center">
+                                    <label className="label">
+                                        <span className="label-text">Deskripsi</span>
+                                    </label>
+                                    <div className="flex">
+                                        <textarea value={desc ? desc : ""} onChange={(e) => setDesc(e.target.value)} className="textarea w-full textarea-bordered" placeholder="Deskripsi Ruangan"></textarea>
+                                        <label className="label">
+                                            {errors.desc &&
+                                                <span className="label-text-alt text-error">{errors.desc}</span>
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <hr className="col-span-4" />
                         </div>

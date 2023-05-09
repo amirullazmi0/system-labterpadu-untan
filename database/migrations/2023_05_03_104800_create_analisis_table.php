@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('analisis', function (Blueprint $table) {
             $table->id();
-            $table->string('primary_id', 50);
+            $table->string      ('primary_id', 50);
             $table->string('name', 30);
             $table->foreignId('ruangan_id')->references('id')->on('ruangan')->onDelete('cascade');
             $table->foreignId('alat_id')->references('id')->on('alat')->onDelete('cascade');

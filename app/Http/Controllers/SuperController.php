@@ -28,12 +28,6 @@ class SuperController extends Controller
      */
     public function index()
     {
-        // //
-        $j_dosen = DB::table('users')->where('level', '1')->count();
-        $j_laboran = DB::table('users')->where('level', '2')->count();
-
-        $pemijaman_ruangan = P_ruangan::with('ruangan')->get();
-        // dd($pemijaman_ruangan);
         $data = [
             "title" => "Halaman Dashboard",
             "active" => "dashboard",
@@ -48,12 +42,7 @@ class SuperController extends Controller
             "ruangan" => Ruangan::all(),
         ];
 
-        $ruangan = Ruangan::all();
-        $p_ruangan = P_ruangan::all();
-
         return Inertia::render('Super/DashboardSuper', $data);
-
-        // return view('/superadmin/index', ($data), compact('p_ruangan', 'ruangan'));
     }
 
     public function profil(User $user, Request $request)
@@ -91,9 +80,7 @@ class SuperController extends Controller
         User::where('id', $user->id)
             ->update($validateData);
 
-        return back()->with("success", "Update Profil Berhasil");
-
-        // return Inertia::render('Super/ProfilSuper', $data);
+        return redirect('/super/' . auth()->user()->id . '/profil?name=' . $request->name)->with('success', 'Update Profil Berhasil');
     }
 
     public function password_update(Request $request)
@@ -121,52 +108,6 @@ class SuperController extends Controller
         return back()->with("update", "Update Password Berhasil");
     }
 
-    public function user_password(User $user, Request $request)
-    {
-        $request->validate([
-            // 'oldpassword' => 'required',
-            'newpassword1' => 'required',
-            'newpassword2' => 'required',
-        ]);
-
-        if ($request->newpassword1 != $request->newpassword2) {
-            return back()->with("error", "Konfirmasi Password Tidak Sama");
-        }
-
-        User::whereId($user->id)->update([
-            'password' => Hash::make($request->newpassword1)
-        ]);
-
-        return back()->with("successs", "Update Password Success");
-    }
-
-    public function update_berkas(Temp_berkas $temp_berkas, Request $request)
-    {
-        if ($request->file('berkas') != null) {
-
-            $rules['berkas'] = 'file|max:2048';
-
-            $validateData = $request->validate($rules);
-
-            if ($temp_berkas->berkas != null) {
-                $file = 'public/storage/' . $temp_berkas->berkas;
-                @unlink($file);
-            }
-
-            // $validateData['berkas'] = $request->file('berkas')->store('/file/template_berkas');
-            $fileName = time() . '.' . $request->file('berkas')->extension();
-            $path_url = '../public/storage/file/template_berkas';
-            $request->file('berkas')->move(public_path($path_url), $fileName);
-            $validateData['berkas'] =  'file/template_berkas/' . $fileName;
-
-            Temp_berkas::whereId($temp_berkas->id)->update([
-                'berkas' => $validateData['berkas']
-            ]);
-        }
-
-        return redirect('/admin/profil/' . auth()->user()->name)->with('success', 'Update Success !!');
-    }
-
     public function lab()
     {
         $data = [
@@ -178,63 +119,6 @@ class SuperController extends Controller
         ];
 
         return Inertia::render('Super/LabSuper', $data);
-    }
-
-    public function show_lab(Lab $lab)
-    {
-        return view('/superadmin/show_lab', [
-            "title" => "Halaman Detail Laboratorium",
-            "active" => "lab",
-            "lab" => $lab,
-            "users" => User::all(),
-            "nomor" => 1,
-        ]);
-    }
-
-    public function edit_lab(Lab $lab)
-    {
-        return view('/superadmin/edit_lab', [
-            "title" => "Halaman Edit Laboratorium",
-            "active" => "lab",
-            "lab" => $lab,
-            "users" => User::all(),
-            "nomor" => 1,
-        ]);
-    }
-
-    public function update_lab(Request $request, Lab $lab)
-    {
-        $rules = ([
-            'desc' => "nullable",
-        ]);
-
-        if ($request->name != $lab->name) {
-            $rules['name'] = 'required|max:50|unique:users';
-        }
-
-        $validateData = $request->validate($rules);
-
-        if ($request->file('photo')) {
-
-            $rules['photo'] = 'image|file|max:2048';
-
-            $validateData = $request->validate($rules);
-
-            if ($lab->photo != null) {
-                $file = 'public/storage/' . $lab->photo;
-                @unlink($file);
-            }
-            // $validateData['photo'] = $request->file('photo')->store('/img/lab');
-            $fileName = time() . '.' . $request->file('photo')->extension();
-            $path_url = '../public/storage/img/lab';
-            $request->file('photo')->move(public_path($path_url), $fileName);
-            $validateData['photo'] =  'img/lab/' . $fileName;
-        }
-
-        Lab::where('id', $lab->id)
-            ->update($validateData);
-
-        return redirect('/admin/laboratorium')->with('success', 'Update Success !!');
     }
     // LABORAN
     public function laboran()
@@ -249,6 +133,24 @@ class SuperController extends Controller
         ];
 
         return Inertia::render('Super/LaboranSuper', $data);
+    }
+
+    public function laboran_password(User $user, Request $request)
+    {
+        $request->validate([
+            'newpassword1' => 'required',
+            'newpassword2' => 'required',
+        ]);
+
+        if ($request->newpassword1 != $request->newpassword2) {
+            return back()->with("error", "Konfirmasi Password Tidak Sama");
+        }
+
+        User::whereId($user->id)->update([
+            'password' => Hash::make($request->newpassword1)
+        ]);
+        return redirect('/super/laboran')->with("success", "Update Password Laboran Berhasil");
+        // return back()->with("successs", "Update Password Success");
     }
 
     public function add_laboran()

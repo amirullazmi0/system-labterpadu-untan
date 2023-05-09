@@ -179,8 +179,20 @@ class P_alatController extends Controller
      * @param  \App\Models\P_alat  $p_alat
      * @return \Illuminate\Http\Response
      */
-    public function destroy(P_alat $p_alat)
+    public function destroy(P_alat $p_alat, Request $request)
     {
         //
+        $all = P_alat::where('primary_id', $request->primary_id)->get();
+        $i = 0;
+        foreach ($all as $a) {
+            if ($a->berkas) {
+                $file = 'file/peminjamanAlat/' . $a->berkas;
+                unlink($file);
+            }
+            P_alat::destroy($a->id);
+            $i++;
+        }
+
+        return redirect('/super/p-alat')->with('delete', 'Peminjaman Alat Berhasil Dihapus!');
     }
 }

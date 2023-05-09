@@ -3,58 +3,133 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import { Link } from '@inertiajs/react'
 import { useEffect, useState } from 'react'
+import moment from 'moment/moment'
 
 const DashboardItem = ({ props }) => {
-    console.log('admin : ', props);
-    const today = new Date()
-    const months = [
-        "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-    ];
-    const formatToday = `${today.getDate()} ${months[today.getMonth()]} ${today.getFullYear()}`;
-    const events = [
-        { title: 'Meeting', start: new Date() }
-    ]
+    const today = moment();
+    const [theDay, setTheDay] = useState(today)
+
+    const formatToday = moment(theDay).format('DD MMMM YYYY')
+    const formatToday2 = moment(theDay).format('YYYY-MM-DD')
+    const [p_alat, setPAlat] = useState(props.p_alat)
+    const [alat, setAlat] = useState(props.aalat)
+
+
     const handleDateClick = (arg) => { // bind with an arrow function
-        console.log(arg);
+        setTheDay(arg.date)
+        // console.log(arg.dateStr);
     }
     const handleEventClick = (arg) => { // bind with an arrow function
-        console.log(arg);
+        // console.log(arg);
     }
+
+    useEffect(() => {
+        // update nilai total tersedia pada state alat setelah p_alat berubah
+        const alatWithTotalTersedia = alat.map((aa) => {
+            const totalPemakaian = p_alat.reduce((total, pp) => {
+                const DateStart = moment(pp.date_start)._i
+                const DateEnd = moment(pp.date_end)._i
+
+                if ((pp.alat_id == aa.id) && ((DateStart == formatToday2) || (pp.date_end && DateEnd == formatToday2) || (pp.date_end && moment(formatToday2).isBetween(DateStart, DateEnd)))) {
+                    return total + pp.total
+                } else {
+                    return total
+                }
+            }, 0);
+
+            console.log(totalPemakaian);
+            return {
+                ...aa,
+                totalTersedia: aa.total - totalPemakaian
+            };
+        });
+
+        setAlat(alatWithTotalTersedia);
+
+    }, [p_alat]);
+
+    const eventAlat = (
+        p_alat.map((aa) => {
+            return (
+                {
+                    id: aa.id,
+                    title: aa.aa_name,
+                    start: aa.date_start + 'T' + aa.time_start,
+                    end: aa.date_end + 'T' + aa.time_end,
+                    backgroundColor: aa.aa_color,
+                    borderColor: aa.aa_color
+                }
+            )
+        })
+    )
+
+    const [kurangTersedia, setKurangTersedia] = useState(false)
+    const tersedia = () => {
+        return (
+            alat.map((aa) => {
+                const [totalTersedia, setTotalTersedia] = useState(aa.total)
+                const total = p_alat.map((pp) => {
+                    const DateStart = moment(pp.date_start)._i
+                    const DateEnd = moment(pp.date_end)._i
+
+                    if ((pp.alat_id == aa.id) && ((DateStart == formatToday2) || (pp.date_end && DateEnd == formatToday2) || (pp.date_end && moment(formatToday2).isBetween(DateStart, DateEnd)))) {
+                        return aa.total - pp.total
+                    } else {
+                        return aa.total
+                    }
+                })
+                console.log('total : ', total[0]);
+                return (
+                    <>
+                        <div className="flex justify-end items-center m-1">
+                            <li className='mr-auto' >{aa.name}</li>
+                            {
+                                p_alat.map((pp) => {
+                                    const DateStart = moment(pp.date_start)._i
+                                    const DateEnd = moment(pp.date_end)._i
+
+                                    if ((pp.alat_id == aa.id) && ((DateStart == formatToday2) || (pp.date_end && DateEnd == formatToday2) || (pp.date_end && moment(formatToday2).isBetween(DateStart, DateEnd)))) {
+                                        return (
+                                            <div className="tidak-tersedia">
+                                                {pp.total}
+                                            </div>
+                                        )
+                                    }
+                                })
+                            }
+                            < div className="tersedia">
+                                {total[0] - total[1] == 0 ?
+                                    total[0]
+                                    :
+                                    total[0] < total[1] ? total[0] : total[1]
+                                }
+                            </div>
+                        </div >
+                        <hr />
+                    </>
+                )
+            }
+            )
+        )
+    }
+
     return (
         <>
             <div className="dashboard-item grid grid-cols-1 lg:grid-cols-7">
-                <div className="lg:col-span-5">
-                    <div className="grid grid-cols-3">
-                        <div className="card">
-                            <div className="head">Alat</div>
-                            <div className="body">{props.alat}</div>
-                            <div className="flex justify-center lg:justify-end">
-                                <Link method="get" href={route('super-lab')} className="btn btn-sm btn-blue mr-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
-                                    </svg>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div className="lg:col-span-5">
                     <div className="card">
                         <FullCalendar
                             plugins={[dayGridPlugin, interactionPlugin]}
                             dateClick={handleDateClick}
                             initialView="dayGridMonth"
-                            events={[
-                                { title: 'event 1', date: '2023-03-01', color: 'red' },
-                                { title: 'event 2', date: '2023-03-22' }
-                            ]}
+                            events={eventAlat}
                             eventClick={handleEventClick}
                         />
                     </div>
                 </div>
                 <div className="lg:col-span-2">
                     <div className="card mb-2">
-                        <div className="card-head ">Keterangan</div>
+                        <div className="card-head ">Ketersediaan</div>
                         <div className="card-body">
                             {/* {today.toDateString()} */}
                             <div className="date">
@@ -62,32 +137,7 @@ const DashboardItem = ({ props }) => {
                             </div>
                             <hr />
                             <div className='ml-5 mb-3'>
-                                <div className="font-bold">
-                                    Peminjaman Alat
-                                </div>
-                                <li>asdas</li>
-                                <li>asdas</li>
-                                <li>asdas</li>
-                                <li>asdas</li>
-                            </div>
-                            <div className='ml-5 mb-3'>
-                                <div className="font-bold">
-                                    Peminjaman Ruangan
-                                </div>
-                                <li>asdas</li>
-                                <li>asdas</li>
-                                <li>asdas</li>
-                                <li>asdas</li>
-                            </div>
-
-                            <div className='ml-5 mb-3'>
-                                <div className="font-bold">
-                                    Analisis Penelitian
-                                </div>
-                                <li>asdas</li>
-                                <li>asdas</li>
-                                <li>asdas</li>
-                                <li>asdas</li>
+                                {tersedia()}
                             </div>
                         </div>
                     </div>

@@ -40,6 +40,9 @@ Route::middleware(['auth', 'super:0'])->group(function () {
     Route::get('/super/lab', [SuperController::class, 'lab'])->name('super-lab');
 
     Route::get('/super/laboran', [SuperController::class, 'laboran'])->name('super-laboran');
+    Route::post('/super/laboran/{user:email}/password', [SuperController::class, 'laboran_password']);
+
+
     Route::get('/super/add-laboran', [SuperController::class, 'add_laboran'])->name('super-add-laboran');
     Route::post('/super/add-laboran', [LaboranController::class, 'store']);
     Route::get('/super/laboran/{user:id}', [SuperController::class, 'show_laboran'])->name('super-show-laboran');
@@ -68,12 +71,16 @@ Route::middleware(['auth', 'super:0'])->group(function () {
     Route::get('/super/p-alat/{p_alat:id}', [SuperController::class, 'show_p_alat'])->name('super-show-p-alat');
     Route::get('/super/p-alat/{p_alat:id}/edit', [SuperController::class, 'edit_p_alat'])->name('super-edit-p-alat');
     Route::post('/super/p-alat/{p_alat:id}/edit', [P_alatController::class, 'update']);
+    Route::get('/super/p-alat/{p_alat:id}/delete', [P_alatController::class, 'destroy']);
 
     Route::get('/super/analisis', [SuperController::class, 'analisis'])->name('super-analisis');
 });
 
 Route::middleware(['auth', 'admin:1'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+    Route::get('/admin/{user:id}/profil', [AdminController::class, 'profil'])->name('admin-profil');
+    Route::post('/admin/{user:id}/profil', [AdminController::class, 'profil_update']);
+    Route::post('/admin/{user:id}/password/update', [AdminController::class, 'password_update']);
 
     Route::get('/admin/alat', [AdminController::class, 'alat'])->name('admin-alat');
     Route::get('/admin/add-alat', [AdminController::class, 'add_alat'])->name('admin-add-alat');
@@ -82,6 +89,7 @@ Route::middleware(['auth', 'admin:1'])->group(function () {
     Route::post('/admin/alat/{alat:id}/edit', [AlatController::class, 'update']);
     Route::get('/admin/alat/{alat:id}/delete', [AlatController::class, 'destroy']);
 });
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
