@@ -49,6 +49,7 @@ class P_ruanganController extends Controller
             'desc' => 'nullable',
             'berkas' => 'nullable|max:2048'
         ]);
+
         if ($request->file('berkas')) {
             $fileName = 'File-PR-' . time() . '.' . $request->file('berkas')->extension();
             $path_url = 'file/peminjamanRuangan';

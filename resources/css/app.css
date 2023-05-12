@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+    background-color: rgb(236, 235, 235);
+    min-height: 100vh;
+}
 .bg-body{
     background-color: rgb(236, 235, 235);
     min-height: 100vh;
@@ -64,31 +68,53 @@
   }
 .navbar-user{
     background-color: rgb(255, 255, 255);
+    /* background: transparent; */
     color: rgb(0, 0, 0);
     position: fixed;
     top: 0;
     z-index: 50;
-    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.349);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.349);
+}
+
+.navbar-user .navbar-item{
+    margin-right: 47px;
+}
+.nav-user-logo{
+    position: fixed;
+    top:-10px;
+    z-index: 51;
+}
+.nav-user-logo .card{
+    background-color: rgb(248, 248, 248);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    border-radius: 5px;
+    left: 50px;
 }
 
 .navbar-img {
+    height: 85px;
+    width: 85px;
     margin-right: 10px;
-    image-resolution:300dpi ;
 }
 
 .navbar-brand{
-    font-size: 25px;
+    font-size: 20px;
     font-weight: bold;
     text-transform: uppercase;
 }
 .navbar-brand2{
-    font-size: 20px;
+    font-size: 11px;
     font-weight: bold;
     text-transform: uppercase;
 }
 
 .navbar-item .menu .active {
-    font-weight: bold;
+    /* font-weight: bold; */
+    background-color: rgb(248, 248, 248);
+    padding: 20px;
+    height:fit-content;
 }
 .navbar-button{
     display: none;
@@ -106,7 +132,17 @@
     display: none;
 }
 .sidebar-item{
-    margin-right: 20px;
+    padding: 20px;
+    margin-top: -20px;
+    margin-bottom: -20px;
+}
+
+.nav-label{
+    display: none;
+}
+
+.sidebar-item:hover{
+    background-color: rgb(248, 248, 248);
 }
 
 .tron{
@@ -119,12 +155,50 @@
     border-bottom-left-radius: 10px;
     z-index: -1;
 }
-
-.card-home{
-    background-color: rgb(255, 255, 255);
-    width: 100%;
-    padding: 20px;
+.tron-user{
+    /* background-color: rgb(0, 140, 255); */
+    /* background: url('/img/tron.jpg'); */
+    background: url('/img/tron.jpg');
+    min-height: 250px;
+    margin-bottom: -100px;
+    z-index: -1;
+}
+.card-user{
+    border-color: black;
+    z-index: 20;
+    margin-left: 47px;
+    margin-right: 47px;
     border-radius: 5px;
+}
+
+.card-user-item{
+    background-color: rgb(255, 255, 255);
+    border-radius: 3px;
+    margin: 3px;
+    margin-bottom: 20px;
+    /* padding: 20px; */
+    transition: 1s;
+}
+
+.card-user-item .cu-head{
+    background-color: rgb(248, 248, 248);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    padding: 20px;
+    color: rgb(17, 17, 17);
+    text-align: center;
+}
+
+.card-user-item .cu-body{
+    padding: 20px;
+}
+
+.card-user-item .cu-body .item {
+    font-weight: bold;
+}
+.card-user-item .cu-body .item li{
+    margin: 7px;
+    font-weight: normal;
 }
 
 .event-ruangan{
@@ -219,6 +293,19 @@
 .btn-black-nav:active{
     background-color: rgb(17, 17, 17);
     color: rgb(255, 255, 255);
+}
+
+.btn-white{
+    background-color: rgb(255, 255, 255);
+    border-color: transparent;
+    color: rgb(17, 17, 17);
+    border-radius: 3px;
+}
+.btn-white:hover{
+    background-color: rgb(236, 235, 235);
+    border-radius: 3px;
+    border-color: transparent;
+    color: rgb(17, 17, 17);
 }
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 .date{
@@ -438,8 +525,18 @@
     padding: 20px;
 }
 
+.terpakai{
+    /* margin-left: 10px; */
+    background-color: rgb(236, 235, 235);
+    padding: 5px;
+    text-align: center;
+    min-width: 50px;
+    color: rgb(17, 17, 17);
+    margin-left: auto;
+    border-radius: 3px;
+}
 .tersedia{
-    margin-left: 10px;
+    margin-left: 3px;
     background-color: rgb(11, 203, 21);
     padding: 5px;
     text-align: center;
@@ -448,13 +545,51 @@
     border-radius: 10px;
 }
 .tidak-tersedia{
-    margin-left: 10px;
-    background-color: rgb(255, 0, 8);
+    margin-left: 3px;
+    background-color: rgb(255, 166, 0);
     padding: 5px;
     text-align: center;
     min-width: 50px;
     color: rgb(248, 248, 248);
     border-radius: 10px;
+}
+
+.alat-name-user{
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 5px;
+}
+.alat-name-user-active{
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: rgb(248, 248, 248);
+    background-color: rgb(10, 163, 18);
+    border-radius: 3px;
+    margin-bottom: 5px;
+}
+.alat-name-user:hover{
+    color: rgb(248, 248, 248);
+    background-color: rgb(10, 163, 18);
+    border-radius: 3px;
+}
+.alat-error{
+    background-color: rgb(255, 166, 0);
+    color: rgb(248, 248, 248);
+    border-radius: 3px;
+    padding-right: 40px;
+    padding-left: 40px;
+}
+.user-alat-sisa{
+    background-color: rgb(255, 166, 0);
+    color: rgb(248, 248, 248);
+    border-radius: 3px;
+    padding: 5px;     
+}
+
+.modal-out{
+    display: none;
 }
 @media Screen and (max-width:800px){
     .navbar-item{
@@ -490,13 +625,11 @@
         width: 100%;
         padding: 20px;
         margin-bottom: 10px;
-        border-bottom-right-radius: 20px;
-        border-bottom-left-radius: 20px;
         display: flex;
         justify-content: center;
         transition: 0.7s;
         position: fixed;
-        top: 70px;
+        top: 63px;
     }
     #sidebar-off{
         background: rgb(248, 248, 248);
@@ -504,13 +637,11 @@
         width: 100%;
         padding: 20px;
         margin-bottom: 10px;
-        border-bottom-right-radius: 20px;
-        border-bottom-left-radius: 20px;
         display: flex;
         justify-content: center;
         transition: 0.7s;
         position: fixed;
-        top: 0;
+        top: 0px;
     }
 
     .login-form .card-form{
@@ -544,5 +675,33 @@
         top: 50vh;
         left: 65vw;
     }
+    .nav-user-logo{
+        position: fixed;
+        top:-10px;
+        z-index: 51;
+        display: none;
+    }
+    .nav-user-logo .card{
+        background-color: rgb(248, 248, 248);
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+        border-radius: 5px;
+        left: 50px;
+    }
+    .card-user{
+        margin-left: 20px;
+        margin-right: 20px;
+    } 
 
+    .nav-label{
+        display: block;
+    }
+    .nl-img img{
+        width: 50px;
+        margin-right: 10px;
+    }
+    .nl-head1{
+        font-weight: bold;
+    }
 }

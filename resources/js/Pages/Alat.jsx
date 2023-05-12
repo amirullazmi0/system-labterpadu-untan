@@ -5,9 +5,9 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import Tron from '@/Components/User/Tron'
 import { Head } from '@inertiajs/react'
-import HomeItem from '@/Components/User/HomeItem'
+import AlatItem from '@/Components/User/AlatItem'
 
-export default function Home(props) {
+export default function Alat(props) {
     return (
         <>
             <Head title="Dashboard" />
@@ -15,7 +15,7 @@ export default function Home(props) {
                 <Navbar props={props} active={props.active} />
                 <Tron />
                 <div className="card-user">
-                    <HomeItem props={props} />
+                    <AlatItem props={props} />
                 </div>
             </div>
         </>

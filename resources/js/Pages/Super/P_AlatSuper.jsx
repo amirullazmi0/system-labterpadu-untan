@@ -14,7 +14,7 @@ export default function P_AlatSuper(props) {
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        <P_AlatItem notif={props.flash} p_alat={props.p_alat} alat={props.alat} />
+                        <P_AlatItem props={props} />
                     </div>
                 </div>
             </div>

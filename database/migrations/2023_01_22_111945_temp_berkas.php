@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('temp_berkas', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('berkas');
+            $table->string('name')->unique();
+            $table->string('berkas')->nullable();
             $table->timestamps();
         });
     }

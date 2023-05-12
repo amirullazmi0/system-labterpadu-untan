@@ -1,8 +1,9 @@
 import { Link, router } from "@inertiajs/react"
 import { useEffect, useState } from "react"
-const RuanganItem = ({ ruangan, notif }) => {
-    console.log('notif : ', notif.success);
-    const [iniRuangan, setRuangan] = useState(ruangan)
+import Paginator from "../User/Paginator"
+const RuanganItem = ({ props }) => {
+    const [notif, setNotif] = useState(props.flash)
+    const [ruangan, setRuangan] = useState(props.ruangan.data)
 
     const alertSuccess = () => {
         return (
@@ -111,6 +112,9 @@ const RuanganItem = ({ ruangan, notif }) => {
                                     <div className="font-bold text-xl uppercase">tidak ada data ruangan</div>
                                 </div>
                             </>}
+                            <div className="mt-4">
+                                <Paginator meta={props.ruangan.meta} />
+                            </div>
                     </div>
                 </div>
             </div>

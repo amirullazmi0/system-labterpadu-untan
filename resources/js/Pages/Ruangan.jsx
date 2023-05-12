@@ -5,17 +5,18 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import Tron from '@/Components/User/Tron'
 import { Head } from '@inertiajs/react'
-import HomeItem from '@/Components/User/HomeItem'
+import RuanganItem from '@/Components/User/RuanganItem'
 
-export default function Home(props) {
+export default function Ruangan(props) {
     return (
         <>
             <Head title="Dashboard" />
             <div className="bg-body">
-                <Navbar props={props} active={props.active} />
+            <Navbar props={props} active={props.active} />
                 <Tron />
                 <div className="card-user">
-                    <HomeItem props={props} />
+                    {/* <HomeItem props={props} /> */}
+                    <RuanganItem props={props} />
                 </div>
             </div>
         </>

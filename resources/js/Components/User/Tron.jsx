@@ -1,7 +1,7 @@
 const Tron = () => {
     return (
         <>
-            <div className="tron"></div>
+            <div className="tron-user"></div>
         </>
     )
 }

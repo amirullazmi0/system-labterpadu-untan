@@ -1,10 +1,11 @@
 import { Link, router } from "@inertiajs/react"
 import { useEffect, useState } from "react"
+import Paginator from "../User/Paginator"
 
-
-const P_RuanganItem = ({ ruangan, p_ruangan, notif }) => {
-    const [iniRuangan, setRuangan] = useState(ruangan)
-    const [iniPRuangan, setPRuangan] = useState(p_ruangan)
+const P_RuanganItem = ({ props }) => {
+    const [ruangan, setRuangan] = useState(props.ruangan)
+    const [p_ruangan, setPRuangan] = useState(props.p_ruangan.data)
+    const [notif, setNotif] = useState(props.flash)
 
     const alertSuccess = () => {
         return (
@@ -135,6 +136,9 @@ const P_RuanganItem = ({ ruangan, p_ruangan, notif }) => {
                                     <div className="font-bold text-xl uppercase">tidak ada data peminjaman ruangan</div>
                                 </div>
                             </>}
+                            <div className="mt-4">
+                                <Paginator meta={props.p_ruangan.meta} />
+                            </div>
                     </div>
                 </div>
             </div >

@@ -14,7 +14,7 @@ export default function RuanganSuper(props) {
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        <RuanganItem notif={props.flash} ruangan={props.ruangan} />
+                        <RuanganItem props={props} />
                     </div>
                 </div>
             </div>

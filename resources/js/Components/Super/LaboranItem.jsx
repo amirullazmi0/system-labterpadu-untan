@@ -1,6 +1,13 @@
 import { Link, router } from "@inertiajs/react"
 import { useState } from "react"
-const LaboranItem = ({ laboran, lab, notif }) => {
+import Paginator from "../User/Paginator"
+import { read, utils, writeFile } from "xlsx"
+
+
+const LaboranItem = ({ props }) => {
+    const [laboran, setLaboran] = useState(props.laboran.data)
+    const [lab, setLab] = useState(props.lab)
+    const [notif, setNotif] = useState(props.flash)
     const alertSuccess = () => {
         return (
             <>
@@ -200,6 +207,9 @@ const LaboranItem = ({ laboran, lab, notif }) => {
                                     </div>
                                 </>
                             }
+                        </div>
+                        <div className="mt-4">
+                            <Paginator meta={props.laboran.meta} />
                         </div>
                     </div>
                 </div>

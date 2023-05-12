@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\dataCollection;
 use App\Models\Lab;
 use App\Models\Alat;
 use App\Models\GroupPAlat;
@@ -126,7 +127,7 @@ class SuperController extends Controller
         $data = [
             "title" => "Halaman Daftar Laboran",
             "active" => "laboran",
-            "laboran" => User::where('level', '1')->get(),
+            "laboran" => new dataCollection(User::where('level', '1')->latest()->paginate(5)),
             // "user" => User::latest()->get(),
             "lab" => Lab::all(),
             "nomor" => 1,
@@ -200,7 +201,7 @@ class SuperController extends Controller
             "active" => "ruangan",
             "user" => User::all(),
             "lab" => Lab::all(),
-            "ruangan" => Ruangan::latest()->get(),
+            "ruangan" => new dataCollection(Ruangan::latest()->paginate(5)),
             "nomor" => 1,
         ];
 
@@ -254,7 +255,7 @@ class SuperController extends Controller
             "user" => User::all(),
             "lab" => Lab::all(),
             "ruangan" => Ruangan::all(),
-            "p_ruangan" => P_ruangan::latest()->get(),
+            "p_ruangan" => new dataCollection(P_ruangan::latest()->paginate(5)),
             "nomor" => 1,
         ];
 
@@ -269,7 +270,7 @@ class SuperController extends Controller
             "user" => User::all(),
             "lab" => Lab::all(),
             "alat" =>  Alat::all(),
-            "p_alat" => P_alat::with('alat')->orderByDesc('created_at')->get(),
+            "p_alat" => new dataCollection(P_alat::with('alat')->latest()->paginate(5)),
             "nomor" => 1,
         ];
 

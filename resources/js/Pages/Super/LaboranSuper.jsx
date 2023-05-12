@@ -14,7 +14,7 @@ export default function LaboranSuper(props) {
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        <LaboranItem laboran={props.laboran} lab={props.lab} notif={props.flash} />
+                        <LaboranItem props={props} />
                     </div>
                 </div>
             </div>

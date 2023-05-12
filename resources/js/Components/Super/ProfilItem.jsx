@@ -1,8 +1,8 @@
 import { Link, router } from "@inertiajs/react"
 import { useEffect, useState, useRef } from "react"
 
-const ProfilItem = ({ user, berkass, notif, errors }) => {
-    const [isiBerkas, setIsiBerkas] = useState(berkass)
+const ProfilItem = ({ user, berkass, notif, errors, props }) => {
+    const [isiBerkas, setIsiBerkas] = useState(props.temp_berkas)
 
     const [name, setName] = useState(user.name)
     const [email, setEmail] = useState(user.email)
@@ -12,10 +12,6 @@ const ProfilItem = ({ user, berkass, notif, errors }) => {
     const [newPassword1, setNewPassword1] = useState('')
     const [newPassword2, setNewPassword2] = useState('')
 
-    const [fileBerkas, setFileBerkas] = useState('')
-    const [berkasRuangan, setBerkasRuangan] = useState('')
-    const [berkasAlat, setBerkasAlat] = useState('')
-    const [berkasAnalisis, setBerkasAnalisis] = useState('')
     const handleUpdateProfil = () => {
         const data = {
             name, email, address
@@ -33,37 +29,87 @@ const ProfilItem = ({ user, berkass, notif, errors }) => {
         setNewPassword2('')
     }
 
-    console.log(errors);
-    const fileInputRef = useRef(null);
-    const fileInputRef1 = useRef(null);
-    const fileInputRef2 = useRef(null);
-    const fileInputRef3 = useRef(null);
+    const [namaBerkas, setNameBerkas] = useState('')
+    const [fileBerkas, setFileBerkas] = useState('')
 
-    const handleBerkas = (event) => {
-        const id = event
-        const berkas = fileBerkas
-        const data = {
-            id, berkas
-        }
+    const [idBerkasEdit, setIdBerkasEdit] = useState('')
+    const [namaBerkasEdit, setNameBerkasEdit] = useState('')
+    const [fileBerkasEdit, setFileBerkasEdit] = useState('')
 
-        console.log('data : ', data);
-        console.log('alata : ', berkas);
-
-        router.post('/super/berkas/' + id + '/update', data)
-
-        fileInputRef1.current.type = "text"
-        fileInputRef1.current.value = "";
-        fileInputRef1.current.type = "file";
-
-        fileInputRef2.current.type = "text"
-        fileInputRef2.current.value = "";
-        fileInputRef2.current.type = "file";
-
-        fileInputRef3.current.type = "text"
-        fileInputRef3.current.value = "";
-        fileInputRef3.current.type = "file";
+    const renderModalEdit = (event) => {
+        setModal(true)
+        setNameBerkasEdit(event.name)
+        setIdBerkasEdit(event.id)
+    }
+    // const renderModalEdit
+    const fileInputRef = useRef(null)
+    const fileInputRefEdit = useRef(null)
+    const [modal, setModal] = useState(false)
+    const modalOn = () => {
+        setModal(true)
     }
 
+    const modalOff = () => {
+        setModal(false)
+        fileInputRef.current.type = "text"
+        fileInputRef.current.value = null;
+        fileInputRef.current.type = "file"
+
+        fileInputRefEdit.current.type = "text"
+        fileInputRefEdit.current.value = null;
+        fileInputRefEdit.current.type = "file"
+    }
+
+
+    const handleAddBerkas = (e) => {
+        const name = namaBerkas
+        const berkas = fileBerkas
+        const data = {
+            name, berkas
+        }
+        router.post('/super/berkas/add', data)
+        setNameBerkas('')
+        setFileBerkas('')
+        setModal(false)
+        fileInputRef.current.type = "text"
+        fileInputRef.current.value = null;
+        fileInputRef.current.type = "file"
+
+        fileInputRefEdit.current.type = "text"
+        fileInputRefEdit.current.value = null;
+        fileInputRefEdit.current.type = "file"
+
+    }
+    const handleEditBerkas = (e) => {
+        const id = idBerkasEdit
+        const name = namaBerkasEdit
+        const berkas = fileBerkasEdit
+        const data = {
+            id, name, berkas
+        }
+        router.post('/super/berkas/' + id + '/update', data)
+        setIdBerkasEdit('')
+        setNameBerkasEdit('')
+        setFileBerkasEdit('')
+        setModal(false)
+        fileInputRef.current.type = "text"
+        fileInputRef.current.value = null;
+        fileInputRef.current.type = "file"
+
+        fileInputRefEdit.current.type = "text"
+        fileInputRefEdit.current.value = null;
+        fileInputRefEdit.current.type = "file"
+    }
+
+    const handleDeleteBerkas = (e) => {
+        if (window.confirm('Are you sure you want to delete this data?')) {
+            const name = e.name
+            const data = {
+                name
+            }
+            router.get('/super/berkas/' + e.id + '/delete', data)
+        }
+    }
     return (
         <>
             <div className="lab-item mt-5">
@@ -205,60 +251,121 @@ const ProfilItem = ({ user, berkass, notif, errors }) => {
                                             </div>
                                         </div>
                                     }
+                                    {notif.berkasDelete &&
+                                        <div className="col-span-1">
+                                            <div className="alert alert-error shadow-lg mb-4">
+                                                <div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                                    <span>{notif.berkasDelete}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
                                     <div className="col-span-1">
-                                        <div className="flex items-center">
+                                        <div className="flex items-center justify-start mb-3">
                                             <div className="text-xl font-bold mr-2">Update Berkas</div>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                                             </svg>
-                                        </div>
-                                        {isiBerkas.map((b, index) => (
-                                            <div key={b.id} className="form-control lg:col-span-2 col-span-2 w-full mb-2">
-                                                <label className="label">
-                                                    <span className="label-text">{b.name}</span>
+                                            <button onClick={() => modalOn()} className="ml-auto">
+                                                <label htmlFor="modal-add" className="btn btn-sm ml-auto">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                                    </svg>
                                                 </label>
-                                                <div className="flex items-center">
-                                                    {b.id == 1 &&
-                                                        <input
-                                                            type='file'
-                                                            accept=".pdf"
-                                                            ref={fileInputRef1}
-                                                            onChange={(berkas) => setFileBerkas(berkas.target.files[0])}
-                                                            className="file-input file-input-md file-input-bordered w-full max-w-xs"
-                                                        />
-                                                    }
-                                                    {b.id == 2 &&
-                                                        <input
-                                                            type='file'
-                                                            accept=".pdf"
-                                                            ref={fileInputRef2}
-                                                            onChange={(berkas) => setFileBerkas(berkas.target.files[0])}
-                                                            className="file-input file-input-md file-input-bordered w-full max-w-xs"
-                                                        />
-                                                    }
-                                                    {b.id == 3 &&
-                                                        <input
-                                                            type='file'
-                                                            accept=".pdf"
-                                                            ref={fileInputRef3}
-                                                            onChange={(berkas) => setFileBerkas(berkas.target.files[0])}
-                                                            className="file-input file-input-md file-input-bordered w-full max-w-xs"
-                                                        />
-                                                    }
-                                                    <button className="btn btn-blue ml-1" onClick={() => handleBerkas(b.id)}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
-                                                        </svg>
+                                            </button>
+                                            {/* Put this part before </body> tag */}
+                                            <input type="checkbox" id="modal-add" className="modal-toggle" />
+                                            <div className={modal == true ? "modal" : "modal-out"}>
+                                                <div className="modal-box relative">
+                                                    <button onClick={() => modalOff()} className="">
+                                                        <label htmlFor="modal-add" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                                                     </button>
+                                                    <h3 className="text-lg font-bold">Tambah Berkas</h3>
+                                                    <div className="form-control">
+                                                        <label htmlFor="" className="label">
+                                                            Nama
+                                                        </label>
+                                                        <input type="text" name="name" value={namaBerkas ? namaBerkas : ""} onChange={(e) => setNameBerkas(e.target.value)} placeholder="Masukan Nama Berkas" className="input input-md input-bordered" />
+                                                    </div>
+                                                    <div className="form-control">
+                                                        <label htmlFor="" className="label">
+                                                            File
+                                                        </label>
+                                                        <input type="file" ref={fileInputRef} name="berkas" accept=".pdf" onChange={(e) => setFileBerkas(e.target.files[0])} placeholder="Masukan Nama Berkas" className="file-input file-input-md input-bordered" />
+                                                    </div>
+                                                    <div className="flex justify-center mt-3">
+                                                        <button htmlFor="modal-add" className="btn btn-sm btn-blue btn-wide" onClick={() => handleAddBerkas()}>
+                                                            Submit
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                {b.berkas ?
-                                                    <Link href={'/file/berkas/' + b.berkas} className="btn btn-green btn-sm mt-1">
-                                                        {b.berkas}
-                                                    </Link>
-                                                    :
-                                                    <label className="label">
-                                                        <span className="label-text text-error">Tidak Ada File Berkas</span>
-                                                    </label>}
+                                            </div>
+                                        </div>
+                                        {props.temp_berkas.map((b, index) => (
+                                            <div key={b.id} className="lg:col-span-2 col-span-2 w-full border rounded p-2 m-1 mb-3">
+                                                <div className="grid grid-cols-5 lg:grid-cols-7">
+                                                    <div className="col-span-5 lg:col-span-7">
+                                                        <div className="flex items-center">
+                                                            <span>Nama : </span>
+                                                            <span>{b.name}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-span-3 lg:col-span-5 mr-1">
+                                                        {b.berkas ?
+                                                            <Link href={'/file/berkas/' + b.berkas} className="btn btn-green btn-sm mt-1 w-full">
+                                                                {b.berkas}
+                                                            </Link>
+                                                            :
+                                                            <label className="label">
+                                                                <span className="label-text text-error">Tidak Ada File Berkas</span>
+                                                            </label>
+                                                        }
+                                                    </div>
+                                                    <div className="col-span-2 lg:col-span-2">
+                                                        <div className="grid grid-cols-2">
+                                                            <button onClick={() => renderModalEdit(b)} className="mt-1">
+                                                                <label htmlFor="modal-edit" className="btn btn-sm btn-blue">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                                    </svg>
+                                                                </label>
+                                                            </button>
+                                                            {/* Put this part before </body> tag */}
+                                                            <input type="checkbox" id="modal-edit" className="modal-toggle" />
+                                                            <div className={modal == true ? "modal" : "modal-out"}>
+                                                                <div className="modal-box relative">
+                                                                    <button onClick={() => modalOff()} className="">
+                                                                        <label htmlFor="modal-edit" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                                                                    </button>
+                                                                    <h3 className="text-lg font-bold">Tambah Berkas</h3>
+                                                                    <div className="form-control">
+                                                                        <label htmlFor="" className="label">
+                                                                            Nama
+                                                                        </label>
+                                                                        <input type="text" name="name" value={namaBerkasEdit ? namaBerkasEdit : ""} onChange={(e) => setNameBerkasEdit(e.target.value)} placeholder="Masukan Nama Berkas" className="input input-md input-bordered" />
+                                                                    </div>
+                                                                    <div className="form-control">
+                                                                        <label htmlFor="" className="label">
+                                                                            File
+                                                                        </label>
+                                                                        <input type="file" ref={fileInputRefEdit} name="berkas" accept=".pdf" onChange={(e) => setFileBerkasEdit(e.target.files[0])} placeholder="Masukan Nama Berkas" className="file-input file-input-md input-bordered" />
+                                                                    </div>
+                                                                    <div className="flex justify-center mt-3">
+                                                                        <button className="btn btn-sm btn-blue btn-wide" onClick={() => handleEditBerkas()}>
+                                                                            Submit
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <button onClick={() => handleDeleteBerkas(b)} className="btn btn-sm btn-red mt-1 ml-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>

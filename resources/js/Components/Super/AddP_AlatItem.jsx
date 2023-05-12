@@ -157,7 +157,7 @@ const AddP_AlatItem = ({ lab, alat, errors }) => {
                                 <label className="label">
                                     <span className="label-text">Nama Peminjam</span>
                                 </label>
-                                <input type="text" placeholder="Nama Peminjam Ruangan" className="input input-bordered max-w-xs w-full" value={name} onChange={(name) => setName(name.target.value)} />
+                                <input type="text" placeholder="Nama Peminjam Alat" className="input input-bordered max-w-xs w-full" value={name} onChange={(name) => setName(name.target.value)} />
                                 <label className="label">
                                     {errors.name && !name &&
                                         <span className="label-text-alt text-error">{errors.name}</span>

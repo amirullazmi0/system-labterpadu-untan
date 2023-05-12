@@ -1,8 +1,12 @@
 import { Link, router } from "@inertiajs/react"
 import { useEffect, useState } from "react"
+import Paginator from "../User/Paginator"
 
 
-const P_AlatItem = ({ alat, p_alat, notif }) => {
+const P_AlatItem = ({ props }) => {
+    const [notif, setNotif] = useState(props.flash)
+    const [p_alat, setPALat] = useState(props.p_alat.data)
+    const [alat, setALat] = useState(props.alat)
     const alertSuccess = () => {
         return (
             <>
@@ -175,6 +179,9 @@ const P_AlatItem = ({ alat, p_alat, notif }) => {
                                     <div className="font-bold text-xl uppercase">tidak ada data peminjaman alat</div>
                                 </div>
                             </>}
+                        <div className="mt-4">
+                            <Paginator meta={props.p_alat.meta} />
+                        </div>
                     </div>
                 </div>
             </div >

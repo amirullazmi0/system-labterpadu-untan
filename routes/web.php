@@ -28,6 +28,9 @@ use App\Http\Controllers\tempBerkasController;
 */
 
 Route::get('/', [UserController::class, 'index'])->name('home');
+Route::get('/ruangan', [UserController::class, 'ruangan'])->name('ruangan');
+Route::get('/alat', [UserController::class, 'all_alat'])->name('alat');
+Route::get('/alat/{lab:name}', [UserController::class, 'alat']);
 
 Route::middleware(['auth', 'super:0'])->group(function () {
     Route::get('/super', [SuperController::class, 'index'])->name('super');
@@ -35,7 +38,9 @@ Route::middleware(['auth', 'super:0'])->group(function () {
     Route::post('/super/{user:id}/profil', [SuperController::class, 'profil_update']);
     Route::post('/super/{user:id}/password/update', [SuperController::class, 'password_update']);
 
+    Route::post('/super/berkas/add', [tempBerkasController::class, 'store']);
     Route::post('/super/berkas/{temp_berkas:id}/update', [tempBerkasController::class, 'update']);
+    Route::get('/super/berkas/{temp_berkas:id}/delete', [tempBerkasController::class, 'destroy']);
 
     Route::get('/super/lab', [SuperController::class, 'lab'])->name('super-lab');
 

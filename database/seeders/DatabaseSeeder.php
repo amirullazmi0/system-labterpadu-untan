@@ -86,10 +86,6 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Peminjaman Alat',
                 'berkas' => '',
             ],
-            [
-                'name' => 'Analisis',
-                'berkas' => '',
-            ],
         ];
         foreach ($temp_berkas as $key => $value) {
             Temp_berkas::create($value);
@@ -97,8 +93,8 @@ class DatabaseSeeder extends Seeder
 
         $ruangan = [
             [
-                'name' => 'aula',
-                'color' => 'black',
+                'name' => 'Aula',
+                'color' => 'yellow',
             ],
         ];
         foreach ($ruangan as $key => $value) {

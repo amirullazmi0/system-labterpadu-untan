@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('message'),
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
+                'berkasDelete' => fn () => $request->session()->get('berkasDelete'),
                 'update' => fn () => $request->session()->get('update'),
                 'delete' => fn () => $request->session()->get('delete')
             ],
