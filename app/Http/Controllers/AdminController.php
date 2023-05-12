@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\dataCollection;
 use App\Models\Lab;
 use App\Models\Alat;
 use App\Models\User;
@@ -110,7 +111,7 @@ class AdminController extends Controller
             "active" => "alat",
             "user" => User::all(),
             "lab" => Lab::all(),
-            "alat" => Alat::where('lab_id', '=', auth()->user()->lab_id)->latest()->get(),
+            "alat" => new dataCollection(Alat::with('lab')->where('lab_id', '=', auth()->user()->lab_id)->latest()->paginate(5)),
             "nomor" => 1,
         ];
 

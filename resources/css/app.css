@@ -616,8 +616,14 @@ body{
         text-transform: uppercase;
     }
 
-     .menu .active {
-        font-weight: bold;
+    .menu .active {
+        /* font-weight: bold; */
+        background-color: rgb(228, 228, 228);
+        padding: 20px;
+        height:fit-content;
+    }
+    .sidebar-item:hover{
+        background-color: rgb(228, 228, 228);
     }
     #sidebar-on{
         background: rgb(248, 248, 248);
@@ -669,6 +675,7 @@ body{
         margin-left: 00px;
         transition: 1s;
     }
+    
     .btn-sidebar{
         display: block;
         position: absolute;

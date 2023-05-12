@@ -127,7 +127,8 @@ class SuperController extends Controller
         $data = [
             "title" => "Halaman Daftar Laboran",
             "active" => "laboran",
-            "laboran" => new dataCollection(User::where('level', '1')->latest()->paginate(5)),
+            "laboran" => new dataCollection(User::with('lab')->where('level', '1')->latest()->paginate(5)),
+            "laboranExport" => User::with('lab')->where('level', '1')->latest()->get(),
             // "user" => User::latest()->get(),
             "lab" => Lab::all(),
             "nomor" => 1,
@@ -202,6 +203,7 @@ class SuperController extends Controller
             "user" => User::all(),
             "lab" => Lab::all(),
             "ruangan" => new dataCollection(Ruangan::latest()->paginate(5)),
+            "ruanganExport" => Ruangan::latest()->get(),
             "nomor" => 1,
         ];
 
@@ -255,7 +257,8 @@ class SuperController extends Controller
             "user" => User::all(),
             "lab" => Lab::all(),
             "ruangan" => Ruangan::all(),
-            "p_ruangan" => new dataCollection(P_ruangan::latest()->paginate(5)),
+            "p_ruangan" => new dataCollection(P_ruangan::with('ruangan')->latest()->paginate(5)),
+            "p_ruanganExport" => P_ruangan::with('ruangan')->latest()->get(),
             "nomor" => 1,
         ];
 
@@ -269,8 +272,9 @@ class SuperController extends Controller
             "active" => "p_alat",
             "user" => User::all(),
             "lab" => Lab::all(),
-            "alat" =>  Alat::all(),
+            "alat" =>  Alat::with('lab')->orderBy('name', 'asc')->get(),
             "p_alat" => new dataCollection(P_alat::with('alat')->latest()->paginate(5)),
+            "p_alatExport" => P_alat::with('alat')->latest()->get(),
             "nomor" => 1,
         ];
 

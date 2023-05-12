@@ -18,16 +18,13 @@ const Navbar = ({ active, props }) => {
     }, [myRef]);
 
     const closeSidebar = () => {
-        if (sidebar == true) {
-            setSidebar(false)
-        }
         setSidebar(false)
     }
-
     const openSidebar = () => {
         setSidebar(true)
     }
 
+    console.log('sidebar : ', sidebar);
     const iniSidebar = () => {
         return (
             <>
@@ -39,14 +36,21 @@ const Navbar = ({ active, props }) => {
                         <Link href={route('ruangan')}>
                             <div className={iniActive == "ruangan" ? "sidebar-item active" : "sidebar-item"}>Ruangan</div>
                         </Link>
-                        <Link>
-                            <div className="sidebar-item">Alat</div>
+                        <Link href={route('alat')}>
+                            <div className={iniActive == "alat" ? "sidebar-item active" : "sidebar-item"}>Alat</div>
                         </Link>
-                        <Link>
-                            <div className="sidebar-item">Download</div>
-                        </Link>
+                        <div className="sidebar-item dropdown dropdown-end dropdown-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                            </svg>
+                            <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 w-52">
+                                {berkas.map((bb) => (
+                                    <Link href={bb.berkas ? ("/file/berkas/" + bb.berkas) : "#"} className="btn btn-block btn-white">{bb.name}</Link>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
-                </ul>
+                </ul >
             </>
         )
     }
@@ -105,13 +109,13 @@ const Navbar = ({ active, props }) => {
                 </div>
                 <div className="navbar-button">
                     {sidebar == false ?
-                        <button className="btn-ghost" onClick={() => openSidebar()}>
+                        <button className="btn-ghost button-nav" onClick={() => openSidebar()}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25" />
                             </svg>
                         </button>
                         :
-                        <button className="btn-ghost" onClick={() => closeSidebar()}>
+                        <button className="btn-ghost button-nav" onClick={() => closeSidebar()}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>

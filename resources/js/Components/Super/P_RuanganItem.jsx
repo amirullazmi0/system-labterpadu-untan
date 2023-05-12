@@ -1,12 +1,47 @@
 import { Link, router } from "@inertiajs/react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Paginator from "../User/Paginator"
+import { read, utils, writeFile, writeFileXLSX } from "xlsx"
 
 const P_RuanganItem = ({ props }) => {
     const [ruangan, setRuangan] = useState(props.ruangan)
     const [p_ruangan, setPRuangan] = useState(props.p_ruangan.data)
     const [notif, setNotif] = useState(props.flash)
 
+    const [pres, setPres] = useState([]);
+    /* get state data and export to XLSX */
+    const [datax, setDatax] = useState(
+        props.p_ruanganExport.map((ll) => (
+            {
+                Nama: ll.name,
+                Ruangan: ll.ruangan.name,
+                Kegiatan: ll.event,
+                TanggalMulai: ll.date_start,
+                TanggalSelesai: ll.date_end,
+                WaktuMulai: ll.time_start,
+                WaktuSelesai: ll.time_end,
+                Deskripsi: ll.desc,
+                NamaBerkas: ll.berkas,
+                Dibuat: ll.created_at
+            }
+        ))
+    )
+    useEffect(() => {
+        (async () => {
+            const f = await (await fetch("https://sheetjs.com/pres.xlsx")).arrayBuffer();
+            const wb = read(f); // parse the array buffer
+            const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+            const data = utils.sheet_to_json(ws); // generate objects
+            setPres(datax); // update state
+        })();
+    }, []);
+
+    const exportFile = useCallback(() => {
+        const ws = utils.json_to_sheet(pres);
+        const wb = utils.book_new();
+        utils.book_append_sheet(wb, ws, "Data");
+        writeFileXLSX(wb, "dataPinjamRuanganUPTLabTerpadu.xlsx");
+    }, [pres]);
     const alertSuccess = () => {
         return (
             <>
@@ -61,9 +96,9 @@ const P_RuanganItem = ({ props }) => {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
                                 </svg>
                             </Link>
-                            <Link className="btn btn-sm btn-green">
+                            <button onClick={exportFile} className="btn btn-sm btn-green">
                                 Export
-                            </Link>
+                            </button>
                         </div>
                         {p_ruangan && p_ruangan.length > 0 ?
                             <>
@@ -136,9 +171,9 @@ const P_RuanganItem = ({ props }) => {
                                     <div className="font-bold text-xl uppercase">tidak ada data peminjaman ruangan</div>
                                 </div>
                             </>}
-                            <div className="mt-4">
-                                <Paginator meta={props.p_ruangan.meta} />
-                            </div>
+                        <div className="mt-4">
+                            <Paginator meta={props.p_ruangan.meta} />
+                        </div>
                     </div>
                 </div>
             </div >

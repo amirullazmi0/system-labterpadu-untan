@@ -1,9 +1,39 @@
 import { Link, router } from "@inertiajs/react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Paginator from "../User/Paginator"
+import { read, utils, writeFile, writeFileXLSX } from "xlsx"
+
 const RuanganItem = ({ props }) => {
     const [notif, setNotif] = useState(props.flash)
     const [ruangan, setRuangan] = useState(props.ruangan.data)
+
+    const [pres, setPres] = useState([]);
+    /* get state data and export to XLSX */
+    const [datax, setDatax] = useState(
+        props.ruanganExport.map((ll) => (
+            {
+                Nama: ll.name,
+                Warna: ll.color,
+                Deskripsi: ll.desc
+            }
+        ))
+    )
+    useEffect(() => {
+        (async () => {
+            const f = await (await fetch("https://sheetjs.com/pres.xlsx")).arrayBuffer();
+            const wb = read(f); // parse the array buffer
+            const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+            const data = utils.sheet_to_json(ws); // generate objects
+            setPres(datax); // update state
+        })();
+    }, []);
+
+    const exportFile = useCallback(() => {
+        const ws = utils.json_to_sheet(pres);
+        const wb = utils.book_new();
+        utils.book_append_sheet(wb, ws, "Data");
+        writeFileXLSX(wb, "dataRuanganUPTLabTerpadu.xlsx");
+    }, [pres]);
 
     const alertSuccess = () => {
         return (
@@ -59,9 +89,9 @@ const RuanganItem = ({ props }) => {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
                                 </svg>
                             </Link>
-                            <Link className="btn btn-sm btn-green">
+                            <button onClick={exportFile} className="btn btn-sm btn-green">
                                 Export
-                            </Link>
+                            </button>
                         </div>
                         {ruangan && ruangan.length > 0 ?
                             <>
@@ -112,9 +142,9 @@ const RuanganItem = ({ props }) => {
                                     <div className="font-bold text-xl uppercase">tidak ada data ruangan</div>
                                 </div>
                             </>}
-                            <div className="mt-4">
-                                <Paginator meta={props.ruangan.meta} />
-                            </div>
+                        <div className="mt-4">
+                            <Paginator meta={props.ruangan.meta} />
+                        </div>
                     </div>
                 </div>
             </div>

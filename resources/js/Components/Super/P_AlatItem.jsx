@@ -1,12 +1,79 @@
 import { Link, router } from "@inertiajs/react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Paginator from "../User/Paginator"
+import { read, utils, writeFile, writeFileXLSX } from "xlsx"
 
 
 const P_AlatItem = ({ props }) => {
     const [notif, setNotif] = useState(props.flash)
     const [p_alat, setPALat] = useState(props.p_alat.data)
+    const [p_alatExport, setPALatExport] = useState(props.p_alatExport)
     const [alat, setALat] = useState(props.alat)
+
+
+    const [pres, setPres] = useState([]);
+    const [pres2, setPres2] = useState([]);
+    /* get state data and export to XLSX */
+    const [datax, setDatax] = useState(
+        p_alatExport.map((ll) => (
+            {
+                Kode: ll.primary_id,
+                Nama: ll.name,
+                Kegiatan: ll.event,
+                Alat: ll.alat.name,
+                Total: ll.total,
+                TanggalMulai: ll.date_start,
+                TanggalSelesai: ll.date_end,
+                WaktuMulai: ll.time_start,
+                WaktuSelesai: ll.time_end,
+                Deskripsi: ll.desc,
+                NamaBerkas: ll.berkas,
+                Dibuat: ll.created_at
+            })
+        ))
+    useEffect(() => {
+        (async () => {
+            const f = await (await fetch("https://sheetjs.com/pres.xlsx")).arrayBuffer();
+            const wb = read(f); // parse the array buffer
+            const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+            const data = utils.sheet_to_json(ws); // generate objects
+            setPres(datax); // update state
+        })();
+    }, []);
+
+    const [datax2, setDatax2] = useState(
+        alat.map((ll) => (
+            {
+                Nama: ll.name,
+                Lab: ll.lab.name,
+                Total: ll.total,
+                Warna: ll.color,
+                Deskripsi: ll.desc
+            })
+        ))
+    useEffect(() => {
+        (async () => {
+            const f2 = await (await fetch("https://sheetjs.com/pres.xlsx")).arrayBuffer();
+            const wb2 = read(f2); // parse the array buffer
+            const ws2 = wb2.Sheets[wb2.SheetNames[0]]; // get the first worksheet
+            const data2 = utils.sheet_to_json(ws2); // generate objects
+            setPres2(datax2); // update state
+        })();
+    }, []);
+
+    const exportFile = useCallback(() => {
+        const ws = utils.json_to_sheet(pres);
+        const wb = utils.book_new();
+        utils.book_append_sheet(wb, ws, "Data");
+        writeFileXLSX(wb, "dataPinjamAlatUPTLabTerpadu.xlsx");
+    }, [pres2]);
+
+    const exportFileAlat = useCallback(() => {
+        const ws2 = utils.json_to_sheet(pres2);
+        const wb2 = utils.book_new();
+        utils.book_append_sheet(wb2, ws2, "Data");
+        writeFileXLSX(wb2, "dataAlatUPTLabTerpadu.xlsx");
+    }, [pres2]);
     const alertSuccess = () => {
         return (
             <>
@@ -71,9 +138,12 @@ const P_AlatItem = ({ props }) => {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
                                 </svg>
                             </Link>
-                            <Link className="btn btn-sm btn-green">
+                            <button onClick={exportFile} className="btn btn-sm btn-green">
                                 Export
-                            </Link>
+                            </button>
+                            <button onClick={exportFileAlat} className="btn btn-sm btn-green ml-1">
+                                Export Data Alat
+                            </button>
                         </div>
                         {p_alat && p_alat.length > 0 ?
                             <>

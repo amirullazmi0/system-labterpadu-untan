@@ -1,13 +1,37 @@
 import { Link, router } from "@inertiajs/react"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Paginator from "../User/Paginator"
-import { read, utils, writeFile } from "xlsx"
-
+import { read, utils, writeFile, writeFileXLSX } from "xlsx"
 
 const LaboranItem = ({ props }) => {
     const [laboran, setLaboran] = useState(props.laboran.data)
     const [lab, setLab] = useState(props.lab)
     const [notif, setNotif] = useState(props.flash)
+
+    const [pres, setPres] = useState([]);
+    /* get state data and export to XLSX */
+    const [datax, setDatax] = useState(
+        props.laboranExport.map((ll) => (
+            { Nama: ll.name, Email: ll.email, Lab: ll.lab.name, Alamat: ll.address }
+        ))
+    )
+    useEffect(() => {
+        (async () => {
+            const f = await (await fetch("https://sheetjs.com/pres.xlsx")).arrayBuffer();
+            const wb = read(f); // parse the array buffer
+            const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+            const data = utils.sheet_to_json(ws); // generate objects
+            setPres(datax); // update state
+        })();
+    }, []);
+
+    const exportFile = useCallback(() => {
+        const ws = utils.json_to_sheet(pres);
+        const wb = utils.book_new();
+        utils.book_append_sheet(wb, ws, "Data");
+        writeFileXLSX(wb, "dataLaboranUPTLabTerpadu.xlsx");
+    }, [pres]);
+
     const alertSuccess = () => {
         return (
             <>
@@ -142,9 +166,9 @@ const LaboranItem = ({ props }) => {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
                                 </svg>
                             </Link>
-                            <Link className="btn btn-sm btn-green">
+                            <button onClick={exportFile} className="btn btn-sm btn-green">
                                 Export
-                            </Link>
+                            </button>
                         </div>
                         {/* Table */}
                         <div className="overflow-x-auto">

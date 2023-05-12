@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\P_ruanganController;
 use App\Http\Controllers\tempBerkasController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,9 @@ Route::get('/', [UserController::class, 'index'])->name('home');
 Route::get('/ruangan', [UserController::class, 'ruangan'])->name('ruangan');
 Route::get('/alat', [UserController::class, 'all_alat'])->name('alat');
 Route::get('/alat/{lab:name}', [UserController::class, 'alat']);
+Route::get('login', [AuthenticatedSessionController::class, 'create'])
+    ->name('login');
+Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
 Route::middleware(['auth', 'super:0'])->group(function () {
     Route::get('/super', [SuperController::class, 'index'])->name('super');

@@ -23,7 +23,12 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                if (auth()->user()->level == '0') {
+                    return redirect()->intended('/super')->with('login', 'Anda Sudah login !');
+                } elseif (auth()->user()->level == '1') {
+                    return redirect()->intended('/admin')->with('login', 'Anda Sudah login !');
+                };
+                // return redirect(RouteServiceProvider::HOME);
             }
         }
 
