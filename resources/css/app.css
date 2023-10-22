@@ -624,7 +624,9 @@ body{
 .modal-out{
     display: none;
 }
-@media Screen and (max-width:800px){
+
+
+@media Screen and (max-width:1000px){
     .navbar-item{
         display: none;
     }
@@ -700,13 +702,13 @@ body{
     }
 
     .sidebar-none{
-        margin-left: -350px;
-        transition: 1s;
+        margin-left: -100vw;
+        transition: 0.5s;
 
     }
     .sidebar-active{
         margin-left: 00px;
-        transition: 1s;
+        transition: 0.5s;
     }
     
     .btn-sidebar{
