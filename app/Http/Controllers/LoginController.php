@@ -43,7 +43,7 @@ class LoginController extends Controller
             return redirect()->intended('/super');
         };
 
-        dd("GAGAL");
+        // dd("GAGAL");
         return back()->with('error', 'Login Failed !');
     }
 

@@ -47,7 +47,7 @@ class UserController extends Controller
             "temp_berkas" => Temp_berkas::orderBy('name', 'asc')->get(),
             "navlab" => Lab::first(),
             "ruangan" => Ruangan::all(),
-            "p_ruangan" => new dataCollection(P_ruangan::with('ruangan')->orderBy('name', 'desc')->latest()->paginate(15)),
+            "p_ruangan" => new dataCollection(P_ruangan::with('ruangan')->orderBy('name', 'desc')->latest()->paginate(10)),
             "user" => User::all(),
             // "jumlah_alat" => $j_alat,
         ];

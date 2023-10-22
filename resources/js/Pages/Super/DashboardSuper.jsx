@@ -7,7 +7,7 @@ import { Head, Link } from '@inertiajs/react';
 export default function DashboardSuper(props) {
     return (
         <>
-            <Head title={props.title} />
+            <Head title={"Dashboard"} />
             <div className="bg-body">
                 <Navbar active={props.active} auth={props.auth} />
                 <Tron />

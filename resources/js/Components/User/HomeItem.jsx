@@ -18,6 +18,8 @@ const HomeItem = ({ props }) => {
     const formatToday = moment(theDay).format('DD MMMM YYYY')
     const formatToday2 = moment(theDay).format('YYYY-MM-DD')
 
+    const [popUp, setPopUp] = useState(false)
+
     const sweetEventRuangan = (event) => {
         event.date_end ?
             swal({
@@ -36,7 +38,6 @@ const HomeItem = ({ props }) => {
             })
     }
     const sweetEventAlat = (event) => {
-        console.log('wkwk Alat : ', event);
         event.date_end ?
             swal({
                 title: event.alat.name + " (" + event.event + ")",
@@ -54,32 +55,98 @@ const HomeItem = ({ props }) => {
             })
     }
 
+    const handleClosePopUp = () => {
+        setPopUp(false)
+    }
+
+    const [popUpData, setPopUpData] = useState(null);
+    const handleEventCC = (arg) => {
+        const kode = arg.event.id[0]
+        const id = arg.event.id.slice(1)
+        if (kode == "A") {
+            p_alat.map((item) => {
+                if (item.id == id) {
+                    console.log('A nih :', item);
+                    setPopUp(true)
+                    setPopUpData(item);
+                }
+            })
+        } else {
+            p_ruangan.map((item) => {
+                if (item.id == id) {
+                    console.log('A nih :', item);
+                    setPopUp(true)
+                    setPopUpData(item);
+                }
+            })
+        }
+    }
+
+    const renderPopUp = () => {
+        console.log(popUpData);
+        return (
+            <>
+                <div className={popUp == true ? "card-popUp-on" : "card-popUp-off"}>
+                    {popUpData ?
+                        <>
+                            <div className="flex justify-end">
+                                <button onClick={() => handleClosePopUp()} className='btn btn-sm'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div className="grid grid-cols-6">
+                                {/* <div className="col-span-2">Nama</div>
+                                <div className="col-span-1">:</div>
+                                <div className="col-span-3">{popUpData.name}</div> */}
+
+                                <div className="col-span-2">{popUpData.ruangan_id ? "Ruangan" : "Alat"}</div>
+                                <div className="col-span-1">:</div>
+                                <div className="col-span-3">{popUpData.ruangan_id ? popUpData.ruangan.name : popUpData.alat.name}</div>
+
+                                {popUpData.alat_id &&
+                                    <>
+                                        <div className="col-span-2">Total</div>
+                                        <div className="col-span-1">:</div>
+                                        <div className="col-span-3">{popUpData.total}</div>
+                                    </>
+                                }
+
+                                <div className="col-span-2">Tanggal</div>
+                                <div className="col-span-1">:</div>
+                                <div className="col-span-3">{moment(popUpData.date_start).format('DD MMMM YYYY')} {popUpData.date_end &&
+                                    <>
+                                        - {moment(popUpData.date_end).format('DD MMMM YYYY')}
+                                    </>
+                                }
+                                </div>
+
+                                <div className="col-span-2">Waktu</div>
+                                <div className="col-span-1">:</div>
+                                <div className="col-span-3">{popUpData.time_start} {popUpData.time_end &&
+                                    <>
+                                        - {popUpData.time_end}
+                                    </>
+                                }
+                                </div>
+
+                                <div className="col-span-2">Deskripsi</div>
+                                <div className="col-span-1">:</div>
+                                <div className="col-span-3">{popUpData.Desc}</div>
+
+                            </div>
+                        </>
+                        : null
+                    }
+                </div>
+            </>
+        )
+    }
+
     const handleDateClick = (arg) => { // bind with an arrow function
         setTheDay(arg.date)
         // console.log(arg);
-    }
-
-    console.log(formatToday2);
-    const handleEventClick = (arg) => { // bind with an arrow function
-        const ee = arg.event.id
-        const first = ee[0]
-        const slice = ee.slice(1)
-        {
-            first == "R" ?
-                <>
-                    {p_ruangan.map((pp) => {
-                        pp.id == slice &&
-                            sweetEventRuangan(pp)
-                    })}
-                </>
-                :
-                <>
-                    {p_alat.map((pp) => {
-                        pp.id == slice &&
-                            sweetEventAlat(pp)
-                    })}
-                </>
-        }
     }
 
     const eventRuangan = (
@@ -146,6 +213,7 @@ const HomeItem = ({ props }) => {
     return (
         <>
             <div className="grid lg:grid-cols-7">
+                {renderPopUp()}
                 <div className="lg:col-span-5">
                     <div className="card-user-item">
                         <div className="cu-body">
@@ -153,7 +221,8 @@ const HomeItem = ({ props }) => {
                                 plugins={[dayGridPlugin, interactionPlugin]}
                                 dateClick={handleDateClick}
                                 initialView="dayGridMonth"
-                                eventClick={handleEventClick}
+                                // eventClick={handleEventClick}
+                                eventClick={handleEventCC}
                                 events={[...eventRuangan, ...eventAlat]}
                                 locale={'id'}
                             />

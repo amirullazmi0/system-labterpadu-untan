@@ -2,12 +2,14 @@ import { Link, router } from "@inertiajs/react"
 import { useCallback, useEffect, useState } from "react"
 import Paginator from "../User/Paginator"
 import { read, utils, writeFile, writeFileXLSX } from "xlsx"
+import moment from "moment/moment"
+
+
 
 const P_RuanganItem = ({ props }) => {
     const [ruangan, setRuangan] = useState(props.ruangan)
     const [p_ruangan, setPRuangan] = useState(props.p_ruangan.data)
     const [notif, setNotif] = useState(props.flash)
-
     const [pres, setPres] = useState([]);
     /* get state data and export to XLSX */
     const [datax, setDatax] = useState(
@@ -120,16 +122,9 @@ const P_RuanganItem = ({ props }) => {
                                                     <tr key={p_ruangan.id}>
                                                         <th>{index + 1}</th>
                                                         <td>{p_ruangan.name}</td>
+                                                        <td>{p_ruangan.ruangan.name}</td>
                                                         <td>
-                                                            {ruangan.map((ruangan) => (
-                                                                p_ruangan.ruangan_id === ruangan.id &&
-                                                                <div key={ruangan.id}>
-                                                                    {ruangan.name}
-                                                                </div>
-                                                            ))}
-                                                        </td>
-                                                        <td>
-                                                            {p_ruangan.date_start} {p_ruangan.date_end != null && " - " + p_ruangan.date_end}
+                                                            {moment(p_ruangan.date_start).format('DD-MM-YYYY')} {p_ruangan.date_end != null && " - " + moment(p_ruangan.date_end).format('DD-MM-YYYY')}
                                                         </td>
                                                         <td>
                                                             {p_ruangan.time_start} - {p_ruangan.time_end}

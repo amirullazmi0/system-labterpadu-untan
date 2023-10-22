@@ -307,7 +307,7 @@ const ProfilItem = ({ user, berkass, notif, errors, props }) => {
                                                 <div className="grid grid-cols-5 lg:grid-cols-7">
                                                     <div className="col-span-5 lg:col-span-7">
                                                         <div className="flex items-center">
-                                                            <span>Nama : </span>
+                                                            {/* <span>Nama : </span> */}
                                                             <span>{b.name}</span>
                                                         </div>
                                                     </div>
@@ -338,7 +338,7 @@ const ProfilItem = ({ user, berkass, notif, errors, props }) => {
                                                                     <button onClick={() => modalOff()} className="">
                                                                         <label htmlFor="modal-edit" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                                                                     </button>
-                                                                    <h3 className="text-lg font-bold">Tambah Berkas</h3>
+                                                                    <h3 className="text-lg font-bold">Edit Berkas</h3>
                                                                     <div className="form-control">
                                                                         <label htmlFor="" className="label">
                                                                             Nama
@@ -353,7 +353,7 @@ const ProfilItem = ({ user, berkass, notif, errors, props }) => {
                                                                     </div>
                                                                     <div className="flex justify-center mt-3">
                                                                         <button className="btn btn-sm btn-blue btn-wide" onClick={() => handleEditBerkas()}>
-                                                                            Submit
+                                                                            Update
                                                                         </button>
                                                                     </div>
                                                                 </div>

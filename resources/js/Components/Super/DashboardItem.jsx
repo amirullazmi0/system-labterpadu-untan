@@ -5,86 +5,111 @@ import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import { Link } from '@inertiajs/react'
 import { useEffect, useState } from 'react'
 import moment from 'moment/moment'
+import 'moment/locale/id';
 import swal from 'sweetalert'
 
 const DashboardItem = ({ props }) => {
+    moment.locale('id');
     const today = moment();
     const [theDay, setTheDay] = useState(today)
 
     const formatToday = moment(theDay).format('DD MMMM YYYY')
     const formatToday2 = moment(theDay).format('YYYY-MM-DD')
 
-
-    const [dateRuangan, setDateRuangan] = useState()
-
     const [p_ruangan, setPRuangan] = useState(props.p_ruangan)
     const [p_alat, setPAlat] = useState(props.p_alat)
 
+    const [popUp, setPopUp] = useState(false)
     const handleDateClick = (arg) => { // bind with an arrow function
+        setTheDay(arg.date)
         setTheDay(arg.date)
     }
 
-    const [textEnd, setTextEnd] = useState('')
-
-    const sweetEventRuangan = (event) => {
-        event.date_end ?
-            swal({
-                title: event.ruangan.name + " (" + event.event + ")",
-                text: moment(event.date_start).format('DD MMMM YYYY') + " - " + moment(event.date_end).format('DD MMMM YYYY'),
-                buttons: {
-                    cancel: "Close",
-                },
-            }) :
-            swal({
-                title: event.ruangan.name + " (" + event.event + ")",
-                text: moment(event.date_start).format('DD MMMM YYYY'),
-                buttons: {
-                    cancel: "Close",
-                },
-            })
+    const handleClosePopUp = () => {
+        setPopUp(false)
     }
-    const sweetEventAlat = (event) => {
-        console.log('wkwk Alat : ', event);
-        event.date_end ?
-            swal({
-                title: event.alat.name + " (" + event.event + ")",
-                text: moment(event.date_start).format('DD MMMM YYYY') + " - " + moment(event.date_end).format('DD MMMM YYYY'),
-                buttons: {
-                    cancel: "Close",
-                },
-            }) :
-            swal({
-                title: event.alat.name + " (" + event.event + ")",
-                text: moment(event.date_start).format('DD MMMM YYYY'),
-                buttons: {
-                    cancel: "Close",
-                },
+
+    const [popUpData, setPopUpData] = useState(null);
+    const handleEventCC = (arg) => {
+        const kode = arg.event.id[0]
+        const id = arg.event.id.slice(1)
+        if (kode == "A") {
+            p_alat.map((item) => {
+                if (item.id == id) {
+                    setPopUp(true)
+                    setPopUpData(item);
+                }
             })
-    }
-    const handleEventClick = (arg) => { // bind with an arrow function
-        const ee = arg.event.id
-        const title = arg.event.title
-        const first = ee[0]
-        const slice = ee.slice(1)
-
-        const Start = moment(arg.event.start).format('DD MMMM YYYY')
-
-        {
-            first == "R" ?
-                <>
-                    {p_ruangan.map((pp) => {
-                        pp.id == slice &&
-                            sweetEventRuangan(pp)
-                    })}
-                </>
-                :
-                <>
-                    {p_alat.map((pp) => {
-                        pp.id == slice &&
-                            sweetEventAlat(pp)
-                    })}
-                </>
+        } else {
+            p_ruangan.map((item) => {
+                if (item.id == id) {
+                    setPopUp(true)
+                    setPopUpData(item);
+                }
+            })
         }
+    }
+
+    const renderPopUp = () => {
+        console.log(popUpData);
+        return (
+            <>
+                <div className={popUp == true ? "card-popUp-on" : "card-popUp-off"}>
+                    {popUpData ?
+                        <>
+                            <div className="flex justify-end">
+                                <button onClick={() => handleClosePopUp()} className='btn btn-sm'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div className="grid grid-cols-6">
+                                <div className="col-span-2">Nama</div>
+                                <div className="col-span-1">:</div>
+                                <div className="col-span-3">{popUpData.name}</div>
+
+                                <div className="col-span-2">{popUpData.ruangan_id ? "ruangan" : "alat"}</div>
+                                <div className="col-span-1">:</div>
+                                <div className="col-span-3">{popUpData.ruangan_id ? popUpData.ruangan.name : popUpData.alat.name}</div>
+
+                                {popUpData.alat_id &&
+                                    <>
+                                        <div className="col-span-2">Total</div>
+                                        <div className="col-span-1">:</div>
+                                        <div className="col-span-3">{popUpData.total}</div>
+                                    </>
+                                }
+
+                                <div className="col-span-2">Tanggal</div>
+                                <div className="col-span-1">:</div>
+                                <div className="col-span-3">{moment(popUpData.date_start).format('DD MMMM YYYY')} {popUpData.date_end &&
+                                    <>
+                                        - {moment(popUpData.date_end).format('DD MMMM YYYY')}
+                                    </>
+                                }
+                                </div>
+
+                                <div className="col-span-2">Waktu</div>
+                                <div className="col-span-1">:</div>
+                                <div className="col-span-3">{popUpData.time_start} {popUpData.time_end &&
+                                    <>
+                                        - {popUpData.time_end}
+                                    </>
+                                }
+                                </div>
+
+                                <div className="col-span-2">Deskripsi</div>
+                                <div className="col-span-1">:</div>
+                                <div className="col-span-3">{popUpData.Desc}</div>
+
+                            </div>
+                        </>
+                        : null
+                    }
+                </div>
+            </>
+        )
     }
 
     const eventRuangan = (
@@ -116,7 +141,6 @@ const DashboardItem = ({ props }) => {
             )
         })
     )
-    const eventAll = [...eventAlat, ...eventRuangan]
 
     const renderPRuangan = (
         p_ruangan.map((pp) => {
@@ -150,13 +174,14 @@ const DashboardItem = ({ props }) => {
                 <div className="grid lg:grid-cols-7">
                     <div className="lg:col-span-5">
                         <div className="card">
+                            {renderPopUp()}
                             <FullCalendar
                                 plugins={[dayGridPlugin, interactionPlugin]}
                                 dateClick={handleDateClick}
                                 initialView="dayGridMonth"
                                 events={[...eventRuangan, ...eventAlat]}
                                 locale={'id'}
-                                eventClick={handleEventClick}
+                                eventClick={handleEventCC}
                             />
                         </div>
                     </div>

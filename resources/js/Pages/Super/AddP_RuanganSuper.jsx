@@ -15,7 +15,7 @@ export default function AddP_RuanganSuper(props) {
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        <AddP_RuanganItem ruangan={props.ruangan} errors={props.errors} />
+                        <AddP_RuanganItem pinjam={props.p_ruangan} ruangan={props.ruangan} errors={props.errors} />
                     </div>
                 </div>
             </div>

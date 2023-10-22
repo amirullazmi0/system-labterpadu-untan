@@ -50,6 +50,7 @@ class LaboranController extends Controller
 
         $validatedData['password'] = Hash::make($validatedData['password']);
 
+
         // dd($validatedData);
 
         User::create($validatedData);

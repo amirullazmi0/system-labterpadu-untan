@@ -1,4 +1,5 @@
 import { Link } from "@inertiajs/react"
+import moment from "moment/moment"
 
 const DetailPRuanganItem = ({ props }) => {
     const handle = (e) => {
@@ -68,7 +69,7 @@ const DetailPRuanganItem = ({ props }) => {
                                 :
                             </div>
                             <div className="col-span-3">
-                                {props.p_ruangan[0].date_start} {props.p_ruangan[0].date_end && " - " + props.p_ruangan[0].date_end}
+                                {moment(props.p_ruangan[0].date_start).format('DD MMMM YYYYY')} {props.p_ruangan[0].date_end && " - " + moment(props.p_ruangan[0].date_end).format('DD MMMM YYYY')}
                             </div>
                         </div>
                         <div className="grid grid-cols-5">

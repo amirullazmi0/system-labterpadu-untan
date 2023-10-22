@@ -40,7 +40,6 @@ class SuperController extends Controller
             "jumlah_ruangan" => Ruangan::count(),
             "p_ruangan" => P_ruangan::with('ruangan')->get(),
             "p_alat" => P_alat::with('alat')->get(),
-            "ruangan" => Ruangan::all(),
         ];
 
         return Inertia::render('Super/DashboardSuper', $data);
@@ -127,7 +126,7 @@ class SuperController extends Controller
         $data = [
             "title" => "Halaman Daftar Laboran",
             "active" => "laboran",
-            "laboran" => new dataCollection(User::with('lab')->where('level', '1')->latest()->paginate(5)),
+            "laboran" => new dataCollection(User::with('lab')->where('level', '1')->latest()->paginate(10)),
             "laboranExport" => User::with('lab')->where('level', '1')->latest()->get(),
             // "user" => User::latest()->get(),
             "lab" => Lab::all(),
@@ -202,7 +201,7 @@ class SuperController extends Controller
             "active" => "ruangan",
             "user" => User::all(),
             "lab" => Lab::all(),
-            "ruangan" => new dataCollection(Ruangan::latest()->paginate(5)),
+            "ruangan" => new dataCollection(Ruangan::latest()->paginate(10)),
             "ruanganExport" => Ruangan::latest()->get(),
             "nomor" => 1,
         ];
@@ -257,7 +256,7 @@ class SuperController extends Controller
             "user" => User::all(),
             "lab" => Lab::all(),
             "ruangan" => Ruangan::all(),
-            "p_ruangan" => new dataCollection(P_ruangan::with('ruangan')->latest()->paginate(5)),
+            "p_ruangan" => new dataCollection(P_ruangan::with('ruangan')->latest()->paginate(10)),
             "p_ruanganExport" => P_ruangan::with('ruangan')->latest()->get(),
             "nomor" => 1,
         ];
@@ -273,7 +272,7 @@ class SuperController extends Controller
             "user" => User::all(),
             "lab" => Lab::all(),
             "alat" =>  Alat::with('lab')->orderBy('name', 'asc')->get(),
-            "p_alat" => new dataCollection(P_alat::with('alat')->latest()->paginate(5)),
+            "p_alat" => new dataCollection(P_alat::with('alat')->latest()->paginate(20)),
             "p_alatExport" => P_alat::with('alat')->latest()->get(),
             "nomor" => 1,
         ];
@@ -288,7 +287,7 @@ class SuperController extends Controller
             "active" => "p_alat",
             "lab" => Lab::all(),
             "alat" =>  Alat::all(),
-            "p_alat" => P_alat::latest()->get(),
+            "daftar_p_alat" => P_alat::with('alat')->get(),
             "nomor" => 1,
         ];
 
@@ -322,6 +321,7 @@ class SuperController extends Controller
             "p_alatId" => P_alat::where('primary_id', $request->primary_id)->pluck('alat_id'),
             "p_alatTotal" => P_alat::where('primary_id', $request->primary_id)->pluck('total'),
             "count_p_alat" => P_alat::where('primary_id', $request->primary_id)->count(),
+            "daftar_p_alat" => P_alat::with('alat')->get(),
             "nomor" => 1,
         ];
 
@@ -347,7 +347,7 @@ class SuperController extends Controller
             "user" => User::all(),
             "lab" => Lab::all(),
             "ruangan" => Ruangan::all(),
-            "p_ruangan" => P_ruangan::all(),
+            "p_ruangan" => P_ruangan::with('ruangan')->get(),
             "nomor" => 1,
         ];
 
@@ -401,6 +401,7 @@ class SuperController extends Controller
             "user" => User::all(),
             "lab" => Lab::all(),
             "ruangan" => Ruangan::all(),
+            "daftar_p_ruangan" => P_ruangan::with('ruangan')->get(),
             "p_ruangan" => P_ruangan::where('id', $p_ruangan->id)->where('name', $request->name)->get(),
             "nomor" => 1,
         ];

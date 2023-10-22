@@ -1,4 +1,5 @@
 import { Link, router } from "@inertiajs/react"
+import moment from "moment/moment";
 import { useState } from "react"
 
 const AddRuanganItem = ({ errors }) => {

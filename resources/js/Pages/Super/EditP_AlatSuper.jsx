@@ -17,6 +17,7 @@ export default function EditP_AlatSuper(props) {
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
                         <EditP_AlatItem
+                            pinjam={props.daftar_p_alat}
                             p_alat={props.p_alat}
                             p_alatId={props.p_alatId}
                             p_alatTotal={props.p_alatTotal}

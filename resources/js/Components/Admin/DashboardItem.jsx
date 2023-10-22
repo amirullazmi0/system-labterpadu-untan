@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import moment from 'moment/moment'
 
 const DashboardItem = ({ props }) => {
+    moment.locale('id');
     const today = moment();
     const [theDay, setTheDay] = useState(today)
 

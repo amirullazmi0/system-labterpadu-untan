@@ -1,9 +1,9 @@
 import { Link, router } from "@inertiajs/react"
+import moment from "moment/moment"
 import { useEffect, useState } from "react"
 
-const EditP_RuanganItem = ({ pr, ruangan, errors }) => {
-    const [Notif, setNotif] = useState(false);
-
+const EditP_RuanganItem = ({ pinjam, pr, ruangan, errors }) => {
+    const [id, setId] = useState(pr.id)
     const [name, setName] = useState(pr.name)
     const [ruangan_id, setRuanganId] = useState(pr.ruangan_id)
     const [event, setEvent] = useState(pr.event)
@@ -18,22 +18,51 @@ const EditP_RuanganItem = ({ pr, ruangan, errors }) => {
 
     const [banyakHari, setBanyakHari] = useState(false)
 
-    useEffect(() => {
-        <>
-            {pr.date_end && setBanyakHari(true)}
-        </>
-    }, [])
 
     const handleBanyakHari = () => {
         { banyakHari == false && setBanyakHari(true) }
         { banyakHari == true && setBanyakHari(false), setDateEnd('') }
     }
+
+    const [notAvailable, setNotAvailable] = useState([])
+    const isNotAvailable = () => {
+        const roomsNotAvailable = [];
+
+        for (let j = 0; j < pinjam.length; j++) {
+            const waktuMulai = moment(time_start, "HH:mm");
+            const waktuSelesai = moment(time_end, "HH:mm");
+            const waktuMulaiPinjam = moment(pinjam[j].time_start, "HH:mm");
+            const waktuSelesaiPinjam = moment(pinjam[j].time_end, "HH:mm");
+
+            if ((pr.id != pinjam[j].id) && ((pinjam[j].date_start && date_start && ((moment(date_start).isSame(pinjam[j].date_start)) || (moment(date_start).isSame(pinjam[j].date_end))) || (moment(date_start).isAfter(pinjam[j].date_start) && moment(date_start).isBefore(pinjam[j].date_end)))
+                || (pinjam[j].date_end && date_end && ((moment(date_end).isSame(pinjam[j].date_start)) || (moment(date_end).isSame(pinjam[j].date_end)))) || (moment(date_end).isAfter(pinjam[j].date_start) && moment(date_end).isBefore(pinjam[j].date_end)))) {
+                if ((waktuMulai >= waktuMulaiPinjam && waktuMulai <= waktuSelesaiPinjam) || (waktuSelesai >= waktuMulaiPinjam && waktuSelesai <= waktuSelesaiPinjam)) {
+                    roomsNotAvailable.push({
+                        id: pinjam[j].ruangan_id, // Memasukkan pinjam[j].ruangan_id ke dalam properti id
+                        name: pinjam[j].ruangan.name, // Memasukkan pinjam[j].ruangan.name ke dalam properti name
+                        dis: true, // Memasukkan pinjam[j].ruangan.name ke dalam properti name
+                    });
+                }
+            }
+        }
+
+        setNotAvailable(roomsNotAvailable); // Langkah 3
+
+    }
+
     const handleSubmit = () => {
         const data = {
             name, ruangan_id, event, date_start, date_end, time_start, time_end, desc, berkas
         }
         router.post('/super/p-ruangan/' + pr.id + '/edit', data)
     }
+
+    useEffect(() => {
+        <>
+            {pr.date_end && setBanyakHari(true)}
+        </>
+        isNotAvailable()
+    }, [])
     return (
         <>
             <div className="laboran-item">
@@ -60,34 +89,18 @@ const EditP_RuanganItem = ({ pr, ruangan, errors }) => {
                                 <label className="label">
                                     <span className="label-text">Nama Peminjam</span>
                                 </label>
-                                <input type="text" placeholder="Nama Peminjam Ruangan" className="input input-bordered max-w-xs w-full" value={name ? name : ""} onChange={(name) => setName(name.target.value)} />
+                                <input type="text" placeholder="Nama Peminjam Ruangan" className="input input-bordered w-full" value={name ? name : ""} onChange={(name) => setName(name.target.value)} />
                                 <label className="label">
                                     {errors.name && !name &&
                                         <span className="label-text-alt text-error">{errors.name}</span>
                                     }
                                 </label>
                             </div>
-                            <div className="form-control m-1">
-                                <label className="label">
-                                    <span className="label-text">Ruangan</span>
-                                </label>
-                                <select defaultValue={ruangan_id ? ruangan_id : "DEFAULT"} onChange={(ruangan_id) => setRuanganId(ruangan_id.target.value)} className="select select-bordered w-full max-w-xs" disabled={ruangan == null || ruangan.length == 0 ? true : false}>
-                                    <option value="DEFAULT" className="hidden" disabled>Pilih Ruangan</option>
-                                    {ruangan.map((ruangan) => (
-                                        <option value={ruangan.id} key={ruangan.id}>{ruangan.name}</option>
-                                    ))}
-                                </select>
-                                <label className="label">
-                                    {errors.ruangan_id && !ruangan_id &&
-                                        <span className="label-text-alt text-error">Please select ruangan</span>
-                                    }
-                                </label>
-                            </div>
-                            <div className="form-control m-1">
+                            <div className="form-control col-span-2 m-1">
                                 <label className="label">
                                     <span className="label-text">Nama Kegiatan / Event</span>
                                 </label>
-                                <input type="text" placeholder="Nama kegiatan atau event" className="input input-bordered max-w-xs w-full" value={event ? event : ""} onChange={(event) => setEvent(event.target.value)} />
+                                <input type="text" placeholder="Nama kegiatan atau event" className="input input-bordered w-full" value={event ? event : ""} onChange={(event) => setEvent(event.target.value)} />
                                 <label className="label">
                                     {errors.event && !event &&
                                         <span className="label-text-alt text-error">{errors.event}</span>
@@ -122,7 +135,7 @@ const EditP_RuanganItem = ({ pr, ruangan, errors }) => {
                                             <label className="label">
                                                 <span className="label-text">Tanggal Selesai</span>
                                             </label>
-                                            <input type="date" className="input input-bordered max-w-xs w-full" value={date_end ? date_end : ""} onChange={(date_end) => setDateEnd(date_end.target.value)} />
+                                            <input type="date" className="input input-bordered w-full" value={date_end ? date_end : ""} onChange={(date_end) => setDateEnd(date_end.target.value)} />
                                             <label className="label">
                                                 {errors.date_end && !date_end &&
                                                     <span className="label-text-alt text-error">{errors.date_end}</span>
@@ -133,7 +146,7 @@ const EditP_RuanganItem = ({ pr, ruangan, errors }) => {
                                             <label className="label">
                                                 <span className="label-text">Waktu Mulai</span>
                                             </label>
-                                            <input type="time" className="input input-bordered max-w-xs w-full" value={time_start ? time_start : ""} onChange={(time_start) => setTimeStart(time_start.target.value)} />
+                                            <input type="time" className="input input-bordered w-full" value={time_start ? time_start : ""} onChange={(time_start) => setTimeStart(time_start.target.value)} />
                                             <label className="label">
                                                 {errors.time_start && !time_start &&
                                                     <span className="label-text-alt text-error">{errors.time_start}</span>
@@ -144,22 +157,54 @@ const EditP_RuanganItem = ({ pr, ruangan, errors }) => {
                                             <label className="label">
                                                 <span className="label-text">Waktu Selesai</span>
                                             </label>
-                                            <input type="time" className="input input-bordered max-w-xs w-full" value={time_end ? time_end : ""} onChange={(time_end) => setTimeEnd(time_end.target.value)} />
+                                            <input type="time" className="input input-bordered w-full" value={time_end ? time_end : ""} onChange={(time_end) => setTimeEnd(time_end.target.value)} />
                                             <label className="label">
                                                 {errors.time_end && !time_end &&
                                                     <span className="label-text-alt text-error">{errors.time_end}</span>
                                                 }
                                             </label>
                                         </div>
+                                        <button onClick={() => isNotAvailable()} className="btn btn-sm">
+                                            Cek Ruangan
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                             <div className="card-form m-1">
+                                <div className="form-control m-1">
+                                    <label className="label">
+                                        <span className="label-text">Ruangan</span>
+                                    </label>
+                                    <select defaultValue={ruangan_id ? ruangan_id : "DEFAULT"} onChange={(ruangan_id) => setRuanganId(ruangan_id.target.value)} className="select select-bordered w-full" disabled={ruangan == null || ruangan.length == 0 ? true : false}>
+                                        <option value="DEFAULT" className="hidden" disabled>Pilih Ruangan</option>
+                                        {ruangan.map((ruangan, index) => {
+                                            const notFound = notAvailable.find((not) => not.id == ruangan.id)
+                                            if (notFound) {
+                                                return (
+                                                    <option disabled className="bg-red-700 text-white" value={ruangan.id} key={index + 1}>
+                                                        {ruangan.name} (Tidak Tersedia)
+                                                    </option>
+                                                )
+                                            } else {
+                                                return (
+                                                    <option className="" value={ruangan.id} key={index + 1}>
+                                                        {ruangan.name}
+                                                    </option>
+                                                );
+                                            }
+                                        })}
+                                    </select>
+                                    <label className="label">
+                                        {errors.ruangan_id && !ruangan_id &&
+                                            <span className="label-text-alt text-error">Please select ruangan</span>
+                                        }
+                                    </label>
+                                </div>
                                 <div className="form-control m-1 mt-0">
                                     <label className="label">
                                         <span className="label-text">File .pdf (optional)</span>
                                     </label>
-                                    <input type="file" accept=".pdf" onChange={(berkas) => setBerkas(berkas.target.files[0])} className="file-input file-input-md file-input-bordered w-full max-w-xs" />
+                                    <input type="file" accept=".pdf" onChange={(berkas) => setBerkas(berkas.target.files[0])} className="file-input file-input-md file-input-bordered w-full" />
                                     <label className="label">
                                         {errors.berkas &&
                                             <span className="label-text-alt text-error">{errors.berkas}</span>
@@ -188,9 +233,9 @@ const EditP_RuanganItem = ({ pr, ruangan, errors }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex justify-center">
-                        <button className="btn btn-sm btn-wide btn-blue mt-5" onClick={() => handleSubmit()}>Submit</button>
+                        <div className="flex justify-center">
+                            <button className="btn btn-sm btn-wide btn-blue mt-5" onClick={() => handleSubmit()}>Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar{
+    width: 0px;
+}
 body{
     background-color: rgb(236, 235, 235);
     min-height: 100vh;
@@ -56,6 +59,36 @@ body{
     max-height: 100vh;
     transform-origin: center;
     animation: pulse 15s ease-in-out infinite alternate;
+}
+
+.card-popUp-off{
+    position: fixed;
+    left: 0;
+    right: 0;
+    visibility: hidden;
+    margin-left:400px;
+    margin-right:400px;
+    margin-top: -350px;
+    transition: ease-in-out 0.5s;
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    z-index: 200;
+    box-shadow: 0px 0px 10px 0px rgba(17, 17, 17, 0.158);
+    border-radius: 20px;
+}
+.card-popUp-on{
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin-left:400px;
+    margin-right:400px;
+    margin-top: 100px;
+    transition: ease-in-out 0.5s;
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    z-index: 200;
+    box-shadow: 0px 0px 10px 0px rgba(17, 17, 17, 0.158);
+    border-radius: 20px;
 }
 
 @keyframes pulse {
@@ -710,5 +743,34 @@ body{
     }
     .nl-head1{
         font-weight: bold;
+    }
+    .card-popUp-off{
+        position: fixed;
+        left: 0;
+        right: 0;
+        visibility: hidden;
+        margin-left:10px;
+        margin-right:10px;
+        margin-top: -350px;
+        transition: ease-in-out 0.5s;
+        background-color: rgb(255, 255, 255);
+        padding: 20px;
+        z-index: 200;
+        box-shadow: 0px 0px 10px 0px rgba(17, 17, 17, 0.158);
+        border-radius: 20px;
+    }
+    .card-popUp-on{
+        position: fixed;
+        left: 0;
+        right: 0;
+        margin-left:10px;
+        margin-right:10px;
+        margin-top: 100px;
+        transition: ease-in-out 0.5s;
+        background-color: rgb(255, 255, 255);
+        padding: 20px;
+        z-index: 200;
+        box-shadow: 0px 0px 10px 0px rgba(17, 17, 17, 0.158);
+        border-radius: 20px;
     }
 }

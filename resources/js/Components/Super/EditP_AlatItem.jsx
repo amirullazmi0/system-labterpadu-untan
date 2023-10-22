@@ -1,11 +1,22 @@
 import { Link, router } from "@inertiajs/react"
+import moment from "moment/moment"
 import { useState, useEffect } from "react"
-
-const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat, errors }) => {
+moment
+const EditP_AlatItem = ({ pinjam, p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat, errors }) => {
     const [jumlah, setJumlah] = useState(count_p_alat)
     const [name, setName] = useState(p_alat[0].name)
-
     const [alat_id, setAlatId] = useState(p_alatId)
+    const [event, setEvent] = useState(p_alat[0].event)
+    const [date_start, setDateStart] = useState(p_alat[0].date_start)
+    const [date_end, setDateEnd] = useState(p_alat[0].date_end)
+    const [time_start, setTimeStart] = useState(p_alat[0].time_start)
+    const [time_end, setTimeEnd] = useState(p_alat[0].time_end)
+    const [desc, setDesc] = useState(p_alat[0].desc)
+    const [berkas, setBerkas] = useState("")
+    const [berkasLama, setBerkasLama] = useState(p_alat[0].berkas)
+
+    const [banyakHari, setBanyakHari] = useState(false);
+    const [banyakAlat, setBanyakAlat] = useState(jumlah)
 
     const valueAlatId = (event) => {
         const selectedIndex = event.target.selectedIndex
@@ -15,6 +26,11 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
             const alatID = [...prevItems]
             alatID[no] = event.target.value
             return alatID
+        })
+        setTotal(prevItems => {
+            const Ntotal = [...prevItems];
+            Ntotal[no] = 0
+            return Ntotal
         })
     }
 
@@ -28,16 +44,7 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
         })
     }
 
-    const [event, setEvent] = useState(p_alat[0].event)
-    const [date_start, setDateStart] = useState(p_alat[0].date_start)
-    const [date_end, setDateEnd] = useState(p_alat[0].date_end)
-    const [time_start, setTimeStart] = useState(p_alat[0].time_start)
-    const [time_end, setTimeEnd] = useState(p_alat[0].time_end)
-    const [desc, setDesc] = useState(p_alat[0].desc)
-    const [berkas, setBerkas] = useState("")
-    const [berkasLama, setBerkasLama] = useState(p_alat[0].berkas)
 
-    const [banyakHari, setBanyakHari] = useState(false);
 
     useEffect(() => {
         <>
@@ -50,7 +57,6 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
         { banyakHari == true && setBanyakHari(false), setDateEnd('') }
     }
 
-    const [banyakAlat, setBanyakAlat] = useState(jumlah)
 
     const tambahFormAlat = () => {
         setBanyakAlat(banyakAlat + 1)
@@ -59,6 +65,38 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
         setBanyakAlat(banyakAlat - 1)
         alat_id.splice(banyakAlat - 1, 1)
         total.splice(banyakAlat - 1, 1)
+    }
+
+    const [notAvailable, setNotAvailable] = useState([])
+    const isNotAvailable = () => {
+        const roomsNotAvailable = [];
+
+        for (let j = 0; j < pinjam.length; j++) {
+            const waktuMulai = moment(time_start, "HH:mm");
+            const waktuSelesai = moment(time_end, "HH:mm");
+            const waktuMulaiPinjam = moment(pinjam[j].time_start, "HH:mm");
+            const waktuSelesaiPinjam = moment(pinjam[j].time_end, "HH:mm");
+            if ((p_alat[0].primary_id != pinjam[j].primary_id) && ((pinjam[j].date_start && date_start && ((moment(date_start).isSame(pinjam[j].date_start)) || (moment(date_start).isSame(pinjam[j].date_end))) || (moment(date_start).isAfter(pinjam[j].date_start) && moment(date_start).isBefore(pinjam[j].date_end)))
+                || (pinjam[j].date_end && date_end && ((moment(date_end).isSame(pinjam[j].date_start)) || (moment(date_end).isSame(pinjam[j].date_end))) || (moment(date_end).isAfter(pinjam[j].date_start) && moment(date_end).isBefore(pinjam[j].date_end))))
+            ) {
+                if ((waktuMulai >= waktuMulaiPinjam && waktuMulai <= waktuSelesaiPinjam) || (waktuSelesai >= waktuMulaiPinjam && waktuSelesai <= waktuSelesaiPinjam)) {
+                    const existingItemIndex = roomsNotAvailable.findIndex(ite => ite.id == pinjam[j].alat_id);
+                    if (existingItemIndex) {
+                        roomsNotAvailable.push({
+                            id: pinjam[j].alat_id,
+                            name: pinjam[j].alat.name,
+                            total: parseInt(pinjam[j].total),
+                            dis: true,
+                        });
+                    } else {
+                        roomsNotAvailable[existingItemIndex].total += parseInt(pinjam[j].total);
+
+                    }
+                }
+            }
+        }
+        setNotAvailable(roomsNotAvailable); // Langkah 3
+
     }
 
     const renderFormAlat = () => {
@@ -72,7 +110,7 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
                             {i < count_p_alat ?
                                 <>
                                     <select defaultValue={p_alat[i].alat_id} className="select select-bordered w-full" onChange={valueAlatId} disabled={alat == null || alat.length == 0 ? true : false}>
-                                        {alat.map((e, index) => (
+                                        {/* {alat.map((e, index) => (
                                             <option key={e.id} no={i} value={e.id}>
                                                 {e.name}
                                                 {
@@ -82,7 +120,23 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
                                                     ))
                                                 }
                                             </option>
-                                        ))}
+                                        ))} */}
+                                        {alat.map((alat, index) => {
+                                            const notFound = notAvailable.find((not) => not.id == alat.id)
+                                            if (notFound) {
+                                                return (
+                                                    <option className="bg-yellow-400 text-white" no={i} value={alat.id} key={index + 1}>
+                                                        {alat.name} (Sisa : {parseInt(alat.total) - parseInt(notFound.total)})
+                                                    </option>
+                                                )
+                                            } else {
+                                                return (
+                                                    <option className="" no={i} value={alat.id} key={index + 1}>
+                                                        {alat.name} (Tersedia : {alat.total})
+                                                    </option>
+                                                );
+                                            }
+                                        })}
                                     </select>
                                     <label className="label">
                                         {errors.alat_id && !alat_id &&
@@ -94,7 +148,7 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
                                 <>
                                     <select defaultValue={"DEFAULT"} className="select select-bordered w-full" onChange={valueAlatId} disabled={alat == null || alat.length == 0 ? true : false}>
                                         <option value="DEFAULT" className="hidden" disabled>Pilih Alat</option>
-                                        {alat.map((e, index) => (
+                                        {/* {alat.map((e, index) => (
                                             <option key={e.id} no={i} value={e.id}>
                                                 {e.name}
                                                 {
@@ -104,7 +158,7 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
                                                     ))
                                                 }
                                             </option>
-                                        ))}
+                                        ))} */}
                                     </select>
                                     <label className="label">
                                         {errors.alat_id && !alat_id &&
@@ -119,11 +173,52 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
                                 <label className="label">
                                     <span className="label-text">Total</span>
                                 </label>
-                                {alat.map((e) => (
+                                {/* {alat.map((e) => (
                                     e.id == alat_id[i] &&
-                                    <input key={e.id} no={i} defaultValue={total[i]} onChange={valueTotal} type="number" min={1} max={e.total} className="input w-44 text-center bg-white" />
+                                    <input
+                                        key={e.id}
+                                        no={i}
+                                        defaultValue={total[i]}
+                                        onChange={valueTotal}
+                                        value={parseInt(total[i]) > parseInt(e.total) ? parseInt(e.total) : parseInt(total[i])}
+                                        type="number"
+                                        min={1}
+                                        max={e.total}
+                                        className="input w-44 text-center bg-white" />
 
-                                ))}
+                                ))} */}
+                                {alat.map((alat, index) => {
+                                    if (alat.id == alat_id[i]) {
+                                        const notFound = notAvailable.find((not) => not.id == alat.id)
+                                        if (notFound) {
+                                            return (
+                                                <input
+                                                    key={alat.id}
+                                                    no={i}
+                                                    defaultValue={1}
+                                                    value={parseInt(total[i]) > parseInt(alat.total) ? parseInt(alat.total) : parseInt(total[i])}
+                                                    onChange={valueTotal}
+                                                    type="number"
+                                                    min={0}
+                                                    max={parseInt(alat.total) - parseInt(notFound.total)}
+                                                    className="input w-44 text-center input-bordered bg-white" />
+                                            )
+                                        } else {
+                                            return (
+                                                <input
+                                                    key={alat.id}
+                                                    no={i}
+                                                    defaultValue={1}
+                                                    value={parseInt(total[i]) > parseInt(alat.total) ? parseInt(alat.total) : parseInt(total[i])}
+                                                    onChange={valueTotal}
+                                                    type="number"
+                                                    min={0}
+                                                    max={parseInt(alat.total)}
+                                                    className="input w-44 text-center input-bordered bg-white" />
+                                            )
+                                        }
+                                    }
+                                })}
                                 {i > 0 &&
                                     <button className="text-red-500 w-10 h-10 rounded-full" onClick={kurangFormAlat}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -190,18 +285,6 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
                                     }
                                 </label>
                             </div>
-                            <div className="col-span-3">
-                                <div className="card-form m-1">
-                                    {renderFormAlat()}
-                                    <div className="flex justify-end items-center">
-                                        <button className="btn btn-sm" onClick={tambahFormAlat}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
                             <div className="col-span-2">
                                 <div className="card-form m-1">
                                     <div className="grid grid-cols-2">
@@ -259,6 +342,9 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
                                                 }
                                             </label>
                                         </div>
+                                        <button onClick={() => isNotAvailable()} className="mt-5 mb-3 btn btn-sm lg:btn-wide">
+                                            Cek Alat
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -280,13 +366,25 @@ const EditP_AlatItem = ({ p_alatId, p_alatTotal, count_p_alat, p_alat, lab, alat
                                     }
                                 </div>
                             </div>
+                            <div className="col-span-3">
+                                <div className="card-form m-1">
+                                    {renderFormAlat()}
+                                    <div className="flex justify-end items-center">
+                                        <button className="btn btn-sm" onClick={tambahFormAlat}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                             <div className="col-span-1 lg:col-span-3 m-1">
                                 <div className="grid grid-cols-2">
                                     <div className="col-span-2 form-control mt-0 mb-0">
                                         <label className="label">
                                             <span className="label-text">Deskripsi</span>
                                         </label>
-                                        <textarea rows="2" value={desc} onChange={(desc) => setDesc(desc.target.value)} className="textarea textarea-bordered" placeholder="Deskripsi Ruangan"></textarea>
+                                        <textarea rows="2" value={desc} onChange={(desc) => setDesc(desc.target.value)} className="textarea textarea-bordered" placeholder="Deskripsi Peminjaman"></textarea>
                                         <label className="label">
                                             {errors.desc &&
                                                 <span className="label-text-alt text-error">{errors.desc}</span>

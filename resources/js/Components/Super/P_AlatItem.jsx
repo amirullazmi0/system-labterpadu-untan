@@ -2,7 +2,7 @@ import { Link, router } from "@inertiajs/react"
 import { useCallback, useEffect, useState } from "react"
 import Paginator from "../User/Paginator"
 import { read, utils, writeFile, writeFileXLSX } from "xlsx"
-
+import moment from "moment/moment"
 
 const P_AlatItem = ({ props }) => {
     const [notif, setNotif] = useState(props.flash)
@@ -10,7 +10,7 @@ const P_AlatItem = ({ props }) => {
     const [p_alatExport, setPALatExport] = useState(props.p_alatExport)
     const [alat, setALat] = useState(props.alat)
 
-
+    console.log('asdasd', p_alat);
     const [pres, setPres] = useState([]);
     const [pres2, setPres2] = useState([]);
     /* get state data and export to XLSX */
@@ -147,13 +147,13 @@ const P_AlatItem = ({ props }) => {
                         </div>
                         {p_alat && p_alat.length > 0 ?
                             <>
-                                <div className="overflow-x-auto">
+                                <div className="overflow-x-auto ">
                                     <>
                                         <table className="table table-zebra w-full">
                                             <thead className="text-center">
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Kode</th>
+                                                    {/* <th>Kode</th> */}
                                                     <th>Pengguna</th>
                                                     <th>Kegiatan / Event</th>
                                                     <th>Alat</th>
@@ -170,11 +170,11 @@ const P_AlatItem = ({ props }) => {
                                                         return (
                                                             <tr key={p.id} >
                                                                 <th>{number++}</th>
-                                                                <td>
+                                                                {/* <td>
                                                                     <Link className="font-bold " method="get" href={'/super/p-alat/' + p.id} data={{ primary_id: p.primary_id }}>
                                                                         {p.primary_id}
                                                                     </Link>
-                                                                </td>
+                                                                </td> */}
                                                                 <td>
                                                                     {p.name}
                                                                 </td>
@@ -205,10 +205,19 @@ const P_AlatItem = ({ props }) => {
                                                                     </ul>
                                                                 </td>
                                                                 <td>
-                                                                    {p.date_start} {p.date_end != null && " - " + p.date_end}
+                                                                    {moment(p.date_start).format('DD-MM-YYYY')}
+                                                                    {p.date_end != null &&
+                                                                        <>
+                                                                            <br />
+                                                                            -
+                                                                            <br /> {moment(p.date_end).format('DD-MM-YYYY')}
+                                                                        </>
+                                                                    }
                                                                 </td>
                                                                 <td>
-                                                                    {p.time_start} - {p.time_end}
+                                                                    {p.time_start} <br />
+                                                                    -
+                                                                    <br /> {p.time_end}
                                                                 </td>
                                                                 <td>
                                                                     <Link method="get" href={'/super/p-alat/' + p.id} data={{ primary_id: p.primary_id }} className="btn btn-sm btn-green mr-1">

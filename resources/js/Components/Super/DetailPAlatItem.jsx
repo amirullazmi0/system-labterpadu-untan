@@ -1,4 +1,5 @@
 import { Link } from "@inertiajs/react"
+import moment from "moment/moment";
 import { useState } from "react";
 
 const DetailPAlatItem = ({ props }) => {
@@ -72,10 +73,10 @@ const DetailPAlatItem = ({ props }) => {
                                 <div className="lg:col-span-3 col-span-2">
                                     {p_alat.map((p) => (
                                         alat.map((a) => (
-                                            p.alat_id === a.id &&
+                                            p.alat_id == a.id &&
                                             <>
                                                 < li className="m-1">
-                                                    {a.name} ( x {p.total} )
+                                                    {a.name} ( Digunakan {p.total} )
                                                 </li>
                                             </>
                                         ))
@@ -91,7 +92,7 @@ const DetailPAlatItem = ({ props }) => {
                                     :
                                 </div>
                                 <div className="lg:col-span-3 col-span-2">
-                                    {props.p_alat[0].date_start}{props.p_alat[0].date_end && " - " + props.p_alat[0].date_end}
+                                    {moment(props.p_alat[0].date_start).format('DD MMMM YYYY')}{props.p_alat[0].date_end && " - " + moment(props.p_alat[0].date_end).format('DD MMMM YYYY')}
                                 </div>
                             </div>
                             <div className="grid grid-cols-5 m-1">

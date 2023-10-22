@@ -14,7 +14,7 @@ export default function EditP_RuanganSuper(props) {
                 <div className="grid grid-cols-1 lg:grid-cols-9">
                     <div className="lg:col-span-2"></div>
                     <div className="col-span-7 dashboard-isi">
-                        <EditP_RuanganItem pr={props.p_ruangan[0]} ruangan={props.ruangan} errors={props.errors} />
+                        <EditP_RuanganItem pinjam={props.daftar_p_ruangan} pr={props.p_ruangan[0]} ruangan={props.ruangan} errors={props.errors} />
                     </div>
                 </div>
             </div>

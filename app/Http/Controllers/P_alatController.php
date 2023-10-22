@@ -141,6 +141,8 @@ class P_alatController extends Controller
         $pa = P_alat::where('primary_id', $p_alat->primary_id)->get();
 
         if ($request->file('berkas')) {
+            $file = 'file/peminjamanAlat/' . $p_alat->berkas;
+            unlink($file);
             $fileName = 'File-PA-' . time() . '.' . $request->file('berkas')->extension();
             $path_url = 'file/peminjamanAlat';
             $request->file('berkas')->move(public_path($path_url), $fileName);
